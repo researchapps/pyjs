@@ -218,9 +218,9 @@ class BaseException:
         return self.args.__getitem__(index)
 
     def __str__(self):
-        if len(self.args) is 0:
+        if len(self.args) == 0:
             return ''
-        elif len(self.args) is 1:
+        elif len(self.args) == 1:
             return str(self.message)
         return repr(self.args)
 
@@ -261,9 +261,9 @@ class LookupError(Exception):
 class KeyError(LookupError):
 
     def __str__(self):
-        if len(self.args) is 0:
+        if len(self.args) == 0:
             return ''
-        elif len(self.args) is 1:
+        elif len(self.args) == 1:
             return repr(self.message)
         return repr(self.args)
 
@@ -1220,7 +1220,7 @@ def str(text):
 
 @noSourceTracking
 def ord(x):
-    if(isString(x) and len(x) is 1):
+    if(isString(x) and len(x) == 1):
         JS("""
             return @{{x}}['charCodeAt'](0);
         """)
