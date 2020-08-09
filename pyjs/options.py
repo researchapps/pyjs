@@ -44,7 +44,8 @@ class Mappings(object):
                 yield (o, self[o])
 
         def items(self):
-            return list(self.items())
+            for o in self:
+                yield (o, self[o])
 
         def keys(self):
             return list(self)
@@ -220,7 +221,8 @@ class Mappings(object):
             yield (o, self[o])
 
     def items(self):
-        return list(self.items())
+        for o in self:
+            yield (o, self[o])
 
     def keys(self):
         return list(self)
