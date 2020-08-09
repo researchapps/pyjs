@@ -15,5 +15,5 @@ class HashableTest(UnitTest):
         dMethodToInt[foo.bar] = 5
         dMethodToInt[foo.bar] = 6
         dMethodToInt[foo.bar] = 7
-        self.assertEquals(1, len(dMethodToInt.keys()),
+        self.assertEqual(1, len(list(dMethodToInt.keys())),
                           'Bug #656 Hashing class methods is not supported')

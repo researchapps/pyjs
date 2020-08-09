@@ -31,7 +31,7 @@ def getTypes(event):
     dt = event.dataTransfer
     try:
         dt_types = dt.types
-        if isinstance(dt_types, basestring):
+        if isinstance(dt_types, str):
             return dt_types.split(',')
         ct = 0
         try:

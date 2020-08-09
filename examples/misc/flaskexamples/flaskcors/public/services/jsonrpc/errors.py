@@ -39,7 +39,7 @@ class MethodNameNotAllowed(JSONRPCError):
 
 def getTracebackStr():
     import traceback
-    import StringIO
-    s=StringIO.StringIO("")
+    import io
+    s=io.StringIO("")
     traceback.print_exc(file=s)
     return s.getvalue()

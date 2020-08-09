@@ -61,7 +61,7 @@ def urlencode(d):
 
     """
     s = ""
-    for i, v in d.iteritems():
+    for i, v in d.items():
         s += "%s=%s&" % (i, quote(str(v)))
     if s != "":
         s = s[:-1]

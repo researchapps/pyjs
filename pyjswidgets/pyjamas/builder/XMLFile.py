@@ -28,7 +28,7 @@ class XMLFile(object):
     re_attr = re.compile('''\S+="[^"]*"''')
 
     def __init__(self, lines):
-        if isinstance(lines, basestring):
+        if isinstance(lines, str):
             lines = lines.split("\n")
         self.lines = lines
         self.lineno = 0
@@ -266,10 +266,10 @@ if __name__ == '__main__':
     tagName, components = xmlFile.parse()
 
     def dump(component):
-        print "component:", component[0], component[1]
+        print("component:", component[0], component[1])
         for c in component[2]:
             dump(c)
     for component in components:
-        print "Frame:", component[0], component[1]
+        print("Frame:", component[0], component[1])
         for c in component[2]:
             dump(c)

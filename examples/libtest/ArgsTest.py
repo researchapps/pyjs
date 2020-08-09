@@ -10,24 +10,24 @@ class ArgsTest(UnitTest):
 
     def testNaming1(self):
         values = ftest(1, 2)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
 
     def testNaming2(self):
         values = ftest(a=1, b=2)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
 
     def testNaming3(self):
         values = ftest(1, b=2)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
 
     def testNaming4(self):
         exc_raised = False
         try:
             values = ftest(1, c=2)
-        except TypeError, t:
+        except TypeError as t:
             exc_raised = True
         self.assertTrue(exc_raised, "TypeError 'c' unexpected arg not raised")
 
@@ -35,62 +35,62 @@ class ArgsTest(UnitTest):
         exc_raised = False
         try:
             values = ftest()
-        except TypeError, t:
+        except TypeError as t:
             exc_raised = True
         self.assertTrue(exc_raised, "TypeError 'ftest() takes exactly 2 arguments (0 given)' not raised")
 
     def testSimpleCall(self):
         values = foo(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = foo2(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testKeywordCall1(self):
         values = foo2(c=3, b=2, a=1)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testKeywordCall2(self):
         values = foo2(b=2, a=1, c=3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testKeywordCall3(self):
         values = foo2(1, c=3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], 3)
 
     def testKeywordCall4(self):
         values = foo2()
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], None)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], None)
 
     def testKeywordCall5(self):
         values = foo2(c=True)
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], True)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], True)
 
     def testStarArgs(self):
         args = (1,2)
         res = aArgs(*args)
-        self.assertEquals(args, res)
+        self.assertEqual(args, res)
 
         args = "123"
         try:
             res = aArgs(*args)
             called = True
             exc = None
-        except TypeError, e:
+        except TypeError as e:
             called = False
             exc = e
 
@@ -98,7 +98,7 @@ class ArgsTest(UnitTest):
         # called on its own as *args! eeugh.
         self.assertTrue(called,
                     "exception not expected but function called:" + repr(res) + repr(exc))
-        self.assertEquals(res, ("1", "2", "3"))
+        self.assertEqual(res, ("1", "2", "3"))
 
 
         args = 1
@@ -114,64 +114,64 @@ class ArgsTest(UnitTest):
 
         args = (1,)
         res = aArgs(*args)
-        self.assertEquals(args, res)
+        self.assertEqual(args, res)
 
         args = (1,)
         res = aArgs(args)
-        self.assertEquals((args,), res)
+        self.assertEqual((args,), res)
 
 
     def testDefaultValuesCall(self):
         values = foo3(b=7)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 7)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 7)
+        self.assertEqual(values[2], 3)
 
         values = foo3(a=9)
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = foo3()
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testVarargsCall(self):
         values = foo4(9, 8, 7, 2, 3, 4)
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 8)
-        self.assertEquals(values[2], 7)
-        self.assertEquals(values[3][0], 2)
-        self.assertEquals(values[3][1], 3)
-        self.assertEquals(values[3][2], 4)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 8)
+        self.assertEqual(values[2], 7)
+        self.assertEqual(values[3][0], 2)
+        self.assertEqual(values[3][1], 3)
+        self.assertEqual(values[3][2], 4)
 
         values = foo4(9, 8, 7, 3, 2, 1)
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 8)
-        self.assertEquals(values[2], 7)
-        self.assertEquals(values[3][0], 3)
-        self.assertEquals(values[3][1], 2)
-        self.assertEquals(values[3][2], 1)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 8)
+        self.assertEqual(values[2], 7)
+        self.assertEqual(values[3][0], 3)
+        self.assertEqual(values[3][1], 2)
+        self.assertEqual(values[3][2], 1)
 
     def testKwargsCall(self):
         values = foo5(9, 8, 7, x=5, y=7)
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 8)
-        self.assertEquals(values[2], 7)
-        self.assertEquals(values[3]["x"], 5)
-        self.assertEquals(values[3]["y"], 7)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 8)
+        self.assertEqual(values[2], 7)
+        self.assertEqual(values[3]["x"], 5)
+        self.assertEqual(values[3]["y"], 7)
 
     def testComboCall(self):
         values = foo6(9, 8, 7, 1, 2, 3, x=4, y=5)
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 8)
-        self.assertEquals(values[2], 7)
-        self.assertEquals(values[3][0], 1)
-        self.assertEquals(values[3][1], 2)
-        self.assertEquals(values[3][2], 3)
-        self.assertEquals(values[4]["x"], 4)
-        self.assertEquals(values[4]["y"], 5)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 8)
+        self.assertEqual(values[2], 7)
+        self.assertEqual(values[3][0], 1)
+        self.assertEqual(values[3][1], 2)
+        self.assertEqual(values[3][2], 3)
+        self.assertEqual(values[4]["x"], 4)
+        self.assertEqual(values[4]["y"], 5)
 
     def testEdgeCall(self):
         values = foo7(1,2,3,b=2)
@@ -194,161 +194,161 @@ class ArgsTest(UnitTest):
 
     def testSimpleCtorCall(self):
         values = ArgsTestClass_foo(1, 2, 3).x
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass_foo2(1, 2, 3).x
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testKeywordCtorCall(self):
         values = ArgsTestClass_foo2(c=3, b=2, a=1).x
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass_foo2(b=2, a=1, c=3).x
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass_foo2().x
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], None)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], None)
 
         values = ArgsTestClass_foo2(c=True).x
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], True)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], True)
 
 
     def testDefaultValuesCtorCall(self):
         values = ArgsTestClass_foo3(b=7).x
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 7)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 7)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass_foo3(a=9).x
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass_foo3().x
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testVarargsCtorCall(self):
         values = ArgsTestClass_foo4(9, 8, 7, 2, 3, 4).x
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 8)
-        self.assertEquals(values[2], 7)
-        self.assertEquals(values[3][0], 2)
-        self.assertEquals(values[3][1], 3)
-        self.assertEquals(values[3][2], 4)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 8)
+        self.assertEqual(values[2], 7)
+        self.assertEqual(values[3][0], 2)
+        self.assertEqual(values[3][1], 3)
+        self.assertEqual(values[3][2], 4)
 
         values = ArgsTestClass_foo4(9, 8, 7, 3, 2, 1).x
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 8)
-        self.assertEquals(values[2], 7)
-        self.assertEquals(values[3][0], 3)
-        self.assertEquals(values[3][1], 2)
-        self.assertEquals(values[3][2], 1)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 8)
+        self.assertEqual(values[2], 7)
+        self.assertEqual(values[3][0], 3)
+        self.assertEqual(values[3][1], 2)
+        self.assertEqual(values[3][2], 1)
 
     def testKwargsCtorCall(self):
         values = ArgsTestClass_foo5(9, 8, 7, x=5, y=7).x
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 8)
-        self.assertEquals(values[2], 7)
-        self.assertEquals(values[3]["x"], 5)
-        self.assertEquals(values[3]["y"], 7)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 8)
+        self.assertEqual(values[2], 7)
+        self.assertEqual(values[3]["x"], 5)
+        self.assertEqual(values[3]["y"], 7)
 
     def testComboCtorCall(self):
         values = ArgsTestClass_foo6(9, 8, 7, 1, 2, 3, x=4, y=5).x
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 8)
-        self.assertEquals(values[2], 7)
-        self.assertEquals(values[3][0], 1)
-        self.assertEquals(values[3][1], 2)
-        self.assertEquals(values[3][2], 3)
-        self.assertEquals(values[4]["x"], 4)
-        self.assertEquals(values[4]["y"], 5)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 8)
+        self.assertEqual(values[2], 7)
+        self.assertEqual(values[3][0], 1)
+        self.assertEqual(values[3][1], 2)
+        self.assertEqual(values[3][2], 3)
+        self.assertEqual(values[4]["x"], 4)
+        self.assertEqual(values[4]["y"], 5)
 
     def testSimpleMethodCall(self):
         values = ArgsTestClass().foo(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass().foo2(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testKeywordMethodCall(self):
         values = ArgsTestClass().foo2(c=3, b=2, a=1)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass().foo2(b=2, a=1, c=3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass().foo2()
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], None)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], None)
 
         values = ArgsTestClass().foo2(c=True)
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], True)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], True)
 
 
     def testDefaultValuesMethodCall(self):
         values = ArgsTestClass().foo3(b=7)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 7)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 7)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass().foo3(a=9)
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass().foo3()
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testVarargsMethodCall(self):
         values = ArgsTestClass().foo4(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass().foo4(3, 2, 1)
-        self.assertEquals(values[0], 3)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 1)
+        self.assertEqual(values[0], 3)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 1)
 
     def testKwargsMethodCall(self):
         values = ArgsTestClass().foo5(x=5, y=7)
-        self.assertEquals(values["x"], 5)
-        self.assertEquals(values["y"], 7)
+        self.assertEqual(values["x"], 5)
+        self.assertEqual(values["y"], 7)
 
     def testComboMethodCall(self):
         values = ArgsTestClass().foo6(1, 2, 3, x=4, y=5)
-        self.assertEquals(values[0][0], 1)
-        self.assertEquals(values[0][1], 2)
-        self.assertEquals(values[0][2], 3)
-        self.assertEquals(values[1]["x"], 4)
-        self.assertEquals(values[1]["y"], 5)
+        self.assertEqual(values[0][0], 1)
+        self.assertEqual(values[0][1], 2)
+        self.assertEqual(values[0][2], 3)
+        self.assertEqual(values[1]["x"], 4)
+        self.assertEqual(values[1]["y"], 5)
 
     def testEdgeMethodCall(self):
         values = ArgsTestClass().foo7(1,2,3,b=2)
@@ -371,75 +371,75 @@ class ArgsTest(UnitTest):
 
     def testSimpleStaticMethodCall(self):
         values = ArgsTestClass2.foo(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass2.foo2(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testKeywordStaticMethodCall(self):
         values = ArgsTestClass2.foo2(c=3, b=2, a=1)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass2.foo2(b=2, a=1, c=3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass2.foo2()
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], None)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], None)
 
         values = ArgsTestClass2.foo2(c=True)
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], True)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], True)
 
     def testDefaultValuesStaticMethodCall(self):
         values = ArgsTestClass2.foo3(b=7)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 7)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 7)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass2.foo3(a=9)
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass2.foo3()
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testVarargsStaticMethodCall(self):
         values = ArgsTestClass2.foo4(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass2.foo4(3, 2, 1)
-        self.assertEquals(values[0], 3)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 1)
+        self.assertEqual(values[0], 3)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 1)
 
     def testKwargsStaticMethodCall(self):
         values = ArgsTestClass2.foo5(x=5, y=7)
-        self.assertEquals(values["x"], 5)
-        self.assertEquals(values["y"], 7)
+        self.assertEqual(values["x"], 5)
+        self.assertEqual(values["y"], 7)
 
     def testComboStaticMethodCall(self):
         values = ArgsTestClass2.foo6(1, 2, 3, x=4, y=5)
-        self.assertEquals(values[0][0], 1)
-        self.assertEquals(values[0][1], 2)
-        self.assertEquals(values[0][2], 3)
-        self.assertEquals(values[1]["x"], 4)
-        self.assertEquals(values[1]["y"], 5)
+        self.assertEqual(values[0][0], 1)
+        self.assertEqual(values[0][1], 2)
+        self.assertEqual(values[0][2], 3)
+        self.assertEqual(values[1]["x"], 4)
+        self.assertEqual(values[1]["y"], 5)
 
     def testEdgeStaticMethodCall(self):
         values = ArgsTestClass2.foo7(1,2,3,b=2)
@@ -462,76 +462,76 @@ class ArgsTest(UnitTest):
 
     def testSimpleClassMethodCall(self):
         values = ArgsTestClass3.foo(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3.foo2(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testKeywordClassMethodCall(self):
         values = ArgsTestClass3.foo2(c=3, b=2, a=1)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3.foo2(b=2, a=1, c=3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3.foo2()
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], None)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], None)
 
         values = ArgsTestClass3.foo2(c=True)
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], True)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], True)
 
 
     def testDefaultValuesClassMethodCall(self):
         values = ArgsTestClass3.foo3(b=7)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 7)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 7)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3.foo3(a=9)
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3.foo3()
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testVarargsClassMethodCall(self):
         values = ArgsTestClass3.foo4(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3.foo4(3, 2, 1)
-        self.assertEquals(values[0], 3)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 1)
+        self.assertEqual(values[0], 3)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 1)
 
     def testKwargsClassMethodCall(self):
         values = ArgsTestClass3.foo5(x=5, y=7)
-        self.assertEquals(values["x"], 5)
-        self.assertEquals(values["y"], 7)
+        self.assertEqual(values["x"], 5)
+        self.assertEqual(values["y"], 7)
 
     def testComboClassMethodCall(self):
         values = ArgsTestClass3.foo6(1, 2, 3, x=4, y=5)
-        self.assertEquals(values[0][0], 1)
-        self.assertEquals(values[0][1], 2)
-        self.assertEquals(values[0][2], 3)
-        self.assertEquals(values[1]["x"], 4)
-        self.assertEquals(values[1]["y"], 5)
+        self.assertEqual(values[0][0], 1)
+        self.assertEqual(values[0][1], 2)
+        self.assertEqual(values[0][2], 3)
+        self.assertEqual(values[1]["x"], 4)
+        self.assertEqual(values[1]["y"], 5)
 
     def testEdgeClassMethodCall(self):
         values = ArgsTestClass3.foo7(1,2,3,b=2)
@@ -554,113 +554,113 @@ class ArgsTest(UnitTest):
 
     def testSimpleIndirectClassMethodCall(self):
         values = ArgsTestClass3().foo(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3().foo2(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testKeywordIndirectClassMethodCall(self):
         values = ArgsTestClass3().foo2(c=3, b=2, a=1)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3().foo2(b=2, a=1, c=3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3().foo2()
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], None)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], None)
 
         values = ArgsTestClass3().foo2(c=True)
-        self.assertEquals(values[0], None)
-        self.assertEquals(values[1], None)
-        self.assertEquals(values[2], True)
+        self.assertEqual(values[0], None)
+        self.assertEqual(values[1], None)
+        self.assertEqual(values[2], True)
 
 
     def testDefaultValuesIndirectClassMethodCall(self):
         values = ArgsTestClass3().foo3(b=7)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 7)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 7)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3().foo3(a=9)
-        self.assertEquals(values[0], 9)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 9)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3().foo3()
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
     def testVarargsIndirectClassMethodCall(self):
         values = ArgsTestClass3().foo4(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = ArgsTestClass3().foo4(3, 2, 1)
-        self.assertEquals(values[0], 3)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 1)
+        self.assertEqual(values[0], 3)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 1)
 
     def testKwargsIndirectClassMethodCall(self):
         values = ArgsTestClass3().foo5(x=5, y=7)
-        self.assertEquals(values["x"], 5)
-        self.assertEquals(values["y"], 7)
+        self.assertEqual(values["x"], 5)
+        self.assertEqual(values["y"], 7)
 
     def testComboIndirectClassMethodCall(self):
         values = ArgsTestClass3().foo6(1, 2, 3, x=4, y=5)
-        self.assertEquals(values[0][0], 1)
-        self.assertEquals(values[0][1], 2)
-        self.assertEquals(values[0][2], 3)
-        self.assertEquals(values[1]["x"], 4)
-        self.assertEquals(values[1]["y"], 5)
+        self.assertEqual(values[0][0], 1)
+        self.assertEqual(values[0][1], 2)
+        self.assertEqual(values[0][2], 3)
+        self.assertEqual(values[1]["x"], 4)
+        self.assertEqual(values[1]["y"], 5)
 
     def testKwArgsRecurse(self):
         kwa = kw_args(x=5, y=6)
         if kwa:
-            self.assertEquals(kwa.get('x'), 5)
-            self.assertEquals(kwa.get('y'), 6)
+            self.assertEqual(kwa.get('x'), 5)
+            self.assertEqual(kwa.get('y'), 6)
 
         kwa = kw_args2(x=5, y=6)
         if kwa:
-            self.assertEquals(kwa.get('x'), 5)
-            self.assertEquals(kwa.get('y'), 6)
+            self.assertEqual(kwa.get('x'), 5)
+            self.assertEqual(kwa.get('y'), 6)
 
         values = varargs_kwargs(1,2,3,4,c=3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], (3,4))
-        self.assertEquals(values[3]['c'], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], (3,4))
+        self.assertEqual(values[3]['c'], 3)
 
         values = varargs_kwargs2(1,2,3,4,c=3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], (3,4))
-        self.assertEquals(values[3]['c'], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], (3,4))
+        self.assertEqual(values[3]['c'], 3)
 
         values = varargs_kwargs2(1)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 3)
 
         values = varargs_kwargs2(1, {'a':1}, {})
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1]['a'], 1)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1]['a'], 1)
 
         values = varargs_kwargs2(1, {'a':1})
-        self.assertEquals(values[0], 1)
+        self.assertEqual(values[0], 1)
         try:
-            self.assertEquals(values[1], {'a':1})
-        except TypeError, e:
+            self.assertEqual(values[1], {'a':1})
+        except TypeError as e:
             self.fail("Last arg in *args,**kwargs is dict problem")
 
     def testKwArgsInherit(self):
@@ -669,18 +669,18 @@ class ArgsTest(UnitTest):
         self.assertTrue(hasattr(c, 'kwargs'))
         kwa = getattr(c, 'kwargs', None)
         if kwa:
-            self.assertEquals(kwa.get('x'), 5)
-            self.assertEquals(kwa.get('y'), 6)
-            self.assertEquals(kwa.get('z'), 7)
+            self.assertEqual(kwa.get('x'), 5)
+            self.assertEqual(kwa.get('y'), 6)
+            self.assertEqual(kwa.get('z'), 7)
 
         try:
             c = Kwargs2(x=5, y=6)
             self.assertTrue(hasattr(c, 'kwargs'))
             kwa = getattr(c, 'kwargs', None)
             if kwa:
-                self.assertEquals(kwa.get('x'), 5)
-                self.assertEquals(kwa.get('y'), 6)
-                self.assertEquals(kwa.get('z'), 7)
+                self.assertEqual(kwa.get('x'), 5)
+                self.assertEqual(kwa.get('y'), 6)
+                self.assertEqual(kwa.get('z'), 7)
         except:
             self.assertTrue(False, "runtime error in kwargs, needs investigating")
 
@@ -688,37 +688,37 @@ class ArgsTest(UnitTest):
         self.assertTrue(hasattr(c, 'kwargs'))
         kwa = getattr(c, 'kwargs', None)
         if kwa:
-            self.assertEquals(kwa.get('x'), 5)
-            self.assertEquals(kwa.get('y'), 6)
-            self.assertEquals(kwa.get('z'), 8)
+            self.assertEqual(kwa.get('x'), 5)
+            self.assertEqual(kwa.get('y'), 6)
+            self.assertEqual(kwa.get('z'), 8)
 
 
         c.set_kwargs2(x=5, y=6)
         self.assertTrue(hasattr(c, 'kwargs'))
         kwa = getattr(c, 'kwargs', None)
         if kwa:
-            self.assertEquals(kwa.get('x'), 5)
-            self.assertEquals(kwa.get('y'), 6)
-            self.assertEquals(kwa.get('z'), 8)
+            self.assertEqual(kwa.get('x'), 5)
+            self.assertEqual(kwa.get('y'), 6)
+            self.assertEqual(kwa.get('z'), 8)
 
 
         c.set_kwargs3(x=5, y=6)
         self.assertTrue(hasattr(c, 'kwargs'))
         kwa = getattr(c, 'kwargs', None)
         if kwa:
-            self.assertEquals(kwa.get('x'), 5)
-            self.assertEquals(kwa.get('y'), 6)
-            self.assertEquals(kwa.get('z'), 8)
+            self.assertEqual(kwa.get('x'), 5)
+            self.assertEqual(kwa.get('y'), 6)
+            self.assertEqual(kwa.get('z'), 8)
 
     def testKwArgsNameMapping(self):
         kwargs = dict(comment='Comment', name='Name')
         def fn(comment=None, name=None):
             return dict(comment=comment, name=name)
         kwargs_out = fn(**kwargs)
-        self.assertEquals(kwargs, kwargs_out)
+        self.assertEqual(kwargs, kwargs_out)
         kwargs = {'comment': 'Comment', 'name': 'Name'}
         kwargs_out = fn(**kwargs)
-        self.assertEquals(kwargs, kwargs_out)
+        self.assertEqual(kwargs, kwargs_out)
 
     def testLookupOrder(self):
         def fn(fint = int):
@@ -740,25 +740,26 @@ class ArgsTest(UnitTest):
         foo = instance.foo
 
         values = foo(1, 2, 3)
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         values = foo(*(1, 2, 3))
-        self.assertEquals(values[0], 1)
-        self.assertEquals(values[1], 2)
-        self.assertEquals(values[2], 3)
+        self.assertEqual(values[0], 1)
+        self.assertEqual(values[1], 2)
+        self.assertEqual(values[2], 3)
 
         try:
             values = foo(*(1, 2), **dict(c=3))
-            self.assertEquals(values[0], 1)
-            self.assertEquals(values[1], 2)
-            self.assertEquals(values[2], 3)
+            self.assertEqual(values[0], 1)
+            self.assertEqual(values[1], 2)
+            self.assertEqual(values[2], 3)
         except TypeError:
             self.fail('foo() takes exactly 4 arguments (5 given), bug #503')
 
     def testArgsUnpack(self):
-        def func(a, (b, c), d):
+        def func(a, xxx_todo_changeme, d):
+            (b, c) = xxx_todo_changeme
             return a + b + c + d
         try:
             self.assertEqual(func(1, (2, 3), 4), 10, 'Function args unpacking not supported, #527')

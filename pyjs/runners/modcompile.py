@@ -50,7 +50,7 @@ class PlatformParser:
     def parseModule(self, module_name, file_name):
 
         importing = False
-        if not self.parse_cache.has_key(file_name):
+        if file_name not in self.parse_cache:
             importing = True
             if self.chain_plat:
                 mod, _ov = self.chain_plat.parseModule(module_name, file_name)
@@ -63,20 +63,20 @@ class PlatformParser:
         override = False
         platform_file_name = self.generatePlatformFilename(file_name)
         if self.verbose:
-            print "platform", platform_file_name
+            print("platform", platform_file_name)
         if self.platform and os.path.isfile(platform_file_name):
             mod = copy.deepcopy(mod)
             mod_override = compiler.parseFile(platform_file_name)
             if self.verbose:
-                print "Merging", module_name, self.platform
+                print("Merging", module_name, self.platform)
             merge(module_name, mod, mod_override)
             override = True
 
         if self.verbose:
             if override:
-                print "Importing %s (Platform %s)" % (module_name, self.platform)
+                print("Importing %s (Platform %s)" % (module_name, self.platform))
             elif importing:
-                print "Importing %s" % (module_name)
+                print("Importing %s" % (module_name))
 
         if override:
             return mod, platform_file_name
@@ -218,7 +218,7 @@ class Module:
         gen = ModuleCodeGenerator(tree)
         if display:
             import pprint
-            print pprint.pprint(tree)
+            print(pprint.pprint(tree))
         self.code = gen.getCode()
 
     def dump(self, f):

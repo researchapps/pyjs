@@ -15,8 +15,8 @@ def sym_type(name):
 def new_node(name):
     return Node(sym_type(name), [])
 
-import __Pyjamas__
-from __Future__ import __Future__
+from . import __Pyjamas__
+from .__Future__ import __Future__
 
 
 # This is taken from the django project.
@@ -197,7 +197,7 @@ builtin_names = [
 class TranslateOptions(object):
 
     def __init__(self, **kwargs):
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
     def __getattribute__(self, name):
@@ -706,7 +706,7 @@ class Translator(object):
             if reflineno is None and len(self.names) > 1 and \
                not _name.glob and _name.reflineno is not None and \
                _name.depth == depth and force is False:
-                print _name.name, _name.reflineno, _name.glob, _name.depth, len(self.names) - 1
+                print(_name.name, _name.reflineno, _name.glob, _name.depth, len(self.names) - 1)
                 reflineno = _name.reflineno
                 _name.reflineno = None
                 raise self.TranslationError(
@@ -814,7 +814,7 @@ class Translator(object):
         return self.const_int[value]
 
     def add_const_long(self, value):
-        value = str(long(value))
+        value = str(int(value))
         if not value in self.const_long:
             name = '%s.l%d' % (
                 self.jsvars['constants'],
@@ -910,12 +910,12 @@ class Translator(object):
                     exc_value.lineno = lineno
                 raise
             else:
-                print "Error in %s at %s:" % (self.srcfile, lineno)
+                print("Error in %s at %s:" % (self.srcfile, lineno))
                 raise
 
     def not_implemented(self, node):
-        print repr(node)
-        print dir(node)
+        print(repr(node))
+        print(dir(node))
         raise NotImplementedError(repr(node))
 
     def get_test(self, node, name=None):
@@ -940,8 +940,8 @@ class Translator(object):
     def get_bit_expr(self, node):
         jsvars = self.jsvars.copy()
         childs = node.children.__iter__()
-        args = [self.dispatch(childs.next())]
-        op = child = childs.next()
+        args = [self.dispatch(next(childs))]
+        op = child = next(childs)
         while child is not None:
             op = child
             op_name = self.op_names2.get(op.value, None)
@@ -949,8 +949,8 @@ class Translator(object):
                 self.not_implemented(node)
             try:
                 while True:
-                    args.append(self.dispatch(childs.next()))
-                    child = childs.next()
+                    args.append(self.dispatch(next(childs)))
+                    child = next(childs)
                     if child.value != op.value:
                         break
             except StopIteration:
@@ -1020,13 +1020,13 @@ class Translator(object):
         # Node(simple_stmt, [Node(expr_stmt, [Leaf(1, 'lhs'), Leaf(22, '='), Leaf(1, 'rhs')]), Leaf(4, '\n')])
         if subst_lhs is not None:
             children = stmt.children[0].children
-            if isinstance(subst_lhs, basestring):
+            if isinstance(subst_lhs, str):
                 children[0].value = subst_lhs
             else:
                 children[0] = subst_lhs
         if subst_rhs is not None:
             children = stmt.children[0].children
-            if isinstance(subst_rhs, basestring):
+            if isinstance(subst_rhs, str):
                 children[2].value = subst_rhs
             else:
                 children[2] = subst_rhs
@@ -1068,7 +1068,7 @@ class Translator(object):
                 if isinstance(arg, Node) or isinstance(arg, Leaf):
                     arglist_childs[idx] = arg
         if subst_base is not None:
-            if isinstance(subst_base, basestring):
+            if isinstance(subst_base, str):
                 stmt.children[0].children[0].value = subst_base
             else:
                 stmt.children[0].children[0] = subst_base
@@ -1079,7 +1079,7 @@ class Translator(object):
                 arg = args[0]
                 if arg is None:
                     pass
-                elif isinstance(arg, basestring):
+                elif isinstance(arg, str):
                     trailer_childs[1].value = arg
                 else:
                     trailer_childs[1] = arg
@@ -1088,7 +1088,7 @@ class Translator(object):
                     idx *= 2
                     if arg is None:
                         pass
-                    elif isinstance(arg, basestring):
+                    elif isinstance(arg, str):
                         arglist_childs[idx].value = arg
                     else:
                         arglist_childs[idx] = arg
@@ -1103,13 +1103,13 @@ class Translator(object):
         # Node(simple_stmt, [Node(power, [Leaf(1, 'base'), Node(trailer, [Leaf(9, '['), Leaf(1, 'idx'), Leaf(10, ']')])]), Leaf(4, '\n')]), Leaf(0, '')
         if subst_base is not None:
             children = stmt.children[0].children
-            if isinstance(subst_base, basestring):
+            if isinstance(subst_base, str):
                 children[0].value = subst_base
             else:
                 children[0] = subst_base
         if subst_idx is not None:
             children = stmt.children[0].children[1].children
-            if isinstance(subst_idx, basestring):
+            if isinstance(subst_idx, str):
                 children[1].value = subst_idx
             else:
                 children[1] = subst_idx
@@ -1130,11 +1130,11 @@ class Translator(object):
         elif name is None:
             name = self.get_tmp_jsname('and$')
             self.add_lines("var %s" % name)
-        args.append(self.get_test(childs.next(), name))
+        args.append(self.get_test(next(childs), name))
         try:
             while True:
                 self.assert_value(node, childs.next().value, 'and')
-                args.append(self.get_test(childs.next(), name))
+                args.append(self.get_test(next(childs), name))
         except StopIteration:
             pass
         test = ' && '.join(args)
@@ -1147,12 +1147,12 @@ class Translator(object):
         arglist = []
         try:
             while True:
-                child = childs.next()
+                child = next(childs)
                 if isinstance(child, Leaf):
                     if child.value == ',':
                         continue
                     if child.value in ['*', '**']:
-                        value = self.dispatch(childs.next())
+                        value = self.dispatch(next(childs))
                         arglist.append(Argument(child.value, value))
                         continue
                     arglist.append(self.dispatch(child))
@@ -1177,14 +1177,14 @@ class Translator(object):
     def node_arith_expr(self, node):
         jsvars = self.jsvars.copy()
         childs = node.children.__iter__()
-        left = self.dispatch(childs.next())
+        left = self.dispatch(next(childs))
         try:
             while True:
-                op = childs.next()
+                op = next(childs)
                 op = self.op_names2.get(op.value, None)
                 if op is None:
                     self.not_implemented(node)
-                right = self.dispatch(childs.next())
+                right = self.dispatch(next(childs))
                 jsvars.update(locals())
                 left = "%(builtin)s['%(op)s'](%(left)s, %(right)s)" % jsvars
         except StopIteration:
@@ -1195,12 +1195,12 @@ class Translator(object):
         jsvars = self.jsvars.copy()
         childs = node.children.__iter__()
         self.assert_value(node, childs.next().value, 'assert')
-        test = self.dispatch(childs.next())
+        test = self.dispatch(next(childs))
         arg = ''
         if len(node.children) > 2:
-            child = childs.next()
+            child = next(childs)
             self.assert_value(node, child.value, ',')
-            arg = ', %s' % self.dispatch(childs.next())
+            arg = ', %s' % self.dispatch(next(childs))
         jsvars.update(locals())
         # TODO: return %(builtin)s['raise'](%(builtin)s['AssertionError']%(arg)s, %(None)s)
         return """if (!%(booljs)s(%(test)s)) {
@@ -1241,7 +1241,7 @@ class Translator(object):
             elif len(node.children) != 2:
                 self.not_implemented(node)
             if items:
-                items = ["[%s, %s]" % (k, v) for k, v in items.iteritems()]
+                items = ["[%s, %s]" % (k, v) for k, v in items.items()]
             else:
                 items = []
         elif node.children[0].value == '`':
@@ -1275,12 +1275,12 @@ class Translator(object):
         self.assert_value(node, childs.next().value, 'class')
         name = childs.next().value
         self.add_name(name)
-        tok = childs.next()
+        tok = next(childs)
         if tok.value == ':':
             bases = self.get_jsname('object')
         else:
             self.assert_value(node, tok.value, '(')
-            bases = childs.next()
+            bases = next(childs)
             if isinstance(bases, Leaf):
                 if bases.value == ')':
                     bases = None
@@ -1313,7 +1313,7 @@ class Translator(object):
         self.next_func_type.append(func_type['function'])
         try:
             while True:
-                child = childs.next()
+                child = next(childs)
                 self.dispatch(child)
         except StopIteration:
             pass
@@ -1349,14 +1349,14 @@ class Translator(object):
         jsvars = self.jsvars.copy()
         left = op = right = None
         childs = node.children.__iter__()
-        first_left = left = self.dispatch(childs.next())
+        first_left = left = self.dispatch(next(childs))
         prev_right = None
         cmp_expr = []
         tmp = None
         try:
             while True:
-                op_node = childs.next()
-                right = self.dispatch(childs.next())
+                op_node = next(childs)
+                right = self.dispatch(next(childs))
                 if isinstance(op_node, Leaf):
                     op = op_compare[op_node.value]
                 elif type_repr(op_node.type) == 'comp_op':
@@ -1463,7 +1463,7 @@ class Translator(object):
         self.assert_value(node, node.children[-1].value, ['\n', '\r\n'])
         childs = node.children.__iter__()
         self.assert_value(node, childs.next().value, '@')
-        child = childs.next()
+        child = next(childs)
         if isinstance(child, Leaf):
             name = child.value
         else:
@@ -1493,11 +1493,11 @@ class Translator(object):
         lineno = self.track_lineno(node)
         childs = node.children.__iter__()
         self.assert_value(node, childs.next().value, 'del')
-        child = childs.next()
+        child = next(childs)
         if isinstance(child, Node) and \
            type_repr(child.type) == 'exprlist':
             childs = child.children.__iter__()
-            child = childs.next()
+            child = next(childs)
         try:
             while True:
                 if isinstance(child, Leaf):
@@ -1533,7 +1533,7 @@ class Translator(object):
                 else:
                     self.not_implemented(node)
                 self.assert_value(node, childs.next().value, ',')
-                child = childs.next()
+                child = next(childs)
         except StopIteration:
             pass
 
@@ -1542,9 +1542,9 @@ class Translator(object):
         childs = node.children.__iter__()
         try:
             while True:
-                k = self.dispatch(childs.next())
+                k = self.dispatch(next(childs))
                 self.assert_value(node, childs.next().value, ':')
-                v = self.dispatch(childs.next())
+                v = self.dispatch(next(childs))
                 values[k] = v
                 self.assert_value(node, childs.next().value, ',')
         except StopIteration:
@@ -1565,7 +1565,7 @@ class Translator(object):
         childs = node.children.__iter__()
         try:
             while True:
-                child = childs.next()
+                child = next(childs)
                 if isinstance(child, Leaf):
                     if child.value == ',':
                         continue
@@ -1602,7 +1602,7 @@ class Translator(object):
         classes = None
         varname = None
         try:
-            child = childs.next()
+            child = next(childs)
             if isinstance(child, Node) and type_repr(child.type) == 'atom':
                 self.assert_value(node, child.children[0].value, '(')
                 self.assert_value(node, child.children[-1].value, ')')
@@ -1610,7 +1610,7 @@ class Translator(object):
             else:
                 classes = self.dispatch(child)
             self.assert_value(node, childs.next().value, ',')
-            varname = self.dispatch(childs.next(), assign=True)
+            varname = self.dispatch(next(childs), assign=True)
         except StopIteration:
             pass
         if classes is not None:
@@ -1707,7 +1707,7 @@ class Translator(object):
                 base = self.dispatch(left.children[0])
             if isinstance(base, Code):
                 base = str(base)
-            self.assert_instance(node, base, basestring)
+            self.assert_instance(node, base, str)
             args = []
             if type_repr(tail.type) == 'trailer':
                 what = tail.children[1]
@@ -1901,7 +1901,7 @@ function init_constants$(silent) {
 +   try {
 """ % jsvars)
             # Add constants: int
-            for name, value in sorted([(v, k) for k,v in self.const_int.iteritems()]):
+            for name, value in sorted([(v, k) for k,v in self.const_int.items()]):
                 if name is not None:
                     v = abs(int(value))
                     if v > (1 << 30):
@@ -1912,7 +1912,7 @@ function init_constants$(silent) {
 ++%(name)s = %(fcall)s(%(module)s, null, builtin['int'], null, %(value)s);\
 """ % jsvars)
             # Add constants: long
-            for name, value in sorted([(v, k) for k,v in self.const_long.iteritems()]):
+            for name, value in sorted([(v, k) for k,v in self.const_long.items()]):
                 if name is not None:
                     v = abs(int(value))
                     if v > (1 << 30):
@@ -1923,7 +1923,7 @@ function init_constants$(silent) {
 ++%(name)s = %(fcall)s(%(module)s, null, builtin['long'], null, %(value)s);\
 """ % jsvars)
             # Add constants: float
-            for name, value in sorted([(v, k) for k,v in self.const_float.iteritems()]):
+            for name, value in sorted([(v, k) for k,v in self.const_float.items()]):
                 if name is not None:
                     jsvars['value'] = value
                     jsvars['name'] = name
@@ -1931,9 +1931,9 @@ function init_constants$(silent) {
 ++%(name)s = %(fcall)s(%(module)s, null, builtin['float'], null, %(value)s);\
 """ % jsvars)
             # Add constants: str
-            for name, value in sorted([(v,k) for k,v in self.const_str.iteritems()]):
+            for name, value in sorted([(v,k) for k,v in self.const_str.items()]):
                 value = "'%s'" % re_js_string_escape.sub(self.substitute_js_chars, value)
-                if isinstance(value, unicode):
+                if isinstance(value, str):
                     value = value.encode('ascii', 'xmlcharrefreplace')
                 if name is not None:
                     jsvars['value'] = value
@@ -1952,7 +1952,7 @@ function init_constants$(silent) {
 })();
 /* end module: %(module_name)s */
 """ % jsvars)
-        pyjs_deps = self.imported_modules.keys()
+        pyjs_deps = list(self.imported_modules.keys())
         if pyjs_deps:
             pyjs_deps.sort()
             jsvars.update(pyjs_deps=pyjs_deps)
@@ -1961,7 +1961,7 @@ function init_constants$(silent) {
 PYJS_DEPS: %(pyjs_deps)r
 */
 """ % jsvars)
-        pyjs_js = self.imported_js.keys()
+        pyjs_js = list(self.imported_js.keys())
         if pyjs_js:
             pyjs_js.sort()
             jsvars.update(pyjs_js=pyjs_js)
@@ -1981,9 +1981,9 @@ PYJS_JS: %(pyjs_js)r
         self.inloop += 1
         childs = node.children.__iter__()
         self.assert_value(node, childs.next().value, 'for')
-        assign = childs.next()
+        assign = next(childs)
         self.assert_value(node, childs.next().value, 'in')
-        iterable = self.dispatch(childs.next())
+        iterable = self.dispatch(next(childs))
         if isinstance(iterable, list):
             iterable = '[%s]' % ', '.join([str(i) for i in iterable])
         self.assert_value(node, childs.next().value, ':')
@@ -2018,7 +2018,7 @@ try {
             line += ';'
         self.add_lines(line)
         n = len(self.lines)
-        self.dispatch(childs.next())
+        self.dispatch(next(childs))
         self.assert_dedent(self.dedent(2), indent_level)
         self.add_lines("""\
 +   }
@@ -2037,7 +2037,7 @@ if (true) {""" % jsvars)
             indent_level = self.indent(1)
             self.assert_value(node, childs.next().value, 'else')
             self.assert_value(node, childs.next().value, ':')
-            self.dispatch(childs.next())
+            self.dispatch(next(childs))
             self.assert_dedent(self.dedent(1), indent_level)
         self.add_lines("""\
 }""" % jsvars)
@@ -2057,7 +2057,7 @@ if (true) {""" % jsvars)
                node.children[1].value == ':':
                 params = Parameters([], None, None, None)
             else:
-                child = childs.next()
+                child = next(childs)
                 if isinstance(child, Leaf):
                     params = Parameters([child.value], None, None, None)
                     #args, star_args, dstar_args, defaults
@@ -2068,7 +2068,7 @@ if (true) {""" % jsvars)
             name = childs.next().value
             self.add_name(name, force=True)
             assign = ''
-            params = self.dispatch(childs.next())
+            params = self.dispatch(next(childs))
         self.assert_instance(node, params, Parameters)
         if params.star_args is None:
             star_args = 'null'
@@ -2146,7 +2146,7 @@ if (true) {""" % jsvars)
         try:
             lambda_code = None
             while True:
-                child = childs.next()
+                child = next(childs)
                 code = self.dispatch(child)
                 if is_lambda:
                     if lambda_code is None:
@@ -2164,7 +2164,7 @@ if (true) {""" % jsvars)
         self.assert_dedent(self.dedent(2), indent_level)
         self.lines = lines
         assert names is self.names.pop()
-        for n in names.itervalues():
+        for n in names.values():
             if n.name not in params.all_args and \
                n.builtin is False and \
                n.to_js is None and \
@@ -2189,7 +2189,7 @@ if (true) {""" % jsvars)
 ++      %(namestack)s[%(depth)s + 1] = %(locals)s;""" % jsvars)
         if tfpdef:
             self.indent(2)
-            for k, v in tfpdef.iteritems():
+            for k, v in tfpdef.items():
                 n = self.create_assign_stmt(
                     lhs=str(v),
                     subst_rhs=Code(k, self.track_lineno(node)),
@@ -2226,20 +2226,20 @@ if (true) {""" % jsvars)
         childs = node.children.__iter__()
         try:
             while True:
-                stmt = childs.next()
+                stmt = next(childs)
                 if stmt.value == 'if':
-                    test = self.get_test(childs.next())
+                    test = self.get_test(next(childs))
                     test = "if (%s) {" % test
                     self.add_lines(test, self.track_lineno(stmt))
                 elif stmt.value == 'elif':
-                    test = self.get_test(childs.next())
+                    test = self.get_test(next(childs))
                     test = "} else if (%s) {" % test
                     self.add_lines(test)
                 elif stmt.value == 'else':
                     self.add_lines('} else {')
                 self.assert_value(node, childs.next().value, ':')
                 self.indent()
-                self.dispatch(childs.next())
+                self.dispatch(next(childs))
                 self.dedent()
         except StopIteration:
             pass
@@ -2393,14 +2393,14 @@ if (true) {""" % jsvars)
                 base_node = comp_node = child
                 comp_node.type = sym_type('for_stmt')
                 comp_node.children = []
-                child = childs.next()
+                child = next(childs)
 
                 try:
                     while True:
                         while isinstance(child, Leaf) or \
                               not type_repr(child.type) in ['comp_if', 'comp_for']:
                             comp_node.append_child(child)
-                            child = childs.next()
+                            child = next(childs)
                         childs = child.children.__iter__()
                         comp_node.append_child(Leaf(11, ':'))
                         comp_node.append_child(child)
@@ -2410,7 +2410,7 @@ if (true) {""" % jsvars)
                             comp_node.type = sym_type('for_stmt')
                         else:
                             comp_node.type = sym_type('if_stmt')
-                        child = childs.next()
+                        child = next(childs)
                 except StopIteration:
                     pass
                 comp_node.append_child(Leaf(11, ':'))
@@ -2465,11 +2465,11 @@ if (true) {""" % jsvars)
         elif name is None:
             name = self.get_tmp_jsname('or$')
             self.add_lines("var %s" % name)
-        args.append(self.get_test(childs.next(), name))
+        args.append(self.get_test(next(childs), name))
         try:
             while True:
                 self.assert_value(node, childs.next().value, 'or')
-                args.append(self.get_test(childs.next(), name))
+                args.append(self.get_test(next(childs), name))
         except StopIteration:
             pass
         test = ' || '.join(args)
@@ -2487,7 +2487,7 @@ if (true) {""" % jsvars)
             args = node.children[1].value
         else:
             args = self.dispatch(node.children[1])
-        if isinstance(args, basestring):
+        if isinstance(args, str):
             return Parameters([args], None, None, None)
         return self.dispatch(node.children[1])
 
@@ -2497,7 +2497,7 @@ if (true) {""" % jsvars)
     def node_power(self, node):
         jsvars = self.jsvars.copy()
         childs = node.children.__iter__()
-        left = self.dispatch(childs.next())
+        left = self.dispatch(next(childs))
         if isinstance(node.children[1], Leaf):
             if node.children[1].value == '**':
                 assert len(node.children) == 3
@@ -2587,7 +2587,7 @@ if (true) {""" % jsvars)
                             named_args = 'null'
                         else:
                             named_args = ', '.join([
-                                '%r: %s' % (k, v) for k,v in named_args.iteritems()
+                                '%r: %s' % (k, v) for k,v in named_args.items()
                             ])
                             named_args = "{%s}" % named_args
                     if isinstance(left, __Pyjamas__.__Pyjamas__):
@@ -2721,11 +2721,11 @@ if (true) {""" % jsvars)
         jsvars = self.jsvars.copy()
         args = []
         childs = node.children.__iter__()
-        args.append(self.dispatch(childs.next()))
+        args.append(self.dispatch(next(childs)))
         try:
             while True:
                 self.assert_value(node, childs.next().value, ',')
-                args.append(self.dispatch(childs.next()))
+                args.append(self.dispatch(next(childs)))
         except StopIteration:
             pass
         args = ', '.join([str(i) for i in args])
@@ -2741,11 +2741,11 @@ if (true) {""" % jsvars)
         # x * y / x
         jsvars = self.jsvars.copy()
         childs = node.children.__iter__()
-        left = self.dispatch(childs.next())
+        left = self.dispatch(next(childs))
         try:
             while True:
                 op = childs.next().value
-                right = self.dispatch(childs.next())
+                right = self.dispatch(next(childs))
                 op = self.op_names2.get(op, None)
                 if op is None:
                     self.not_implemented(node)
@@ -2758,11 +2758,11 @@ if (true) {""" % jsvars)
     def node_test(self, node):
         jsvars = self.jsvars.copy()
         childs = node.children.__iter__()
-        left = self.dispatch(childs.next())
+        left = self.dispatch(next(childs))
         self.assert_value(node, childs.next().value, 'if')
-        test = self.get_test(childs.next())
+        test = self.get_test(next(childs))
         self.assert_value(node, childs.next().value, 'else')
-        right = self.dispatch(childs.next())
+        right = self.dispatch(next(childs))
         return '%s ? %s : %s' % (test, left, right)
 
     def node_testlist(self, node):
@@ -2770,7 +2770,7 @@ if (true) {""" % jsvars)
         childs = node.children.__iter__()
         try:
             while True:
-                items.append(self.dispatch(childs.next()))
+                items.append(self.dispatch(next(childs)))
                 self.assert_value(node, childs.next().value, ',')
         except StopIteration:
             pass
@@ -2800,7 +2800,7 @@ if (true) {""" % jsvars)
         items = []
         try:
             while True:
-                items.append(self.dispatch(childs.next()))
+                items.append(self.dispatch(next(childs)))
                 self.assert_value(node, childs.next().value, ',')
         except StopIteration:
             pass
@@ -2812,7 +2812,7 @@ if (true) {""" % jsvars)
     def node_tfpdef(self, node):
         childs = node.children.__iter__()
         self.assert_value(node, childs.next().value, '(')
-        tpl = self.dispatch(childs.next())
+        tpl = self.dispatch(next(childs))
         self.assert_value(node, childs.next().value, ')')
         return tuple(tpl)
 
@@ -2821,7 +2821,7 @@ if (true) {""" % jsvars)
         tpl = []
         try:
             while True:
-                child = childs.next()
+                child = next(childs)
                 if isinstance(child, Leaf):
                     tpl.append(child.value)
                 else:
@@ -2843,7 +2843,7 @@ if (true) {""" % jsvars)
             childs = node.children.__iter__()
             self.assert_value(node, childs.next().value, '(')
             while True:
-                child = childs.next()
+                child = next(childs)
                 if isinstance(child, Leaf):
                     if child.value == ')':
                         break
@@ -2884,29 +2884,29 @@ if (true) {""" % jsvars)
         # finally
         self.assert_value(node, childs.next().value, 'try')
         self.assert_value(node, childs.next().value, ':')
-        _try = childs.next()
+        _try = next(childs)
         _except_clauses = []
         _except = None
         _else = None
         _finally = None
         try:
             while True:
-                child = childs.next()
+                child = next(childs)
                 if isinstance(child, Leaf):
                     if child.value == 'except':
                         self.assert_value(node, childs.next().value, ':')
-                        _except = childs.next()
+                        _except = next(childs)
                     elif child.value == 'else':
                         self.assert_value(node, childs.next().value, ':')
-                        _else = childs.next()
+                        _else = next(childs)
                     elif child.value == 'finally':
                         self.assert_value(node, childs.next().value, ':')
-                        _finally = childs.next()
+                        _finally = next(childs)
                     else:
                         raise NotImplementedError(repr(node))
                 elif type_repr(child.type) == 'except_clause':
                     self.assert_value(node, childs.next().value, ':')
-                    _except_clauses.append((child, childs.next()))
+                    _except_clauses.append((child, next(childs)))
                 else:
                     raise NotImplementedError(repr(node))
         except StopIteration:
@@ -2973,14 +2973,14 @@ if (true) {""" % jsvars)
         defaults = []
         try:
             while True:
-                child = childs.next()
+                child = next(childs)
                 if isinstance(child, Leaf):
                     if child.value == '*':
                         star_args = childs.next().value
                     elif child.value == '**':
                         dstar_args = childs.next().value
                     elif child.value == '=':
-                        defaults.append(childs.next())
+                        defaults.append(next(childs))
                     elif child.value != ',':
                         args.append(child.value)
                 elif type_repr(child.type) == 'tfpdef':
@@ -3011,7 +3011,7 @@ if (true) {""" % jsvars)
         self.inloop += 1
         childs = node.children.__iter__()
         self.assert_value(node, childs.next().value, 'while')
-        test = self.get_test(childs.next())
+        test = self.get_test(next(childs))
         self.assert_value(node, childs.next().value, ':')
         if len(node.children) > 4 and node.children[4].value == 'else':
             loop = self.get_tmp_jsname('while$')
@@ -3024,7 +3024,7 @@ if (true) {""" % jsvars)
         self.add_lines("""\
 %(loopdecl)swhile (%(test)s) {%(loopass)s""" % jsvars, node.children[0].lineno)
         self.indent()
-        self.dispatch(childs.next())
+        self.dispatch(next(childs))
         self.dedent()
         self.add_lines("};")
         if loop is not None:
@@ -3033,7 +3033,7 @@ if (true) {""" % jsvars)
             self.add_lines("""\
 if (!(%(loop)s).valueOf()) {""" % jsvars, )
             self.indent()
-            self.dispatch(childs.next())
+            self.dispatch(next(childs))
             self.dedent()
             self.add_lines("};")
         self.inloop -= 1
@@ -3078,10 +3078,10 @@ if (!(%(loop)s).valueOf()) {""" % jsvars, )
         if re_int.match(leaf.value):
             return self.add_const_int(leaf.value)
         if re_oct_long.match(leaf.value):
-            i = str(long(leaf.value, 16))
+            i = str(int(leaf.value, 16))
             return self.add_const_long(i)
         if re_hex_long.match(leaf.value):
-            i = str(long(leaf.value, 16))
+            i = str(int(leaf.value, 16))
             return self.add_const_long(i)
         if re_long.match(leaf.value):
             return self.add_const_long(leaf.value)
@@ -3121,11 +3121,11 @@ if (!(%(loop)s).valueOf()) {""" % jsvars, )
 # External hooks as in translator_proto
 ###
 
-from options import (all_compile_options, add_compile_options,
+from .options import (all_compile_options, add_compile_options,
                      get_compile_options, debug_options, speed_options,
                      pythonic_options)
 
-if os.environ.has_key('PYJS_SYSPATH'):
+if 'PYJS_SYSPATH' in os.environ:
     sys.path[0:0] = [os.environ['PYJS_SYSPATH']]
 
 import pyjs
@@ -3139,7 +3139,7 @@ def translate(sources, output_file, module_name=None, **kw):
     global TranslationError
     kw = dict(all_compile_options, **kw)
     list_imports = kw.get('list_imports', False)
-    sources = map(os.path.abspath, sources)
+    sources = list(map(os.path.abspath, sources))
     output_file = os.path.abspath(output_file)
     if not module_name:
         module_name, extension = os.path.splitext(os.path.basename(sources[0]))
@@ -3167,7 +3167,7 @@ def translate(sources, output_file, module_name=None, **kw):
     if list_imports:
         # TODO: use ImportVisitor instead of Translator
         translator.dispatch_file(tree)
-        return translator.imported_modules.keys(), translator.imported_js.keys()
+        return list(translator.imported_modules.keys()), list(translator.imported_js.keys())
         v = ImportVisitor(module_name)
         compiler.walk(tree, v)
         return v.imported_modules, v.imported_js
@@ -3248,4 +3248,4 @@ if __name__ == "__main__":
     translator = Translator(sys.argv[1], None, {})
     translator.tree = translator.ast_tree_creator()
     translator.dispatch_file(translator.tree)
-    print translator.get_javascript()
+    print(translator.get_javascript())

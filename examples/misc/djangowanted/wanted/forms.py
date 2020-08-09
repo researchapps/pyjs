@@ -87,19 +87,19 @@ def test_item_form():
         d = {'id': idx, 'name': 'fred %d' % (idx % 10), 'short_description': 'joe', 'description': 'longer', 'price': 20, 'vehicletype': 'a car', 'numdoors': 5}
         f = ItemForm(d, instance=i)
         if not f.is_valid():
-            for (e, k) in f.errors.items():
-                print e, k
+            for (e, k) in list(f.errors.items()):
+                print(e, k)
         it = f.save()
 
-        print it, it.id, it.price, it.vehicletype.id, it.vehicletype.value, it.numdoors.value
+        print(it, it.id, it.price, it.vehicletype.id, it.vehicletype.value, it.numdoors.value)
 
         it.price = 25
         if not f.is_valid():
-            for (e, k) in f.errors.items():
-                print e, k
+            for (e, k) in list(f.errors.items()):
+                print(e, k)
         it = f.save()
 
-        print it, it.id, it.price, it.vehicletype.id, it.vehicletype.value, it.numdoors.value
+        print(it, it.id, it.price, it.vehicletype.id, it.vehicletype.value, it.numdoors.value)
 
 def test_add_flagtypes():
     f = FlagType(name="num_doors", description="Number of Doors")

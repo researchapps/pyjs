@@ -91,7 +91,7 @@ class MenuExample:
 
     # Print a string when a menu item is selected
     def menuitem_response(self, widget, string):
-        print "%s" % string
+        print("%s" % string)
 
 def main():
     gtk.main()

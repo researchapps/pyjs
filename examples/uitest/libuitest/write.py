@@ -23,7 +23,7 @@ def write(text, do_escape=True):
         text = escape(text)
     data += text
 
-    print "data", data
+    print("data", data)
 
 def writebr(text, do_escape=True):
     write(text + "<br />\n", do_escape)

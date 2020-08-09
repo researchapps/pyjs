@@ -1,7 +1,7 @@
 from pyjamas.ui.RootPanel import RootPanel
 from pyjamas import DOM
 
-from UnitTest import UnitTest1
+from .UnitTest import UnitTest1
 
 from __pyjamas__ import doc
 

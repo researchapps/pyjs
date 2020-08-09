@@ -1,7 +1,7 @@
 # Check http://docs.python.org/library/time.html
 
 from __pyjamas__ import JS, debugger
-import math
+from . import math
 
 timezone = JS("60 * (new Date(new Date()['getFullYear'](), 0, 1))['getTimezoneOffset']()")
 altzone = JS("60 * (new Date(new Date()['getFullYear'](), 6, 1))['getTimezoneOffset']()")

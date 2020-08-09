@@ -79,7 +79,7 @@ class FormSaveGrid:
 
         writebr(repr(response))
         writebr("%d" % len(response))
-        writebr("%s" % repr(response.keys()))
+        writebr("%s" % repr(list(response.keys())))
 
         self.sink.save_respond(response)
 
@@ -95,7 +95,7 @@ class FormGetGrid:
         writebr(method)
         writebr(repr(response))
         writebr("%d" % len(response))
-        writebr("%s" % repr(response.keys()))
+        writebr("%s" % repr(list(response.keys())))
 
         self.sink.do_get(response)
 
@@ -122,11 +122,11 @@ class Form(FormPanel):
     def __init__(self, svc, **kwargs):
 
         self.describe_listeners = []
-        if kwargs.has_key('listener'):
+        if 'listener' in kwargs:
             listener = kwargs.pop('listener')
             self.addDescribeListener(listener)
 
-        if kwargs.has_key('data'):
+        if 'data' in kwargs:
             data = kwargs.pop('data')
         else:
             data = None
@@ -194,7 +194,7 @@ class Form(FormPanel):
         offsets = {}
         for idx, fname in enumerate(self.fields):
             offsets[fname] = idx
-        for k, err in errors.items():
+        for k, err in list(errors.items()):
             err = "<br />".join(err)
             idx = offsets[k]
             self.grid.setHTML(idx, 2, err)
@@ -205,7 +205,7 @@ class Form(FormPanel):
 
         for idx, fname in enumerate(self.fields):
             val = None
-            if self.data.has_key(fname):
+            if fname in self.data:
                 val = self.data[fname]
             w = self.grid.getWidget(idx, 1)
             w.setValue(val)
@@ -219,15 +219,15 @@ class Form(FormPanel):
 
     def do_describe(self, fields):
 
-        self.fields = fields.keys()
+        self.fields = list(fields.keys())
         for idx, fname in enumerate(self.fields):
             field = fields[fname]
-            if self.data and self.data.has_key(fname):
+            if self.data and fname in self.data:
                 field['initial'] = self.data[fname]
             field_type = field['type']
             widget_kls = widget_factory.get(field_type, CharField)
             fv = {}
-            for (k, v) in field.items():
+            for (k, v) in list(field.items()):
                 fv[str(k)] = v
             w = widget_kls(**fv)
             self.add_widget(field['label'], w)

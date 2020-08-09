@@ -39,7 +39,7 @@ def getElementsByTagName(element, tagname):
     it = DOM.walkChildren(element)
     while True:
         try:
-            child = it.next()
+            child = next(it)
         except StopIteration:
             break
         el = _check_tagname(child, tagname)

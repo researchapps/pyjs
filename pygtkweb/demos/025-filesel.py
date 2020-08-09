@@ -9,7 +9,7 @@ import gtk
 class FileSelectionExample:
     # Get the selected filename and print it to the console
     def file_ok_sel(self, w):
-        print "%s" % self.filew.get_filename()
+        print("%s" % self.filew.get_filename())
 
     def destroy(self, widget):
         gtk.main_quit()

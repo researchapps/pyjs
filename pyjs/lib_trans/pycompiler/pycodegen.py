@@ -4,7 +4,7 @@ import marshal
 import struct
 import sys
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
     from io import StringIO
 
@@ -115,7 +115,7 @@ class Module(AbstractCompileMode):
         gen = ModuleCodeGenerator(tree)
         if display:
             import pprint
-            print(pprint.pprint(tree))
+            print((pprint.pprint(tree)))
         self.code = gen.getCode()
 
     def dump(self, f):
@@ -234,7 +234,7 @@ class CodeGenerator:
             assert getattr(self, 'NameFinder')
             assert getattr(self, 'FunctionGen')
             assert getattr(self, 'ClassGen')
-        except AssertionError, msg:
+        except AssertionError as msg:
             intro = "Bad class construction for %s" % self.__class__.__name__
             raise AssertionError(intro)
 
@@ -579,7 +579,7 @@ class CodeGenerator:
         self.emit('BUILD_LIST', 0)
 
         stack = []
-        for i, for_ in zip(range(len(node.quals)), node.quals):
+        for i, for_ in zip(list(range(len(node.quals))), node.quals):
             start, anchor = self.visit(for_)
             cont = None
             for if_ in for_.ifs:
@@ -650,7 +650,7 @@ class CodeGenerator:
         # setup list
 
         stack = []
-        for i, for_ in zip(range(len(node.quals)), node.quals):
+        for i, for_ in zip(list(range(len(node.quals))), node.quals):
             start, anchor, end = self.visit(for_)
             cont = None
             for if_ in for_.ifs:
@@ -896,7 +896,7 @@ class CodeGenerator:
         level = node.level
         if level == 0 and not self.graph.checkFlag(CO_FUTURE_ABSIMPORT):
             level = -1
-        fromlist = map(lambda names: names[0], node.names)
+        fromlist = [names[0] for names in node.names]
         if VERSION > 1:
             self.emit('LOAD_CONST', level)
             self.emit('LOAD_CONST', tuple(fromlist))
@@ -948,7 +948,7 @@ class CodeGenerator:
             self.set_lineno(node)
             self.delName(node.name)
         else:
-            print("oops", node.flags)
+            print(("oops", node.flags))
 
     def visitAssAttr(self, node):
         self.visit(node.expr)
@@ -957,7 +957,7 @@ class CodeGenerator:
         elif node.flags == 'OP_DELETE':
             self.emit('DELETE_ATTR', self.mangle(node.attrname))
         else:
-            print("warning: unexpected flags:", node.flags)
+            print(("warning: unexpected flags:", node.flags))
             print(node)
 
     def _visitAssSequence(self, node, op='UNPACK_SEQUENCE'):
@@ -1125,7 +1125,7 @@ class CodeGenerator:
         elif node.flags == 'OP_DELETE':
             self.emit('DELETE_SLICE+%d' % slice)
         else:
-            print("weird slice", node.flags)
+            print(("weird slice", node.flags))
             raise
 
     def visitSubscript(self, node, aug_flag=None):

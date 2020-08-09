@@ -101,15 +101,15 @@ import gtk
 import gobject
 import pywebkitgtk as pywebkit
 
-from urllib import urlopen
-from urlparse import urljoin
+from urllib.request import urlopen
+from urllib.parse import urljoin
 
 def module_load(m):
     minst = None
-    exec """\
+    exec("""\
 from %(mod)s import %(mod)s
 minst = %(mod)s()
-""" % ({'mod': m})
+""" % ({'mod': m}))
     return minst
 
 def mash_attrib(name, joiner='-'):
@@ -216,8 +216,8 @@ class Browser:
         scanner = {'href': dom.querySelectorAll('head link[rel~=icon][href],' +
                                                 'head link[rel|=apple-touch-icon][href]'),
                    'content': dom.querySelectorAll('head meta[itemprop=image][content]')}
-        for attr in scanner.keys():
-            for i in xrange(scanner[attr].length):
+        for attr in list(scanner.keys()):
+            for i in range(scanner[attr].length):
                 uri = getattr(scanner[attr].item(i), attr)
                 if len(uri) == 0:
                     continue
@@ -242,10 +242,10 @@ class Browser:
             self._toplevel.set_icon_name(icon[0])
         else:
             self._toplevel.set_icon(icon[1])
-        print '_icon_loaded_cb <%s>' % icon[0]
+        print('_icon_loaded_cb <%s>' % icon[0])
 
     def _selection_changed_cb(self):
-        print "selection changed"
+        print("selection changed")
 
     def _set_scroll_adjustments_cb(self, view, hadjustment, vadjustment):
         self._scrolled_window.props.hadjustment = hadjustment
@@ -257,7 +257,7 @@ class Browser:
 
     def _javascript_script_alert_cb(self, view, frame, message):
 
-        print "alert", message
+        print("alert", message)
 
         def close(w):
             dialog.destroy()

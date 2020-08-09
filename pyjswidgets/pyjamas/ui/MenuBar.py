@@ -41,7 +41,7 @@ class MenuBar(Widget):
         self.shownChildMenu = None
         self.autoOpen = False
 
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             table = kwargs.pop('Element')
             fc = DOM.getFirstChild(table)
             if fc:
@@ -69,18 +69,18 @@ class MenuBar(Widget):
         self.clearItems() # really tricky to update, so just blow away.
 
         items = {}
-        for (k, v) in props.items():
+        for (k, v) in list(props.items()):
             if not isinstance(k, int):
                 continue
             items[int(k)] = v
-        items = items.items()
+        items = list(items.items())
         items.sort()
 
         last_level = 0
         menu = self
         menus = [menu]
         for prop in items:
-            print prop
+            print(prop)
             level, name, label, handler = prop[1]
             if level < last_level:
                 menus = menus[:level+1]

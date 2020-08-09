@@ -167,10 +167,10 @@ class Modload:
         for modlist in self.app_modlist:
             for mod in modlist:
                 depth = len(mod.split('.'))
-                if not self.modules.has_key(depth):
+                if depth not in self.modules:
                     self.modules[depth] = []
                 self.modules[depth].append(mod)
-        self.depths = self.modules.keys()
+        self.depths = list(self.modules.keys())
         self.depths.sort()
         self.depths.reverse()
 
@@ -203,7 +203,7 @@ def preload_app_modules(path, app_modnames, app_imported_fn, dynamic,
                         parent_mod=None):
 
     loader = Modload(path, app_modnames, app_imported_fn, dynamic, parent_mod)
-    loader.next()
+    next(loader)
 
 class BaseException:
 
@@ -233,27 +233,27 @@ class BaseException:
 class Exception(BaseException):
     pass
 
-class StandardError(Exception):
+class Exception(Exception):
     pass
 
-class TypeError(StandardError):
+class TypeError(Exception):
     pass
 
-class AttributeError(StandardError):
+class AttributeError(Exception):
 
     def toString(self):
         return "AttributeError: %s of %s" % (self.args[1], self.args[0])
 
-class NameError(StandardError):
+class NameError(Exception):
     pass
 
-class ValueError(StandardError):
+class ValueError(Exception):
     pass
 
-class ImportError(StandardError):
+class ImportError(Exception):
     pass
 
-class LookupError(StandardError):
+class LookupError(Exception):
 
     def toString(self):
         return self.__name__ + ": " + self.args[0]
@@ -1048,7 +1048,7 @@ class Dict:
 
     @noSourceTracking
     def __iter__(self):
-        return self.keys().__iter__()
+        return list(self.keys()).__iter__()
 
     @noSourceTracking
     def iterkeys(self):
@@ -1056,27 +1056,27 @@ class Dict:
 
     @noSourceTracking
     def itervalues(self):
-        return self.values().__iter__();
+        return list(self.values()).__iter__();
 
     @noSourceTracking
     def iteritems(self):
-        return self.items().__iter__();
+        return list(self.items()).__iter__();
 
     @noSourceTracking
     def setdefault(self, key, default_value):
-        if not self.has_key(key):
+        if key not in self:
             self[key] = default_value
         return self[key]
 
     @noSourceTracking
     def get(self, key, default_value=None):
-        if not self.has_key(key):
+        if key not in self:
             return default_value
         return self[key]
 
     @noSourceTracking
     def update(self, d):
-        for k,v in d.iteritems():
+        for k,v in d.items():
             self[k] = v
 
     @noSourceTracking
@@ -1089,7 +1089,7 @@ class Dict:
 
     @noSourceTracking
     def copy(self):
-        return Dict(self.items())
+        return Dict(list(self.items()))
 
     @noSourceTracking
     def __str__(self):
@@ -1806,7 +1806,7 @@ def sprintf(strng, args):
             if (typeof conversion == 'undefined') conversion = null;
 """)
             result.append(left)
-            if not arg.has_key(key):
+            if key not in arg:
                 raise KeyError(key)
             else:
                 param = arg[key]
@@ -1847,7 +1847,7 @@ def type(clsname, bases=None, methods=None):
 
     JS(" var mths = {}; ")
     if methods:
-        for k in methods.keys():
+        for k in list(methods.keys()):
             mth = methods[k]
             JS(" @{{mths}}[@{{k}}] = @{{mth}}; ")
 

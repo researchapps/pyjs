@@ -28,7 +28,7 @@ class CaptionPanel(SimplePanel):
             ]
 
     def __init__(self, caption, widget=None, **kwargs):
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
         else:
             element = DOM.createElement("fieldset")

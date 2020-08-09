@@ -66,7 +66,7 @@ class TCPServiceServer:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind(address)
         self.socket.listen(5)
-        print "serving", self.socket
+        print("serving", self.socket)
         while 1:
             (conn,addr) = self.socket.accept()
             self.acceptConnection(conn)

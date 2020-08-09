@@ -28,12 +28,12 @@ class TabBar(Composite):
 
     def __init__(self, **kwargs):
 
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']="gwt-TabBar"
+        if 'StyleName' not in kwargs: kwargs['StyleName']="gwt-TabBar"
 
         # this is awkward: HorizontalPanel is the composite,
         # so we either the element here, and pass it in to HorizontalPanel.
         element = None
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
 
         self.panel = HorizontalPanel(Element=element)
@@ -118,7 +118,7 @@ class TabBar(Composite):
             self.panel.setCellWidth(text, "100%")
             return
 
-        istext = isinstance(text, basestring)
+        istext = isinstance(text, str)
 
         if istext:
             if asHTML:

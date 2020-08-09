@@ -65,7 +65,7 @@ class AttributeTest(UnitTest):
 
         try:
             self.assertEqual(1, getattr(foo, "vv"))
-        except AttributeError, e:
+        except AttributeError as e:
             self.assertEqual(e.__class__.__name__, 'AttributeError')
             return
         self.fail("No AttributeError raised")
@@ -99,7 +99,7 @@ class AttributeTest(UnitTest):
         self.assertEqual(hasattr(foo, "getV"), True)
         try:
             delattr(foo, "getV")
-        except AttributeError, e:
+        except AttributeError as e:
             self.assertEqual(str(e), "Foo instance has no attribute 'getV'")
 
 
@@ -173,7 +173,7 @@ class AttributeTest(UnitTest):
         self.assertEqual(getattr(f, 'typeof'), 1)
         try:
             self.assertEqual(f.typeof, 1)
-        except AttributeError, e:
+        except AttributeError as e:
             self.fail("Bug #402 setattr error for keywords")
         self.assertTrue(hasattr(Foo, 'typeof'))
         delattr(Foo, 'typeof')
@@ -195,11 +195,11 @@ class AttributeTest(UnitTest):
                 x = (1,2,3).count
             x = (lambda x:z).__name__
             x = [1,2,3,4][1:2].append
-        except Exception, e:
+        except Exception as e:
             self.fail("Base type attribute, #594, '%s'" % e)
         try:
             x = "asdfgd".rjust
-        except Exception, e:
+        except Exception as e:
             self.fail("String attribute, #595, '%s'" % e)
 
     def testExpressionAttributeCall(self):

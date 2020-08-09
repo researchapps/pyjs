@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response
-from jsonrpc import *
+from .jsonrpc import *
 from gaedjangononrelpuremvcblog.post.models import Post
 
 service = JSONRPCService()

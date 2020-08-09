@@ -48,7 +48,7 @@ class RichTextArea (FocusWidget) :
     * Creates a new, blank {@link RichTextArea} object with no stylesheet.
     """
     def __init__(self, **kwargs):
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']="gwt-RichTextArea"
+        if 'StyleName' not in kwargs: kwargs['StyleName']="gwt-RichTextArea"
         self.impl = RichTextAreaImplStandard()
         FocusWidget.__init__(self, self.impl.getElement(), **kwargs)
 

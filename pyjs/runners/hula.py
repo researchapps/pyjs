@@ -37,7 +37,7 @@ from xpcom.nsError import *
 from xpcom import components
 from xpcom.components import interfaces
 
-from progresslistener import ProgressListener
+from .progresslistener import ProgressListener
 
 class nsITimerCallback:
 
@@ -91,7 +91,7 @@ class Browser(WebView):
         self.progress.connect('loading-progress', self._loading)
 
     def _alert(self, txt):
-        print "_alert", txt
+        print("_alert", txt)
         #self.get_prompt_svc().alert(None, "Alert", txt)
 
         def close(w):
@@ -173,7 +173,7 @@ class Browser(WebView):
 
     def _loaded(self, progress_listener):
 
-        print "loaded"
+        print("loaded")
 
         if self.already_initialised:
             return
@@ -297,9 +297,9 @@ def setup(application, appdir=None, width=800, height=600):
 
 def module_load(m):
     minst = None
-    exec """\
+    exec("""\
 from %(mod)s import %(mod)s
 minst = %(mod)s()
-""" % ({'mod': m})
+""" % ({'mod': m}))
     return minst
 

@@ -84,7 +84,7 @@ def find_single_connection_interface(source):
     enum = cpc.EnumConnectionPoints()
     iid = enum.next().GetConnectionInterface()
     try:
-        enum.next()
+        next(enum)
     except StopIteration:
         try:
             interface = comtypes.com_interface_registry[str(iid)]
@@ -207,7 +207,7 @@ def PumpEvents(timeout):
                                                                int(timeout * 1000),
                                                                len(handles), handles,
                                                                ctypes.byref(ctypes.c_ulong()))
-        except WindowsError, details:
+        except WindowsError as details:
             if details.args[0] != RPC_S_CALLPENDING: # timeout expired
                 raise
         else:
@@ -299,7 +299,7 @@ def GetDispEventReceiver(interface, sink, sink_name=None):
     interfaces = interface.mro()[:-3] # skip IDispatch, IUnknown, object
     interface_names = [itf.__name__ for itf in interfaces]
     for itf in interfaces:
-        for memid, name in _get_dispmap(itf).iteritems():
+        for memid, name in _get_dispmap(itf).items():
             if name == sink_name:
                 #print "GetDispEventReceiver", memid, name
                 methods[0] = sink

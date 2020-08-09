@@ -25,8 +25,8 @@ pyjs.path += [os.path.join(pyjspth, 'library'),
 
 
 from pyjs import translator
-from linker import PLATFORM, PyV8Linker, add_linker_options
-from jsglobal import Global
+from .linker import PLATFORM, PyV8Linker, add_linker_options
+from .jsglobal import Global
 
 class JSRuntimeError(Exception):
     def __init__(self, ctxt, exc):
@@ -131,11 +131,11 @@ def main():
     ctxt.enter()
     try:
         x = ctxt.eval(txt)
-    except Exception, e:
-        print JSRuntimeError(ctxt, e).full()
+    except Exception as e:
+        print(JSRuntimeError(ctxt, e).full())
 
     if IS_REPL:
-        from repl import REPL
+        from .repl import REPL
         REPL(translator.compiler, linker, translator_arguments, g, ctxt)()
 
 

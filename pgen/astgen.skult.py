@@ -10,7 +10,7 @@ the Node interface has changed more often than the grammar.
 import fileinput
 import re
 import sys
-from StringIO import StringIO
+from io import StringIO
 
 SPEC = "ast.txt"
 COMMA = ", "
@@ -91,9 +91,9 @@ class NodeInfo:
     def gen_source(self):
         buf = StringIO()
         self._gen_init(buf)
-        print >> buf
+        print(file=buf)
         self._gen_walkChildren(buf)
-        print >> buf
+        print(file=buf)
         bufAux = StringIO()
         self._gen_repr(bufAux)
         buf.seek(0, 0)
@@ -101,46 +101,46 @@ class NodeInfo:
         return buf.read(), bufAux.read()
 
     def _gen_init(self, buf):
-        print >> buf, "# --------------------------------------------------------"
-        print >> buf, "class %s:\n" % self.name
+        print("# --------------------------------------------------------", file=buf)
+        print("class %s:\n" % self.name, file=buf)
         if self.args:
-            print >> buf, "    def __init__ (self, %s, lineno):\n" % (self.args)
+            print("    def __init__ (self, %s, lineno):\n" % (self.args), file=buf)
         else:
-            print >> buf, "    def __init__(self, lineno):\n"
-        print >>buf, "        self.nodeName = \"%s\";" % self.name
+            print("    def __init__(self, lineno):\n", file=buf)
+        print("        self.nodeName = \"%s\";" % self.name, file=buf)
         if self.argnames:
             for name in self.argnames:
-                print >> buf, "        self.%s = %s;" % (name, name)
-        print >> buf, "        self.lineno = lineno;"
+                print("        self.%s = %s;" % (name, name), file=buf)
+        print("        self.lineno = lineno;", file=buf)
         # Copy the lines in self.init, indented four spaces.  The rstrip()
         # business is to get rid of the four spaces if line happens to be
         # empty, so that reindent.py is happy with the output.
         for line in self.init:
-            print >> buf, line.rstrip()
+            print(line.rstrip(), file=buf)
 
     def _gen_walkChildren(self, buf):
-        print >> buf, "    def walkChildren(self, handler, args):"
+        print("    def walkChildren(self, handler, args):", file=buf)
         if len(self.argnames) == 0:
-            print >> buf, "        return;"
+            print("        return;", file=buf)
         else:
             if self.hardest_arg < P_NESTED:
                 for c in self.argnames:
-                    print >>buf, "        ret = handler.visit(self.%s, args);" % c
-                    print >>buf, "        if ret: self.%s = ret" % c
+                    print("        ret = handler.visit(self.%s, args);" % c, file=buf)
+                    print("        if ret: self.%s = ret" % c, file=buf)
             else:
                 for name in self.argnames:
                     if self.argprops[name] == P_NESTED:
-                        print >> buf, "        for i_%(name)s in range(len(self.%(name)s)):\n" % {'name':name}
-                        print >> buf, "            ret = handler.visit(self.%(name)s[i_%(name)s], args);" % {'name': name}
-                        print >> buf, "            if ret: self.%(name)s[i_%(name)s] = ret\n" % {'name': name}
+                        print("        for i_%(name)s in range(len(self.%(name)s)):\n" % {'name':name}, file=buf)
+                        print("            ret = handler.visit(self.%(name)s[i_%(name)s], args);" % {'name': name}, file=buf)
+                        print("            if ret: self.%(name)s[i_%(name)s] = ret\n" % {'name': name}, file=buf)
                     else:
-                        print >> buf, "        ret = handler.visit(self.%s, args);" % name
-                        print >> buf, "        if ret: self.%s = ret" % name
+                        print("        ret = handler.visit(self.%s, args);" % name, file=buf)
+                        print("        if ret: self.%s = ret" % name, file=buf)
 
     def _gen_repr(self, buf):
         # can't use actual type, or extend prototype because it's inside the
         # non-debug no-symbol-leaking big function
-        print >> buf, "if (node.nodeName=== '%s'):" % self.name
+        print("if (node.nodeName=== '%s'):" % self.name, file=buf)
         if self.argnames:
             fmts = []
             for name in self.argnames:
@@ -148,11 +148,11 @@ class NodeInfo:
             fmt = COMMA.join(fmts)
             vals = ["astDump(node.%s)" % name for name in self.argnames]
             vals = COMMA.join(vals)
-            print >> buf, '    return sprintf("%s(%s)", %s)' % \
-                  (self.name, fmt, vals)
+            print('    return sprintf("%s(%s)", %s)' % \
+                  (self.name, fmt, vals), file=buf)
         else:
-            print >> buf, '    return "%s()"' % self.name
-        print >> buf, "}"
+            print('    return "%s()"' % self.name, file=buf)
+        print("}", file=buf)
 
 rx_init = re.compile('init\((.*)\):')
 
@@ -179,15 +179,15 @@ def parse_spec(file):
             # some extra code for a Node's __init__ method
             name = mo.group(1)
             cur = classes[name]
-    return sorted(classes.values(), key=lambda n: n.name)
+    return sorted(list(classes.values()), key=lambda n: n.name)
 
 def main():
     prologue, epilogue = load_boilerplate(sys.argv[0])
     mainf = open(sys.argv[1], "w")
     auxf = open(sys.argv[2], "w")
-    print >>mainf, prologue
-    print >>mainf
-    print >>auxf, """// This file is automatically generated by pgen/astgen.py
+    print(prologue, file=mainf)
+    print(file=mainf)
+    print("""// This file is automatically generated by pgen/astgen.py
 
 function astDump(node)
 {
@@ -203,14 +203,14 @@ function astDump(node)
                 ret += ",";
         return ret
 
-"""
+""", file=auxf)
     classes = parse_spec(SPEC)
     for info in classes:
         a,b = info.gen_source()
-        print >>mainf, a
-        print >>auxf, b
-    print >>mainf, epilogue
-    print >>auxf, "}\n"
+        print(a, file=mainf)
+        print(b, file=auxf)
+    print(epilogue, file=mainf)
+    print("}\n", file=auxf)
     mainf.close()
     auxf.close()
 

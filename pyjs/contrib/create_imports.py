@@ -69,7 +69,7 @@ class CreateImports(object):
         skip = False
         try:
             nodes = compiler.parseFile(srcFile).getChildNodes()[0]
-        except SyntaxError, e:
+        except SyntaxError as e:
             self.warning("Skipping. Syntax error: %s" % e)
             skip = True
         except:
@@ -85,14 +85,14 @@ class CreateImports(object):
                     method(dict_import_names, node)
                 elif self.verbosity:
                     self.warning('Skipping %s' % ast_name, node.lineno)
-            import_names[:] = dict_import_names.keys()
+            import_names[:] = list(dict_import_names.keys())
             import_names.sort()
             self.srcFile = savedSrcFile
         return import_names
 
     def addNames(self, import_names, node_names):
         for names in node_names:
-            if isinstance(names, basestring):
+            if isinstance(names, str):
                 name = names
             elif names[1] is None:
                 name = names[0]
@@ -166,7 +166,7 @@ class CreateImports(object):
             import_lines = self.import_lines
         try:
             oldData = open(dstFile, 'r').readlines()
-        except IOError, e:
+        except IOError as e:
             if e[0] == 2: # No such file or directory
                 oldData = []
             else:

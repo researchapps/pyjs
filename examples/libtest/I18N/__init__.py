@@ -11,9 +11,9 @@ locale = 'en'
 domains = []
 
 import sys
-import domain
+from . import domain
 domains.append('domain')
-import domain.subdomain
+from . import domain.subdomain
 domains.append('domain.subdomain')
 
 def set_locale(loc):
@@ -21,13 +21,13 @@ def set_locale(loc):
     try:
         path = "I18N.%s" % loc
         c = __import__(path)
-    except ImportError, e:
-        print "Failed to import %s" % e
+    except ImportError as e:
+        print("Failed to import %s" % e)
     domains.sort()
     for domain in domains:
         try:
             path = "I18N.%s.%s" % (domain, loc)
             __import__(path)
-        except ImportError, e:
-            print "Failed to import %s" % e
+        except ImportError as e:
+            print("Failed to import %s" % e)
 

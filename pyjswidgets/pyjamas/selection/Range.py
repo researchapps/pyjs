@@ -22,8 +22,8 @@ the License.
 
 from pyjamas import DOM
 
-from RangeEndPoint import RangeEndPoint
-import RangeUtil
+from .RangeEndPoint import RangeEndPoint
+from . import RangeUtil
 
 import random
 

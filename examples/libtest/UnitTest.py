@@ -20,13 +20,13 @@ class UnitTest:
         self.test_idx = None
 
         # Synonyms for assertion methods
-        self.assertEqual = self.assertEquals = self.failUnlessEqual
-        self.assertNotEqual = self.assertNotEquals = self.failIfEqual
-        self.assertAlmostEqual = self.assertAlmostEquals = self.failUnlessAlmostEqual
-        self.assertNotAlmostEqual = self.assertNotAlmostEquals = self.failIfAlmostEqual
-        self.failUnlessRaises = self.assertRaises
-        self.assert_ = self.assertTrue = self.failUnless
-        self.assertFalse = self.failIf
+        self.assertEqual = self.assertEqual = self.assertEqual
+        self.assertNotEqual = self.assertNotEqual = self.assertNotEqual
+        self.assertAlmostEqual = self.assertAlmostEqual = self.assertAlmostEqual
+        self.assertNotAlmostEqual = self.assertNotAlmostEqual = self.assertNotAlmostEqual
+        self.assertRaises = self.assertRaises
+        self.assertTrue = self.assertTrue = self.assertTrue
+        self.assertFalse = self.assertFalse
 
     def _run_test(self, test_method_name):
         self.getTestMethods()
@@ -37,7 +37,7 @@ class UnitTest:
         try:
             try:
                 test_method()
-            except Exception,e:
+            except Exception as e:
                 self.fail("uncaught exception: " + str(e))
         except:
             self.fail("uncaught javascript exception")

@@ -45,7 +45,7 @@ class DbTest():
                 self.db.execute('delete from Demo where Timestamp=?', rs.field(1));
             index += 1
 
-            rs.next()
+            next(rs)
         rs.close()
 
 if __name__ == '__main__':

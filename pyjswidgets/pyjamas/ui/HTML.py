@@ -39,10 +39,10 @@ class HTML(Label, InnerHTML):
         return Widget._getProps() + self._props
 
     def _setWeirdProps(self, props, builderstate):
-        if props.has_key("label"):
+        if "label" in props:
             props['text'] = props['label']
             del props['label']
-        if not props.has_key("text"):
+        if "text" not in props:
             return
         txt = props["text"]
         if props.get("html", False):

@@ -41,7 +41,7 @@ class EventArguments(SimplePanel):
         self.map.addListener("click", self.clicked)
 
     def clicked(self, event):
-        print "clicked on " + str(event.latLng)
+        print("clicked on " + str(event.latLng))
         self.placeMarker(event.latLng)
 
     def placeMarker(self, location):

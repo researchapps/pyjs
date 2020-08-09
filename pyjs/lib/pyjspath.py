@@ -10,11 +10,11 @@ Some of this can actually be useful on non-Posix systems too, e.g.
 for manipulation of the pathname component of URLs.
 """
 
-import os
-import sys
-import stat
-import genericpath
-from genericpath import *
+from . import os
+from . import sys
+from . import stat
+from . import genericpath
+from .genericpath import *
 
 __all__ = ["normcase","isabs","join","splitdrive","split","splitext",
            "basename","dirname","commonprefix","getsize","getmtime",

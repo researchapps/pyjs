@@ -176,7 +176,7 @@ class Model:
                 self.destroyShip()
                 return
 
-        for i in reversed(range(len(self.shots))):
+        for i in reversed(list(range(len(self.shots)))):
             if not self.shots[i].move():
                 self.shots.pop(i)
                 

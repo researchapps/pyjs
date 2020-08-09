@@ -8,11 +8,11 @@ API for Flowplayer http://flowplayer.org
 """
 
 from pyjamas.ui.FlashPanel import FlashPanel
-import DeferredHandler
+from . import DeferredHandler
 
 from pyjamas.ui.Composite import Composite
 from pyjamas.Timer import Timer
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from __pyjamas__ import wnd
 from pyjamas import logging
 
@@ -224,7 +224,7 @@ class Player(FlashPanel):
                         name = 'screen'
                     else:
                         name = arguments[0]
-                    if self.plugins.has_key(name):
+                    if name in self.plugins:
                         self.plugins[name].loaded = True
                     if hasattr(listener, 'onLoadPlugin'):
                         eventMethod = getattr(listener, 'onLoadPlugin')
@@ -232,7 +232,7 @@ class Player(FlashPanel):
             elif eventName == 'onPluginEvent':
                 plugin_name = arguments[0]
                 plugin_eventName = arguments[1]
-                if self.plugins.has_key(plugin_name):
+                if plugin_name in self.plugins:
                     self.plugins[plugin_name].fireEvent(plugin_eventName)
             elif eventName == 'onClipAdd':
                 arguments[0] = self.playlist[int(arguments[1])]
@@ -369,7 +369,7 @@ class Player(FlashPanel):
 
         @return: plugin with the given name
         """
-        if self.plugins.has_key(name):
+        if name in self.plugins:
             plugin = self.plugins[name]
             return plugin
         else:

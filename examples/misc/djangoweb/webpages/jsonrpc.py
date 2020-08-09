@@ -71,7 +71,7 @@ def jsonremote(service):
             service.add_method(func.__name__, func)
         else:
             emsg = 'Service "%s" not found' % str(service.__name__)
-            raise NotImplementedError, emsg
+            raise NotImplementedError(emsg)
         return func
     return remotify
 
@@ -100,11 +100,11 @@ from django import forms
 
 def builderrors(form):
     d = {}
-    for error in form.errors.keys():
+    for error in list(form.errors.keys()):
         if error not in d:
             d[error] = []
         for errorval in form.errors[error]:
-            d[error].append(unicode(errorval))
+            d[error].append(str(errorval))
     return d
 
 class FormProcessor(JSONRPCService):
@@ -112,7 +112,7 @@ class FormProcessor(JSONRPCService):
 
         if _formcls is None:
             JSONRPCService.__init__(self)
-            for k in forms.keys():
+            for k in list(forms.keys()):
                 s  = FormProcessor({}, forms[k])
                 self.add_method(k, s.__process)
                 #self.add_method(k, s)
@@ -165,7 +165,7 @@ from datetime import date
 
 def dict_datetimeflatten(item):
     d = {}
-    for k, v in item.items():
+    for k, v in list(item.items()):
         k = str(k)
         if isinstance(v, datetime.date):
             d[k] = str(v)

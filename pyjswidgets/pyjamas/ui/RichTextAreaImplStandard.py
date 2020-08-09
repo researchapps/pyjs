@@ -70,7 +70,7 @@ class RichTextAreaImplStandard (RichTextAreaImpl):
         return DOM.getInnerText(self.beforeInitPlaceholder)
 
     def onTimer(self, tid):
-        print "initialise timer done", tid
+        print("initialise timer done", tid)
         self.elem.contentWindow.document.designMode = 'On'
 
         # Send notification that the iframe has reached design mode.
@@ -80,7 +80,7 @@ class RichTextAreaImplStandard (RichTextAreaImpl):
         # Most browsers don't like setting designMode until slightly _after_
         # the iframe becomes attached to the DOM. Any non-zero timeout will do
         # just fine.
-        print "initElement"
+        print("initElement")
         self.initializing = True
         Timer(50, self)
 
@@ -239,7 +239,7 @@ class RichTextAreaImplStandard (RichTextAreaImpl):
         self.__gwt_handler(view, evt, from_window)
 
     def hookEvents(self):
-        print self, "hook events weirdly"
+        print(self, "hook events weirdly")
 
         elem = self.elem;
         win = elem.contentWindow;
@@ -264,7 +264,7 @@ class RichTextAreaImplStandard (RichTextAreaImpl):
         if not self.initializing:
             return
 
-        print "onElementInit", DOM.getInnerHTML(self.beforeInitPlaceholder)
+        print("onElementInit", DOM.getInnerHTML(self.beforeInitPlaceholder))
         self.initializing = False
 
         RichTextAreaImpl.onElementInitialized(self)
@@ -292,7 +292,7 @@ class RichTextAreaImplStandard (RichTextAreaImpl):
         self.elem.contentWindow.document.body.textContent = text;
 
     def unhookEvents(self):
-        print """ TODO: RichTextEditor.unhookEvents:
+        print(""" TODO: RichTextEditor.unhookEvents:
         var elem = this.elem;
         var wnd = elem.contentWindow;
 
@@ -312,7 +312,7 @@ class RichTextAreaImplStandard (RichTextAreaImpl):
         elem.__gwt_handler = null;
         elem.__gwt_focusHandler = null;
         elem.__gwt_blurHandler = null;
-        """
+        """)
 
     def execCommand(self, cmd, param):
         if self.isRichEditingActive(self.elem):

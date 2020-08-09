@@ -55,7 +55,7 @@ class DoubleControl(Control):
         self.dragging = False
         self.drag_enabled = False
 
-        if not kwargs.has_key("TabIndex"): kwargs['TabIndex'] = 0
+        if "TabIndex" not in kwargs: kwargs['TabIndex'] = 0
         FocusWidget.__init__(self, element, **kwargs)
         MouseHandler.__init__(self)
 
@@ -78,8 +78,9 @@ class DoubleControl(Control):
 
         return [value_x, value_y]
 
-    def setValue(self, (new_value_x,new_value_y), notify=1):
+    def setValue(self, xxx_todo_changeme, notify=1):
 
+        (new_value_x,new_value_y) = xxx_todo_changeme
         old_value = [self.value_x, self.value_y]
 
         self.value_x = new_value[0]

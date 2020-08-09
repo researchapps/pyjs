@@ -173,7 +173,7 @@ class UIMergeExample:
         buttonbox.pack_start(visiblebutton, False)
         buttonbox.pack_start(mergebutton, False)
         vbox.pack_start(buttonbox)
-        print uimanager.get_ui()
+        print(uimanager.get_ui())
         window.show_all()
         return
 
@@ -185,7 +185,7 @@ class UIMergeExample:
 
     def loudness_cb(self, action):
         # action has not toggled yet
-        print 'Loudness toggled'
+        print('Loudness toggled')
         return
 
     def radioband_cb(self, action, current):
@@ -194,15 +194,15 @@ class UIMergeExample:
         return
 
     def new_cb(self, b):
-        print 'New settings'
+        print('New settings')
         return
 
     def save_cb(self, b):
-        print 'Save settings'
+        print('Save settings')
         return
 
     def quit_cb(self, b):
-        print 'Quitting program'
+        print('Quitting program')
         gtk.main_quit()
 
     def toggle_sensitivity(self, b):
@@ -219,8 +219,8 @@ class UIMergeExample:
             self.merge_id = 0
         else:
             self.merge_id = self.uimanager.add_ui_from_string(self.ui1)
-            print 'merge id:', self.merge_id
-        print self.uimanager.get_ui()
+            print('merge id:', self.merge_id)
+        print(self.uimanager.get_ui())
         return
 
 if __name__ == '__main__':

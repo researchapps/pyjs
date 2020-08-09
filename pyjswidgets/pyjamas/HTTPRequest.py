@@ -73,7 +73,7 @@ class HTTPRequest(object):
         xmlHttp = None
         # XXX HACK! webkit wrapper returns 0 not 200!
         if status == 0:
-            print "HACK ALERT! webkit wrapper returns 0 not 200!"
+            print("HACK ALERT! webkit wrapper returns 0 not 200!")
         if status == 200 or status == 0:
             localHandler.onCompletion(responseText)
         else :
@@ -182,7 +182,7 @@ class HTTPRequest(object):
                 res = xmlHttp.open(method, url)
             #print url, res
         for h in headers:
-            if isinstance(headers[h], basestring):
+            if isinstance(headers[h], str):
                 xmlHttp.setRequestHeader(h, headers[h])
             else:
                 hval = ';'.join([str(i) for i in headers[h]])

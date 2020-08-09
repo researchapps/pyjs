@@ -95,7 +95,7 @@ class DirectionsSimple(DockPanel):
         start = self.start.getValue(self.start.getSelectedIndex())
         end = self.end.getValue(self.end.getSelectedIndex())
 
-        print "calcRoute start:", start, "end:", end
+        print("calcRoute start:", start, "end:", end)
 
         request = DirectionsRequest(origin=start, destination=end, \
             travelMode=DirectionsTravelMode.DRIVING)
@@ -103,19 +103,19 @@ class DirectionsSimple(DockPanel):
         self.directionsService.route(request, self.directionsResult)
 
     def directionsResult(self, response, status):
-        print "directionsResult:"
+        print("directionsResult:")
 
         if status == DirectionsStatus.OK:
 
             Hf = response.Hf
-            print Hf.origin, Hf.destination, Hf.travelMode
+            print(Hf.origin, Hf.destination, Hf.travelMode)
 
             for route in response.routes:
                 attrs = dir(route)
                 attrs.sort()
                 for attr in attrs:
-                    print '%s: %r' % (attr, getattr(route, attr))
-            print "\n"
+                    print('%s: %r' % (attr, getattr(route, attr)))
+            print("\n")
 
             self.directionsDisplay.setDirections(response)
 

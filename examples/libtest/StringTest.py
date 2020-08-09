@@ -7,7 +7,7 @@ class StringTest(UnitTest):
     def testBasestring(self):
         s = 'A string'
         self.assertTrue(isinstance(s, str), "isinstance(s, str)")
-        self.assertTrue(isinstance(s, basestring), "isinstance(s, basestring)")
+        self.assertTrue(isinstance(s, str), "isinstance(s, basestring)")
 
     def testToString(self):
         # TODO: this fails on IE, because we can not override toString
@@ -15,11 +15,11 @@ class StringTest(UnitTest):
         # we need to do something like this
         # http://webreflection.blogspot.com/2007/07/quick-fix-internet-explorer-and.html
         o = ClassWithOwnToString()
-        self.assertEquals(o.toString(), 'ClassWithOwnToString as a String')
+        self.assertEqual(o.toString(), 'ClassWithOwnToString as a String')
         o = ClassWithOwnToString2()
         try:
-            self.assertEquals(o.toString(), 'ClassWithOwnToString2 as a String')
-        except AttributeError, e:
+            self.assertEqual(o.toString(), 'ClassWithOwnToString2 as a String')
+        except AttributeError as e:
             #AttributeError: 'ClassWithOwnToString2' object has no attribute 'toString
             # mapping of toString to __str__ is not available in normal python
             pass
@@ -31,49 +31,49 @@ class StringTest(UnitTest):
         expected_result3="this_is_a_rather_long_string"
 
         result=text.replace("is", "---")
-        self.assertEquals(result, expected_result1)
+        self.assertEqual(result, expected_result1)
 
         result=text.replace("s", "--", 1)
-        self.assertEquals(result, expected_result2)
+        self.assertEqual(result, expected_result2)
 
         result=text.replace(" ", "_")
-        self.assertEquals(result, expected_result3)
+        self.assertEqual(result, expected_result3)
 
     def testRFind(self):
         text="this is a yes it is a rather long string"
 
         result=text.rfind("not found")
-        self.assertEquals(result, -1)
+        self.assertEqual(result, -1)
 
         result=text.rfind("is")
-        self.assertEquals(result, 17)
+        self.assertEqual(result, 17)
 
         result=text.rfind("is", 18)
-        self.assertEquals(result, -1)
+        self.assertEqual(result, -1)
 
         result=text.rfind("is", 17)
-        self.assertEquals(result, 17)
+        self.assertEqual(result, 17)
 
         result=text.rfind("is", 16)
-        self.assertEquals(result, 17)
+        self.assertEqual(result, 17)
 
         result=text.rfind("is", 2, 3)
-        self.assertEquals(result, -1)
+        self.assertEqual(result, -1)
 
     def testFind(self):
         text="this is a rather long string"
 
         result=text.find("not found")
-        self.assertEquals(result, -1)
+        self.assertEqual(result, -1)
 
         result=text.find("is")
-        self.assertEquals(result, 2)
+        self.assertEqual(result, 2)
 
         result=text.find("is", 3)
-        self.assertEquals(result, 5)
+        self.assertEqual(result, 5)
 
         result=text.find("is", 2, 3)
-        self.assertEquals(result, -1)
+        self.assertEqual(result, -1)
 
     def testJoin(self):
         data="this is a rather long string"
@@ -84,10 +84,10 @@ class StringTest(UnitTest):
         expected_result2="thisisaratherlongstring"
 
         result=sep1.join(data)
-        self.assertEquals(result, expected_result1)
+        self.assertEqual(result, expected_result1)
 
         result=sep2.join(data)
-        self.assertEquals(result, expected_result2)
+        self.assertEqual(result, expected_result2)
 
     def testSplit(self):
         text=" this is  a rather long string  "
@@ -98,32 +98,32 @@ class StringTest(UnitTest):
         expected_result3="this is a rather long string"
 
         t = text.split(space)
-        self.assertEquals(t[0], '')
-        self.assertEquals(t[1], 'this')
-        self.assertEquals(t[2], 'is')
-        self.assertEquals(t[3], '')
-        self.assertEquals(t[4], 'a')
+        self.assertEqual(t[0], '')
+        self.assertEqual(t[1], 'this')
+        self.assertEqual(t[2], 'is')
+        self.assertEqual(t[3], '')
+        self.assertEqual(t[4], 'a')
 
         result=space.join(t)
-        self.assertEquals(result, expected_result1)
+        self.assertEqual(result, expected_result1)
 
         result=empty.join(text.split(space, 2))
-        self.assertEquals(result, expected_result2)
+        self.assertEqual(result, expected_result2)
 
         result=space.join(text.split())
-        self.assertEquals(result, expected_result3)
+        self.assertEqual(result, expected_result3)
 
         result=empty.split()
-        self.assertEquals(result, [])
+        self.assertEqual(result, [])
 
         result=empty.split(None)
-        self.assertEquals(result, [])
+        self.assertEqual(result, [])
 
         result=empty.split(' ')
-        self.assertEquals(result, [''])
+        self.assertEqual(result, [''])
 
-        self.assertEquals('1.2.3'.rsplit('.', 1), ['1.2', '3'])
-        self.assertEquals('1.2.3'.rsplit('.', 2), ['1', '2', '3'])
+        self.assertEqual('1.2.3'.rsplit('.', 1), ['1.2', '3'])
+        self.assertEqual('1.2.3'.rsplit('.', 2), ['1', '2', '3'])
 
     def testStrip(self):
         text=" this is  a rather long string  "
@@ -131,16 +131,16 @@ class StringTest(UnitTest):
         expected_result2="a rather long string"
 
         result=text.strip()
-        self.assertEquals(result, expected_result1)
+        self.assertEqual(result, expected_result1)
 
         result=text.strip(" sthi")
-        self.assertEquals(result, expected_result2)
+        self.assertEqual(result, expected_result2)
 
         result=text.strip("")
-        self.assertEquals(result, text)
+        self.assertEqual(result, text)
 
     def testUnicode(self):
-        text=u"""Liebe 'hallo' "grüsse" Grüsse"""
+        text="""Liebe 'hallo' "grüsse" Grüsse"""
         self.assertEqual(text, text[:])
 
     def testIsDigit(self):
@@ -236,12 +236,12 @@ class StringTest(UnitTest):
         try:
             s = "%*g,%10f" % (1, 2)
             self.fail('Failed to raise error for "%*g,%10f" % (1, 2)')
-        except TypeError, e:
+        except TypeError as e:
             self.assertEqual(str(e), "not enough arguments for format string")
         try:
             s = "%*g,%10f" % (1, 2, 3, 4)
             self.fail('Failed to raise error for "%*g,%10f" % (1, 2, 3, 4)')
-        except TypeError, e:
+        except TypeError as e:
             self.assertEqual(str(e), "not all arguments converted during string formatting")
 
         # Check for handling of newlines in format string
@@ -267,7 +267,7 @@ class StringTest(UnitTest):
         try:
             s = "%(not-there)s" % testdict
             self.fail('Failed to raise error for "%(not-there)s" % testdict')
-        except KeyError, e:
+        except KeyError as e:
             self.assertEqual(str(e), "'not-there'")
 
         # Check for handling of newlines in format string
@@ -288,12 +288,12 @@ class StringTest(UnitTest):
         try:
             a = s[200]
             self.fail("Failed to raise an IndexError")
-        except IndexError, e:
+        except IndexError as e:
             self.assertEqual(e[0], 'string index out of range')
         try:
             a = s[-200]
             self.fail("Failed to raise an IndexError")
-        except IndexError, e:
+        except IndexError as e:
             self.assertEqual(e[0], 'string index out of range')
 
     def testOperator(self):

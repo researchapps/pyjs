@@ -1,14 +1,14 @@
 
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
-from SocketServer import ThreadingMixIn, ForkingMixIn
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn, ForkingMixIn
 import sys
 import os
 import cgi
 import mimetypes
 import shutil
-import urlparse
+import urllib.parse
 import posixpath
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 class Server:
 
@@ -58,7 +58,7 @@ class TestRequestHandler(BaseHTTPRequestHandler):
         try:
             f = open(path)
         except IOError:
-            print 'File not found %s' % path
+            print('File not found %s' % path)
             self.send_error(404, 'File not found')
             return
         self.send_response(200)
@@ -88,10 +88,10 @@ class TestRequestHandler(BaseHTTPRequestHandler):
 
     def translate_path(self, path):
         path = path.decode('utf-8')
-        path = urlparse.urlparse(path)[2]
-        path = posixpath.normpath(urllib.unquote(path))
+        path = urllib.parse.urlparse(path)[2]
+        path = posixpath.normpath(urllib.parse.unquote(path))
         words = path.split('/')
-        words = filter(None, words)
+        words = [_f for _f in words if _f]
         path = os.getcwd()
         for word in words:
             drive, word = os.path.splitdrive(word)

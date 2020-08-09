@@ -89,7 +89,7 @@ class ImageLoader:
         self._listener.onFrameLoad()
 
     def _onsubmit(self, form, event, something):
-        print form, event, something
+        print(form, event, something)
         try:
             event = get_main_frame().gobject_wrap(event) # webkit HACK!
             form = get_main_frame().gobject_wrap(form) # webkit HACK!

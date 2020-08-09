@@ -68,7 +68,7 @@ class DecoratorPanel(SimplePanel):
         if rowStyles is None:
             rowStyles = self.DEFAULT_ROW_STYLENAMES
 
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             self.table = kwargs.pop('Element')
             fc = DOM.getFirstChild(self.table)
             if fc:
@@ -84,7 +84,7 @@ class DecoratorPanel(SimplePanel):
             DOM.setAttribute(self.table, "cellSpacing", "0")
             DOM.setAttribute(self.table, "cellPadding", "0")
 
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']=self.DEFAULT_STYLENAME
+        if 'StyleName' not in kwargs: kwargs['StyleName']=self.DEFAULT_STYLENAME
         SimplePanel.__init__(self, self.table, **kwargs)
 
         # Add each row
@@ -161,8 +161,8 @@ class DecoratedTabPanel(TabPanel):
     DEFAULT_STYLENAME = "gwt-DecoratedTabPanel"
 
     def __init__(self, **kwargs):
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']=self.DEFAULT_STYLENAME
-        if kwargs.has_key('TabBar'):
+        if 'StyleName' not in kwargs: kwargs['StyleName']=self.DEFAULT_STYLENAME
+        if 'TabBar' in kwargs:
             tabbar = kwargs.pop('TabBar')
         else:
             tabbar = DecoratedTabBar()

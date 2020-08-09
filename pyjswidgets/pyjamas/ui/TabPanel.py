@@ -101,12 +101,12 @@ class TabPanel(PanelBase, Composite):
             or by name (string).  if by name, the name has to be one
             which was given to add or insert
         """
-        if isinstance(widget, basestring):
+        if isinstance(widget, str):
             widget = self.tab_names[widget]
         elif isinstance(widget, int):
             widget = self.getWidget(widget)
 
-        for (k, w) in self.tab_names.items():
+        for (k, w) in list(self.tab_names.items()):
             if widget == w:
                 self.tab_names.pop(k)
                 break
@@ -129,7 +129,7 @@ class TabPanel(PanelBase, Composite):
              * by tab name (matching TabPanel.insert name arg if given)
              * or by widget.
         """
-        if isinstance(index, basestring):
+        if isinstance(index, str):
             index = self.tab_names[index]
         if not isinstance(index, int):
             index = self.getWidgetIndex(index)

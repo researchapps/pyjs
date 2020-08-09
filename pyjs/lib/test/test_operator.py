@@ -1,7 +1,9 @@
-from UnitTest import UnitTest
-import RunTests
+from .UnitTest import UnitTest
+from . import RunTests
 
 import operator
+import collections.abc
+import numbers
 
 class Seq1:
     def __init__(self, lst):
@@ -139,7 +141,7 @@ class OperatorTestCase(UnitTest):
         self.assertTrue(a == [4, 2, 1])
 
     def test_delslice(self):
-        a = range(10)
+        a = list(range(10))
         self.assertRaises(TypeError, operator.delslice, a)
         self.assertRaises(TypeError, operator.delslice, a, None, None)
         self.assertTrue(operator.delslice(a, 2, 8) is None)
@@ -161,13 +163,13 @@ class OperatorTestCase(UnitTest):
         self.assertTrue(operator.truediv(5, 2) == 2.5)
 
     def test_getitem(self):
-        a = range(10)
+        a = list(range(10))
         self.assertRaises(TypeError, operator.getitem)
         self.assertRaises(TypeError, operator.getitem, a, None)
         self.assertTrue(operator.getitem(a, 2) == 2)
 
     def test_getslice(self):
-        a = range(10)
+        a = list(range(10))
         self.assertRaises(TypeError, operator.getslice)
         self.assertRaises(TypeError, operator.getslice, a, None, None)
         self.assertTrue(operator.getslice(a, 4, 6) == [4, 5])
@@ -188,7 +190,7 @@ class OperatorTestCase(UnitTest):
         class C:
             pass
         def check(self, o, v):
-            self.assertEqual(operator.isCallable(o), v)
+            self.assertEqual(callable(o), v)
             self.assertEqual(callable(o), v)
         check(self, 4, 0)
         check(self, operator.isCallable, 1)
@@ -197,28 +199,28 @@ class OperatorTestCase(UnitTest):
 
     def test_isMappingType(self):
         self.assertRaises(TypeError, operator.isMappingType)
-        self.assertFalse(operator.isMappingType(1))
-        self.assertFalse(operator.isMappingType(operator.isMappingType))
-        self.assertTrue(operator.isMappingType(operator.__dict__))
-        self.assertTrue(operator.isMappingType({}))
+        self.assertFalse(isinstance(1, collections.abc.Mapping))
+        self.assertFalse(isinstance(operator.isMappingType, collections.abc.Mapping))
+        self.assertTrue(isinstance(operator.__dict__, collections.abc.Mapping))
+        self.assertTrue(isinstance({}, collections.abc.Mapping))
 
     def test_isNumberType(self):
         self.assertRaises(TypeError, operator.isNumberType)
-        self.assertTrue(operator.isNumberType(8))
-        self.assertTrue(operator.isNumberType(8j))
-        self.assertTrue(operator.isNumberType(8L))
-        self.assertTrue(operator.isNumberType(8.3))
-        self.assertFalse(operator.isNumberType(dir()))
+        self.assertTrue(isinstance(8, numbers.Number))
+        self.assertTrue(isinstance(8j, numbers.Number))
+        self.assertTrue(isinstance(8, numbers.Number))
+        self.assertTrue(isinstance(8.3, numbers.Number))
+        self.assertFalse(isinstance(dir(), numbers.Number))
 
     def test_isSequenceType(self):
         self.assertRaises(TypeError, operator.isSequenceType)
-        self.assertTrue(operator.isSequenceType(dir()))
-        self.assertTrue(operator.isSequenceType(()))
-        self.assertTrue(operator.isSequenceType(xrange(10)))
-        self.assertTrue(operator.isSequenceType('yeahbuddy'))
-        self.assertFalse(operator.isSequenceType(3))
+        self.assertTrue(isinstance(dir(), collections.abc.Sequence))
+        self.assertTrue(isinstance((), collections.abc.Sequence))
+        self.assertTrue(isinstance(list(range(10)), collections.abc.Sequence))
+        self.assertTrue(isinstance('yeahbuddy', collections.abc.Sequence))
+        self.assertFalse(isinstance(3, collections.abc.Sequence))
         class Dict(dict): pass
-        self.assertFalse(operator.isSequenceType(Dict()))
+        self.assertFalse(isinstance(Dict(), collections.abc.Sequence))
 
     def test_lshift(self):
         self.assertRaises(TypeError, operator.lshift)
@@ -267,28 +269,28 @@ class OperatorTestCase(UnitTest):
         self.assertRaises(TypeError, operator.pow, 1, 2, 3)
 
     def test_repeat(self):
-        a = range(3)
+        a = list(range(3))
         self.assertRaises(TypeError, operator.repeat)
         self.assertRaises(TypeError, operator.repeat, a, None)
-        self.assertTrue(operator.repeat(a, 2) == a+a)
-        self.assertTrue(operator.repeat(a, 1) == a)
-        self.assertTrue(operator.repeat(a, 0) == [])
+        self.assertTrue(operator.mul(a, 2) == a+a)
+        self.assertTrue(operator.mul(a, 1) == a)
+        self.assertTrue(operator.mul(a, 0) == [])
         a = (1, 2, 3)
-        self.assertTrue(operator.repeat(a, 2) == a+a)
-        self.assertTrue(operator.repeat(a, 1) == a)
-        self.assertTrue(operator.repeat(a, 0) == ())
+        self.assertTrue(operator.mul(a, 2) == a+a)
+        self.assertTrue(operator.mul(a, 1) == a)
+        self.assertTrue(operator.mul(a, 0) == ())
         a = '123'
-        self.assertTrue(operator.repeat(a, 2) == a+a)
-        self.assertTrue(operator.repeat(a, 1) == a)
-        self.assertTrue(operator.repeat(a, 0) == '')
+        self.assertTrue(operator.mul(a, 2) == a+a)
+        self.assertTrue(operator.mul(a, 1) == a)
+        self.assertTrue(operator.mul(a, 0) == '')
         a = Seq1([4, 5, 6])
-        self.assertTrue(operator.repeat(a, 2) == [4, 5, 6, 4, 5, 6])
-        self.assertTrue(operator.repeat(a, 1) == [4, 5, 6])
-        self.assertTrue(operator.repeat(a, 0) == [])
+        self.assertTrue(operator.mul(a, 2) == [4, 5, 6, 4, 5, 6])
+        self.assertTrue(operator.mul(a, 1) == [4, 5, 6])
+        self.assertTrue(operator.mul(a, 0) == [])
         a = Seq2([4, 5, 6])
-        self.assertTrue(operator.repeat(a, 2) == [4, 5, 6, 4, 5, 6])
-        self.assertTrue(operator.repeat(a, 1) == [4, 5, 6])
-        self.assertTrue(operator.repeat(a, 0) == [])
+        self.assertTrue(operator.mul(a, 2) == [4, 5, 6, 4, 5, 6])
+        self.assertTrue(operator.mul(a, 1) == [4, 5, 6])
+        self.assertTrue(operator.mul(a, 0) == [])
         self.assertRaises(TypeError, operator.repeat, 6, 7)
 
     def test_rshift(self):
@@ -301,13 +303,13 @@ class OperatorTestCase(UnitTest):
     def test_contains(self):
         self.assertRaises(TypeError, operator.contains)
         self.assertRaises(TypeError, operator.contains, None, None)
-        self.assertTrue(operator.contains(range(4), 2))
-        self.assertFalse(operator.contains(range(4), 5))
-        self.assertTrue(operator.sequenceIncludes(range(4), 2))
-        self.assertFalse(operator.sequenceIncludes(range(4), 5))
+        self.assertTrue(operator.contains(list(range(4)), 2))
+        self.assertFalse(operator.contains(list(range(4)), 5))
+        self.assertTrue(operator.contains(list(range(4)), 2))
+        self.assertFalse(operator.contains(list(range(4)), 5))
 
     def test_setitem(self):
-        a = range(3)
+        a = list(range(3))
         self.assertRaises(TypeError, operator.setitem, a)
         self.assertRaises(TypeError, operator.setitem, a, None, None)
         self.assertTrue(operator.setitem(a, 0, 2) is None)
@@ -315,7 +317,7 @@ class OperatorTestCase(UnitTest):
         self.assertRaises(IndexError, operator.setitem, a, 4, 2)
 
     def test_setslice(self):
-        a = range(4)
+        a = list(range(4))
         self.assertRaises(TypeError, operator.setslice, a)
         self.assertRaises(TypeError, operator.setslice, a, None, None, None)
         self.assertTrue(operator.setslice(a, 1, 3, [2, 1]) is None)
@@ -328,7 +330,7 @@ class OperatorTestCase(UnitTest):
 
     def test_truth(self):
         class C(object):
-            def __nonzero__(self):
+            def __bool__(self):
                 raise SyntaxError
         self.assertRaises(TypeError, operator.truth)
         self.assertRaises(SyntaxError, operator.truth, C())
@@ -427,12 +429,12 @@ class OperatorTestCase(UnitTest):
         # example used in the docs
         inventory = [('apple', 3), ('banana', 2), ('pear', 5), ('orange', 1)]
         getcount = operator.itemgetter(1)
-        self.assertEqual(map(getcount, inventory), [3, 2, 5, 1])
+        self.assertEqual(list(map(getcount, inventory)), [3, 2, 5, 1])
         self.assertEqual(sorted(inventory, key=getcount),
             [('orange', 1), ('banana', 2), ('apple', 3), ('pear', 5)])
 
         # multiple gets
-        data = map(str, range(20))
+        data = list(map(str, list(range(20))))
         self.assertEqual(operator.itemgetter(2,10,5)(data), ('2', '10', '5'))
         self.assertRaises(TypeError, operator.itemgetter(2, 'x', 5), data)
 
@@ -485,7 +487,7 @@ class OperatorTestCase(UnitTest):
         self.assertEqual(operator.itruediv (c, 5), "itruediv")
         self.assertEqual(operator.ixor     (c, 5), "ixor")
         self.assertEqual(operator.iconcat  (c, c), "iadd")
-        self.assertEqual(operator.irepeat  (c, 5), "imul")
+        self.assertEqual(operator.imul  (c, 5), "imul")
         self.assertEqual(operator.__iadd__     (c, 5), "iadd")
         self.assertEqual(operator.__iand__     (c, 5), "iand")
         self.assertEqual(operator.__idiv__     (c, 5), "idiv")

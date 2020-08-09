@@ -8,7 +8,7 @@ import sys
 from tempfile import mkdtemp
 from optparse import OptionParser
 from os.path import join, dirname, basename, abspath, pathsep, sep
-from pyv8run import (PyV8Linker, translator, PLATFORM, pyjs,
+from .pyv8run import (PyV8Linker, translator, PLATFORM, pyjs,
                      add_linker_options,
                      PyV8, Global, JSRuntimeError)
 from pyjs.translator import translate
@@ -119,14 +119,12 @@ def main():
                         translator_arguments=translator_arguments)
     linker()
 
-    mod_src = dict(map(
-        lambda x: x.strip().split(':'),
-        open(join(pyjs.pyjspth, 'stdlib', 'modules_sources')).readlines())
+    mod_src = dict([x.strip().split(':') for x in open(join(pyjs.pyjspth, 'stdlib', 'modules_sources')).readlines()]
                    )
 
     mods = {}
     mods[mod] = Module(mod, args[0], linker._file_deps[None], mods)
-    for fn, mn in linker._file_to_module.iteritems():
+    for fn, mn in linker._file_to_module.items():
         mods[mn] = Module(mn, fn, linker._file_deps[fn], mods)
         mods[mn].set_source(mod_src)
     if not 'pyjslib' in mods[mod].deps:
@@ -134,13 +132,13 @@ def main():
 
     mods[mod].paint()
     nf2 = defaultdict(set)
-    for nf, rdeps in linker._not_found.iteritems():
+    for nf, rdeps in linker._not_found.items():
         if not nf.split('.')[0] in mods:
             nf2[nf.split('.')[0]].update(
-                map(lambda x: linker._file_to_module[x], rdeps))
+                [linker._file_to_module[x] for x in rdeps])
 
-    for nf, rdeps in nf2.iteritems():
-        print "Not found {} depended by {}".format(nf, list(rdeps))
+    for nf, rdeps in nf2.items():
+        print("Not found {} depended by {}".format(nf, list(rdeps)))
     for m in mods:
         linker = DepsTestLinker([m], output=out,
                                 platforms=[PLATFORM],
@@ -153,10 +151,10 @@ def main():
     for m in sorted(mods.values()):
         outf.write(m.export())
     outf.close()
-    print "Exported dependency tree to {}.deps".format(mod)
+    print("Exported dependency tree to {}.deps".format(mod))
 
     outf = open('{}.deps.json'.format(mod), 'w')
-    outf.write(DepsJSON().encode(mods.values()))
+    outf.write(DepsJSON().encode(list(mods.values())))
     outf.close()
 
 def test_dependency(linker):
@@ -170,13 +168,13 @@ def test_dependency(linker):
         fp = open(linker.out_file_mod, 'r')
         txt = fp.read()
         fp.close()
-    except Exception, e:
+    except Exception as e:
         return e
 
     try:
         ctxt.enter()
         x = ctxt.eval(txt)
-    except Exception, e:
+    except Exception as e:
         res = JSRuntimeError(ctxt, e)
     finally:
         if ctxt.entered:
@@ -255,8 +253,8 @@ class DepsExport(PyV8Linker):
             if not p:
                 self._not_found[mn].add(parent_file)
                 continue
-                raise RuntimeError, "Module %r not found. Dep of %r" % (
-                    mn, self.dependencies)
+                raise RuntimeError("Module %r not found. Dep of %r" % (
+                    mn, self.dependencies))
             if mn==self.top_module:
                 self.top_module_path = p
             override_paths=[]

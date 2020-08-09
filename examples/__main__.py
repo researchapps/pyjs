@@ -9,7 +9,7 @@ import subprocess
 from _examples import util
 
 try:
-    from __builtin__ import str # In case str is redefined in util
+    from builtins import str # In case str is redefined in util
 except ImportError:
     pass
 
@@ -44,7 +44,7 @@ for path in paths:
     if 'PYJS_DIR_PYJAMAS' not in env:
         env.update(dict([
             ('PYJS_' + k, v)
-            for k, v in util._process_pyjamas(head).items()
+            for k, v in list(util._process_pyjamas(head).items())
         ]))
 
     for example in examples:

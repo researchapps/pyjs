@@ -1,5 +1,5 @@
 import UnitTest
-from StringIO import StringIO
+from io import StringIO
 import sys
 
 class StringIOModuleTest(UnitTest.UnitTest):
@@ -12,7 +12,7 @@ class StringIOModuleTest(UnitTest.UnitTest):
         orig_stdout = sys.stdout
         try:
             sys.stdout = StringIO()
-            print 'stdout'
+            print('stdout')
             self.assertEqual(sys.stdout.getvalue(), 'stdout\n')
         finally:
             sys.stdout = orig_stdout

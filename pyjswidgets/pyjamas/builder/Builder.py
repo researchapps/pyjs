@@ -87,13 +87,13 @@ class Builder(object):
 
             args = {}
             wprops = {}
-            if props.has_key("common"):
+            if "common" in props:
                 wprops.update(props['common'])
-            if props.has_key("widget"):
+            if "widget" in props:
                 wprops.update(props['widget'])
             for n in kls._getProps():
                 name = n[ui.PROP_NAME]
-                if not wprops.has_key(name):
+                if name not in wprops:
                     continue
                 fname = n[ui.PROP_FNAM]
                 if wprops[name] == '':
@@ -122,13 +122,13 @@ class Builder(object):
             #    context = parentInstance.getIndexedChild(comp['index'])
             #    context.add(item.componentInstance)
             for (index, child) in enumerate(childs):
-                if not child[0].has_key("type") or child[0]["type"] is None:
+                if "type" not in child[0] or child[0]["type"] is None:
                     continue
                 childitem = addItem(child[0], child[1], child[2], item,
                                     eventTarget)
                 if childitem is None:
                     continue
-                print "childitem", childitem
+                print("childitem", childitem)
                 item.addIndexedItem(child[0]["index"], childitem)
                 if not "elements" in props:
                     props["elements"] = {}
@@ -136,7 +136,7 @@ class Builder(object):
                     props["elements"][index] = {}
 
                 elemprops = props['elements'][index]
-                print "elemprops", childitem, item, elemprops
+                print("elemprops", childitem, item, elemprops)
                 item.setElementProperties(childitem, elemprops)
 
                 # add child (by name) to item
@@ -144,10 +144,10 @@ class Builder(object):
                 setattr(item, cname, childitem)
 
             # make the event target the recipient of all events
-            if eventTarget is not None and props.has_key("events"):
+            if eventTarget is not None and "events" in props:
                 added_already = []
                 #print props["events"]
-                for listener_name, listener_fn in props["events"].items():
+                for listener_name, listener_fn in list(props["events"].items()):
                     if listener_name in added_already or not listener_fn:
                         continue
                     args = {}

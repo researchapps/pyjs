@@ -613,7 +613,7 @@ class __Pyjamas__(object):
                     "jsimport function only supports constant string arguments",
                 node.node)
             option = arg.value
-            if translator.decorator_compiler_options.has_key(option):
+            if option in translator.decorator_compiler_options:
                 for var, val in translator.decorator_compiler_options[option]:
                     setattr(translator, var, val)
             elif option == "Speed":
@@ -942,7 +942,7 @@ class Translator(object):
         captured_output = self.output.getvalue()
         self.output = save_output
         if self.source_tracking and self.store_source:
-            for l in self.track_lines.keys():
+            for l in list(self.track_lines.keys()):
                 self.w( self.spacing() + '''%s__track_lines__[%d] = %s;''' % (self.module_prefix, l, uescapejs(self.track_lines[l])), translate=False)
         self.w( self.local_js_vars_decl([]))
         if captured_output.find("@CONSTANT_DECLARATION@") >= 0:
@@ -976,7 +976,7 @@ class Translator(object):
 
     def set_compile_options(self, opts):
         opts = dict(all_compile_options, **opts)
-        for opt, value in opts.iteritems():
+        for opt, value in opts.items():
             if opt in all_compile_options:
                 setattr(self, opt, value)
             else:
@@ -998,14 +998,14 @@ class Translator(object):
         assert(isinstance(newline, bool))
         if newline:
             if txt is None:
-                print >> self.output
+                print(file=self.output)
                 return
-            print >> self.output, txt
+            print(txt, file=self.output)
         else:
-            print >> self.output, txt,
+            print(txt, end=' ', file=self.output)
 
     def uniqid(self, prefix = ""):
-        if not self.__unique_ids__.has_key(prefix):
+        if prefix not in self.__unique_ids__:
             self.__unique_ids__[prefix] = 0
         self.__unique_ids__[prefix] += 1
         return "%s%d" % (prefix, self.__unique_ids__[prefix])
@@ -1127,7 +1127,7 @@ class Translator(object):
             if word in pyjs_attrib_remap:
                attr.append("'%s'" % pyjs_attrib_remap[word])
             elif word.find('(') >= 0:
-                print ('attrib_join:', splitted, attr, word)
+                print(('attrib_join:', splitted, attr, word))
                 attr.append(word)
             else:
                attr.append("'%s'" % word)
@@ -1171,7 +1171,7 @@ class Translator(object):
             return "$p['" + name + "']"
         else:
             if isinstance(args, (tuple, list)):
-                args = map(lambda x: str(x), args)
+                args = [str(x) for x in args]
                 args = ', '.join(args)
             return "$p['%(name)s'](%(args)s)" % dict(name=name, args=args)
 
@@ -1180,7 +1180,7 @@ class Translator(object):
         if self.local_prefix is not None:
             if jsname.find(self.local_prefix) != 0:
                 jsname = self.jsname(name_type, "%s.%s" % (self.local_prefix, jsname))
-        if self.lookup_stack[depth].has_key(pyname):
+        if pyname in self.lookup_stack[depth]:
             name_type = self.lookup_stack[depth][pyname][0]
         if self.module_name != 'pyjslib' or pyname != 'int':
             self.lookup_stack[depth][pyname] = (name_type, pyname, jsname)
@@ -1197,7 +1197,7 @@ class Translator(object):
         jsname = None
         max_depth = depth = len(self.lookup_stack) - 1
         while depth >= 0:
-            if self.lookup_stack[depth].has_key(name):
+            if name in self.lookup_stack[depth]:
                 name_type, pyname, jsname = self.lookup_stack[depth][name]
                 break
             depth -= 1
@@ -1213,7 +1213,7 @@ class Translator(object):
                     if pyname in ['int', 'long']:
                         name = 'float_int'
                 jsname = self.jsname("variable", "$p['%s']" % self.attrib_remap(name))
-            elif PYJSLIB_BUILTIN_MAPPING.has_key(name):
+            elif name in PYJSLIB_BUILTIN_MAPPING:
                 name_type = 'builtin'
                 pyname = name
                 jsname = PYJSLIB_BUILTIN_MAPPING[name]
@@ -1234,7 +1234,7 @@ class Translator(object):
         """
         l = escaped_subst.split(txt)
         txt = l[0]
-        for i in xrange(1, len(l)-1, 2):
+        for i in range(1, len(l)-1, 2):
             varname = l[i].strip()
             if varname.startswith('!'):
                     txt += varname[1:]
@@ -1269,10 +1269,10 @@ class Translator(object):
         s = self.spacing()
         lines = []
         module_prefix = self.module_prefix[:-1]
-        remap = pyjs_attrib_remap.keys()
+        remap = list(pyjs_attrib_remap.keys())
         remap.sort()
         lines.append("%(s)svar attrib_remap = %(module_prefix)s['attrib_remap'] = %(remap)s;" % locals())
-        remap = pyjs_vars_remap.keys()
+        remap = list(pyjs_vars_remap.keys())
         remap.sort()
         lines.append("%(s)svar var_remap = %(module_prefix)s['var_remap'] = %(remap)s;" % locals())
         return "\n".join(lines)
@@ -1293,7 +1293,7 @@ class Translator(object):
            )
     def local_js_vars_decl(self, ignore_py_vars):
         names = []
-        for name in self.lookup_stack[-1].keys():
+        for name in list(self.lookup_stack[-1].keys()):
             nametype = self.lookup_stack[-1][name][0]
             pyname = self.lookup_stack[-1][name][1]
             jsname = self.lookup_stack[-1][name][2]
@@ -2131,7 +2131,7 @@ var %s = arguments['length'] >= %d ? arguments[arguments['length']-1] : argument
                         self.add_lookup("__pyjamas__", ass_name, name[0])
                     else:
                         self.add_lookup("__pyjamas__", ass_name, jsname)
-                except AttributeError, e:
+                except AttributeError as e:
                     #raise TranslationError("Unknown __pyjamas__ import: %s" % name, node)
                     pass
             return
@@ -2897,7 +2897,7 @@ var %(e)s_name = (typeof %(e)s['__name__'] == 'undefined' ? %(e)s['name'] : %(e)
 %(s)svar $data = $p['dict']();
 %(s)sfor (var $item in %(local_prefix)s) { $data['__setitem__']($item, %(local_prefix)s[$item]); }
 %(s)sreturn @{{_create_class}}('%(n)s', $p['tuple']($bases), $data);"""
-        create_class %= {'n': node.name, 's': self.spacing(), 'local_prefix': local_prefix, 'bases': ",".join(map(lambda x: x[1], base_classes))}
+        create_class %= {'n': node.name, 's': self.spacing(), 'local_prefix': local_prefix, 'bases': ",".join([x[1] for x in base_classes])}
         create_class += """
 %s})();""" % self.dedent()
         self.w( create_class)
@@ -3830,7 +3830,7 @@ var %(e)s_name = (typeof %(e)s['__name__'] == 'undefined' ? %(e)s['name'] : %(e)
                 return str(node.value)
             self.constant_int[node.value] = 1
             return "$constant_int_%s" % str(node.value)
-        elif isinstance(node.value, long):
+        elif isinstance(node.value, int):
             v = str(node.value)
             if v[-1] == 'L':
                 v = v[:-1]
@@ -3840,9 +3840,9 @@ var %(e)s_name = (typeof %(e)s['__name__'] == 'undefined' ? %(e)s['name'] : %(e)
             return "$constant_long_%s" % v
         elif isinstance(node.value, float):
             return str(node.value)
-        elif isinstance(node.value, basestring):
+        elif isinstance(node.value, str):
             v = node.value
-            if isinstance(node.value, unicode):
+            if isinstance(node.value, str):
                 v = v.encode('utf-8')
             return uescapejs(node.value)
         elif node.value is None:
@@ -3955,7 +3955,7 @@ var %(e)s_name = (typeof %(e)s['__name__'] == 'undefined' ? %(e)s['name'] : %(e)
 %(s)s\t@{{op_mul}}(%(v1)s,%(v2)s))""" % locals()
 
     def _mod(self, node, current_klass):
-        if isinstance(node.left, self.ast.Const) and isinstance(node.left.value, types.StringType):
+        if isinstance(node.left, self.ast.Const) and isinstance(node.left.value, bytes):
             return self.track_call("@{{sprintf}}("+self.expr(node.left, current_klass) + ", " + self.expr(node.right, current_klass)+")", node.lineno)
 
         e1 = self.expr(node.left, current_klass)
@@ -4422,7 +4422,7 @@ var %(e)s_name = (typeof %(e)s['__name__'] == 'undefined' ? %(e)s['name'] : %(e)
 def translate(sources, output_file, module_name=None, **kw):
     kw = dict(all_compile_options, **kw)
     list_imports = kw.get('list_imports', False)
-    sources = map(os.path.abspath, sources)
+    sources = list(map(os.path.abspath, sources))
     if not module_name:
         module_name, extension = os.path.splitext(os.path.basename(sources[0]))
 
@@ -4553,7 +4553,7 @@ class PlatformParser:
     def parseModule(self, module_name, file_name):
 
         importing = False
-        if not self.parse_cache.has_key(file_name):
+        if file_name not in self.parse_cache:
             importing = True
             if self.chain_plat:
                 mod, override = self.chain_plat.parseModule(module_name,
@@ -4570,15 +4570,15 @@ class PlatformParser:
             mod = copy.deepcopy(mod)
             mod_override = self.compiler.parseFile(platform_file_name)
             if self.verbose:
-                print ("Merging", module_name, self.platform)
+                print(("Merging", module_name, self.platform))
             self.merge(smod, mod_override)
             override = True
 
         if self.verbose:
             if override:
-                print ("Importing %s (Platform %s)" % (module_name, self.platform))
+                print(("Importing %s (Platform %s)" % (module_name, self.platform)))
             elif importing:
-                print ("Importing %s" % (module_name))
+                print(("Importing %s" % (module_name)))
 
         return mod, override
 
@@ -4842,28 +4842,28 @@ class AppTranslator:
                 continue
             self.library_modules.append(library)
             if self.verbose:
-                print ('Including LIB', library)
-            print >> lib_code, '\n//\n// BEGIN LIB '+library+'\n//\n'
-            print >> lib_code, self._translate(
-                library, False, debug=debug, imported_js=imported_js)
+                print(('Including LIB', library))
+            print('\n//\n// BEGIN LIB '+library+'\n//\n', file=lib_code)
+            print(self._translate(
+                library, False, debug=debug, imported_js=imported_js), file=lib_code)
 
-            print >> lib_code, "/* initialize static library */"
-            print >> lib_code, "%s();\n" % library
+            print("/* initialize static library */", file=lib_code)
+            print("%s();\n" % library, file=lib_code)
 
-            print >> lib_code, '\n//\n// END LIB '+library+'\n//\n'
+            print('\n//\n// END LIB '+library+'\n//\n', file=lib_code)
         if module_name:
-            print >> app_code, self._translate(
-                module_name, is_app, debug=debug, imported_js=imported_js)
+            print(self._translate(
+                module_name, is_app, debug=debug, imported_js=imported_js), file=app_code)
         for js in imported_js:
            path = self.findFile(js)
            if os.path.isfile(path):
               if self.verbose:
-                  print ('Including JS', js)
-              print >> lib_code,  '\n//\n// BEGIN JS '+js+'\n//\n'
-              print >> lib_code, file(path).read()
-              print >> lib_code,  '\n//\n// END JS '+js+'\n//\n'
+                  print(('Including JS', js))
+              print('\n//\n// BEGIN JS '+js+'\n//\n', file=lib_code)
+              print(file(path).read(), file=lib_code)
+              print('\n//\n// END JS '+js+'\n//\n', file=lib_code)
            else:
-              print >>sys.stderr, 'Warning: Unable to find imported javascript:', js
+              print('Warning: Unable to find imported javascript:', js, file=sys.stderr)
         return lib_code.getvalue(), app_code.getvalue()
 
 ## DANIEL KLUEV VERSION
@@ -4896,10 +4896,10 @@ def main():
     if options.output == '-':
         options.output = os.path.abspath(options.output)
 
-    file_names = map(os.path.abspath, args)
+    file_names = list(map(os.path.abspath, args))
     for fn in file_names:
         if not os.path.isfile(fn):
-            print >> sys.stderr, "Input file not found %s" % fn
+            print("Input file not found %s" % fn, file=sys.stderr)
             sys.exit(1)
 
     imports, js = translate(compiler, file_names, options.output,
@@ -4908,12 +4908,12 @@ def main():
     if options.list_imports:
         if imports:
             print ('/*')
-            print ('PYJS_DEPS: %s' % imports)
+            print(('PYJS_DEPS: %s' % imports))
             print ('*/')
 
         if js:
             print ('/*')
-            print ('PYJS_JS: %s' % repr(js))
+            print(('PYJS_JS: %s' % repr(js)))
             print ('*/')
 
 if __name__ == "__main__":

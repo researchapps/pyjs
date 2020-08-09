@@ -38,7 +38,7 @@ class TupleTest(UnitTest):
         it = t.__iter__()
         while True:
             try:
-                item = it.next()
+                item = next(it)
             except StopIteration:
                 break
             self.assertEqual(item, t[i])

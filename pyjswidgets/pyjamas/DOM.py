@@ -690,7 +690,7 @@ class IterChildrenClass:
         self.child = elem.firstChild
         self.lastChild = None
 
-    def next(self):
+    def __next__(self):
         if not self.child:
             raise StopIteration
         self.lastChild = self.child
@@ -724,7 +724,7 @@ class IterWalkChildren:
         self.lastChild = None
         self.stack = []
 
-    def next(self):
+    def __next__(self):
         if not self.child:
             raise StopIteration
         self.lastChild = self.child
@@ -930,7 +930,7 @@ def setStyleAttributes(element, **kwargs):
    """
    multi attr: setStyleAttributes(self, {attr1:val1, attr2:val2, ...})
    """
-   for attr, val in kwargs.items():
+   for attr, val in list(kwargs.items()):
         if hasattr(element.style, 'setProperty'):
                 element.style.setProperty(mash_name_for_glib(attr), val, "")
         else:

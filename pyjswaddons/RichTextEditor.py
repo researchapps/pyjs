@@ -5,7 +5,7 @@ Pass "-j fckeditor/fckeditor.js" to build.py in order to include the
 FCKeditor javascript.
 """
 
-from BoundMethod import BoundMethod
+from .BoundMethod import BoundMethod
 from pyjamas import logging
 from pyjamas import DOM
 from pyjamas import Window
@@ -41,10 +41,10 @@ class RichTextEditor(Widget):
         DOM.setAttribute(self.element, "method", method)
         DOM.setAttribute(self.element, "target", target)
 
-        if not kwargs.has_key('ID'): kwargs['ID'] = self.id
-        if not kwargs.has_key('StyleName'): kwargs['StyleName'] = "gwt-RichTextEditor"
-        if not kwargs.has_key('Height'): kwargs['Height'] = "600px"
-        if not kwargs.has_key('Width'): kwargs['Width'] = "100%"
+        if 'ID' not in kwargs: kwargs['ID'] = self.id
+        if 'StyleName' not in kwargs: kwargs['StyleName'] = "gwt-RichTextEditor"
+        if 'Height' not in kwargs: kwargs['Height'] = "600px"
+        if 'Width' not in kwargs: kwargs['Width'] = "100%"
         Widget.__init__(self, **kwargs)
 
         JS("""

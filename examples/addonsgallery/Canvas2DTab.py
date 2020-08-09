@@ -75,7 +75,7 @@ class ColourGridCanvas(Canvas):
     def draw(self):
         for i in range(0, 6):
             for j in range(0, 6):
-                self.context.fillStyle = u'rgb(%d,%d,0)' % \
+                self.context.fillStyle = 'rgb(%d,%d,0)' % \
                                         ( floor(255-42.5*i), floor(255-42.5*j))
                 self.context.fillRect(j*25,i*25,25,25)
 

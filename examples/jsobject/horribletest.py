@@ -14,6 +14,6 @@ rectobj.area = rect_area
 
 x = rectobj(5, 2)
 y = rectobj(2, 7)
-print x.area()
+print(x.area())
 x.add(y)
-print x.area()
+print(x.area())

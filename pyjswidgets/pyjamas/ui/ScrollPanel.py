@@ -33,7 +33,7 @@ class ScrollPanel(SimplePanel):
 
         if child is not None:
             kwargs['Widget'] = child
-        if not kwargs.has_key('AlwaysShowScrollBars'):
+        if 'AlwaysShowScrollBars' not in kwargs:
              kwargs['AlwaysShowScrollBars'] = False
 
         SimplePanel.__init__(self, **kwargs)

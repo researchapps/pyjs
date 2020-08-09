@@ -10,8 +10,8 @@ logging.getLogger(__name__).setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 import re
-from urllib import urlopen
-from urlparse import urljoin
+from urllib.request import urlopen
+from urllib.parse import urljoin
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -43,7 +43,7 @@ class URI(object):
 
     @staticmethod
     def items(uri):
-        return zip(URI.KEYS, URI.get_keys(uri))
+        return list(zip(URI.KEYS, URI.get_keys(uri)))
 
 
 class GIXMLHttpRequestEventTarget(object):
@@ -224,7 +224,7 @@ class GIXMLHttpRequest(GIXMLHttpRequestEventTarget):
                 pass
         if 'accept' not in meta['author-request-headers']:
             hdrs['accept'] = '*/*'
-        for hdr in hdrs.iteritems():
+        for hdr in hdrs.items():
             msg.request_headers.replace(*hdr)
         if not meta['anonymous-flag']:
             msg.request_headers.replace('origin', meta['source-origin'])
@@ -503,7 +503,7 @@ class RunnerContext(object):
         logger.debug('mainloop:exiting...')
 
     def setup(self, uri=uri, **kwds):
-        for k, v in kwds.iteritems():
+        for k, v in kwds.items():
             if hasattr(self, k):
                 setattr(self, k, v)
         if '://' not in uri:
@@ -571,12 +571,12 @@ class RunnerContext(object):
         content_type = m.request_headers.get_content_type()[0]
         if content_type is not None:
             if content_type.startswith('application/json'):
-                print 'JSONRPC!'
+                print('JSONRPC!')
 
     def _resource_recv_cb(self, view, frame, res, length, data):
         #m = res.get_network_request().get_message()
         #print m.request_headers.get_content_type()
-        print res.props.mime_type, res.props.uri
+        print(res.props.mime_type, res.props.uri)
 
     def _frame_loaded_cb(self, view, frame):
         #TODO: multiple apps should be simple to implement
@@ -632,8 +632,8 @@ class RunnerContext(object):
                         'head meta[itemprop=image][content]'
                         ),
             }
-        for attr in scanner.keys():
-            for i in xrange(scanner[attr].length):
+        for attr in list(scanner.keys()):
+            for i in range(scanner[attr].length):
                 uri = getattr(scanner[attr].item(i), attr)
                 if len(uri) == 0:
                     continue

@@ -9,13 +9,13 @@ Should also produce token.py
 from string import Template
 import datetime
 import sys
-from lib2to3.compiler import parser
-from lib2to3.pgen2.driver import load_grammar, grammar as grammar_module
+from .lib2to3.compiler import parser
+from .lib2to3.pgen2.driver import load_grammar, grammar as grammar_module
 
 gen_date = datetime.datetime.now()
 python_version = sys.version.split('\n')[0]
 
-print "Generating grammar2x.py"
+print("Generating grammar2x.py")
 
 opmap = grammar_module.opmap
 g = load_grammar('grammar2x.txt', force=True)
@@ -40,12 +40,12 @@ out_f = open('grammar2x.py', 'w')
 out_f.write(out)
 out_f.close()
 
-print "Generating symbol.py"
+print("Generating symbol.py")
 
 symb_templ = Template(open('symbol.py.templ').read())
 symbols_assign = []
 
-for name, symbol in g.symbol2number.iteritems():
+for name, symbol in g.symbol2number.items():
     symbols_assign.append(name + " = " + repr(symbol))
 
 symbols_assign_str = "\n".join(symbols_assign)

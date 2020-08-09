@@ -286,7 +286,7 @@ class RichTextEditor(Composite):
             Selection.getSelection(window)
 
         except:
-            print "Error getting the selection"
+            print("Error getting the selection")
             traceback.print_exc()
 
     def getWindow(self, iFrame=None):

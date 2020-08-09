@@ -32,7 +32,7 @@ class AutoCompleteTextBox(TextBox):
 
         self.choices.setStyleName("list")
 
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']="gwt-AutoCompleteTextBox"
+        if 'StyleName' not in kwargs: kwargs['StyleName']="gwt-AutoCompleteTextBox"
 
         TextBox.__init__(self, **kwargs)
         self.addKeyboardListener(self)

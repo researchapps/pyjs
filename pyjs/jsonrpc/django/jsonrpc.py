@@ -18,5 +18,5 @@ class JSONRPCService(JSONRPCServiceBase):
         return self.process(request.raw_post_data)
 
 # just for convenience and for fun...
-from jsonformprocessor import *
+from .jsonformprocessor import *
 

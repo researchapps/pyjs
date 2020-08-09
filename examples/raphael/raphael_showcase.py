@@ -14,9 +14,9 @@ from pyjamas.ui.HTML import HTML
 from pyjamas.ui import HasAlignment
 from pyjamas import DOM
 
-import graffle
-import events
-import spinner
+from . import graffle
+from . import events
+from . import spinner
 
 
 class TabContainer(DockPanel):

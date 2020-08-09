@@ -4,7 +4,7 @@
 import sys
 import os
 import subprocess
-import urllib
+import urllib.request, urllib.parse, urllib.error
 #import zlib
 #import bz2
 import zipfile
@@ -23,11 +23,11 @@ optparser = None
 if not hasattr(str, 'format'):
     # Dirty implementation of str.format()
     # Ignores format_spec
-    import __builtin__
+    import builtins
     import re
     re_format = re.compile('((^{)|([^{]{))(((([a-zA-Z_]\w*)|(\d*))(([.][^.[]+?)|([[][^.[]+?[]]))*?))([!].)?(:[^}]*)?}')
     re_format_field = re.compile('([.][^.[]+)|([[][^.[]+[]]).*')
-    class str(__builtin__.str):
+    class str(builtins.str):
         def format(self, *args, **kwargs):
             idx = [0]
             def sub(m):
@@ -72,7 +72,7 @@ if not hasattr(str, 'format'):
                 return start_char + v
             s = re_format.sub(sub, self)
             return s.replace('{{', '{').replace('}}', '}')
-    __builtin__.str = str
+    builtins.str = str
 
 
 PACKAGE = {
@@ -187,7 +187,7 @@ def _process_pyjamas(root):
 def _process_environ():
     return dict([
         (k[5:], v[:])
-        for k, v in os.environ.items()
+        for k, v in list(os.environ.items())
         if k.startswith('PYJS')
     ])
 
@@ -261,7 +261,7 @@ def download(downloads):
         if not os.path.exists(dst):
             if not OPTS.download:
                 raise TypeError('Downloads not permitted. Use --download option to permit')
-            urllib.urlretrieve(url, dst)
+            urllib.request.urlretrieve(url, dst)
             if download.get('unzip'):
                 path = download.get('path', os.path.dirname(dst))
                 z = zipfile.ZipFile(dst)
@@ -386,6 +386,6 @@ def install(package=None, **packages):
     if not os.path.exists(_output_dir):
         try:
            shutil.copytree(_static_dir, _output_dir)
-        except Exception, e:
+        except Exception as e:
            sys.stdout.write("Error copying static directory to output directory\n")
            sys.stdout.write("%s\n" % e)

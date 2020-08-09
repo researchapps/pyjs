@@ -32,7 +32,7 @@ def xpm_label_box(parent, xpm_filename, label_text):
 class Buttons:
     # Our usual callback method
     def callback(self, widget, data=None):
-        print "Hello again - %s was pressed" % data
+        print("Hello again - %s was pressed" % data)
 
     def __init__(self):
         # Create a new window

@@ -4,6 +4,6 @@ class Todo(models.Model):
 	task = models.CharField(max_length=30)
 
 	def __unicode__(self):
-		return unicode(self.task)
+		return str(self.task)
 
 # Create your models here.

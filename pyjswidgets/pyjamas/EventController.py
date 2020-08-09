@@ -100,7 +100,7 @@ class Handler(object):
         self.listeners.pop(listener)
 
     def onEvent(self, sender, *eventargs):
-        for listener, args in self.listeners.items():
+        for listener, args in list(self.listeners.items()):
             fn = getattr(listener, self.callback_fnname, listener)
             (args, kwargs) = args
             args = (sender,) + args + eventargs

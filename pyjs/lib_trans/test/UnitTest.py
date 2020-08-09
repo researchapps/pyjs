@@ -1,4 +1,4 @@
-from write import write, writebr
+from .write import write, writebr
 import sys
 
 IN_BROWSER = sys.platform in ['mozilla', 'ie6', 'opera', 'oldmoz', 'safari']
@@ -18,13 +18,13 @@ class UnitTest:
         self.test_idx = None
 
         # Synonyms for assertion methods
-        self.assertEqual = self.assertEquals = self.failUnlessEqual
-        self.assertNotEqual = self.assertNotEquals = self.failIfEqual
-        self.assertAlmostEqual = self.assertAlmostEquals = self.failUnlessAlmostEqual
-        self.assertNotAlmostEqual = self.assertNotAlmostEquals = self.failIfAlmostEqual
-        self.assertRaises = self.failUnlessRaises
-        self.assert_ = self.assertTrue = self.failUnless
-        self.assertFalse = self.failIf
+        self.assertEqual = self.assertEqual = self.assertEqual
+        self.assertNotEqual = self.assertNotEqual = self.assertNotEqual
+        self.assertAlmostEqual = self.assertAlmostEqual = self.assertAlmostEqual
+        self.assertNotAlmostEqual = self.assertNotAlmostEqual = self.assertNotAlmostEqual
+        self.assertRaises = self.assertRaises
+        self.assertTrue = self.assertTrue = self.assertTrue
+        self.assertFalse = self.assertFalse
 
     def _run_test(self, test_method_name):
         self.getTestMethods()
@@ -35,7 +35,7 @@ class UnitTest:
         try:
             try:
                 test_method()
-            except Exception, e:
+            except Exception as e:
                 import traceback
                 traceback.print_exc()
                 self.fail("uncaught exception:" + str(e))
@@ -201,7 +201,7 @@ class UnitTest:
         self.startTest()
         try:
             callableObj(*args, **kwargs)
-        except excClass, exc:
+        except excClass as exc:
             return
         else:
             if hasattr(excClass, '__name__'):

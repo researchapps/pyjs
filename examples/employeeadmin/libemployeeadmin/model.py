@@ -6,9 +6,9 @@ Addapted for pyjamas: Kees Bos
 """
 
 from puremvc.patterns.proxy import Proxy
-import vo
-import ApplicationConstants
-from ApplicationConstants import Command, Notification
+from . import vo
+from . import ApplicationConstants
+from .ApplicationConstants import Command, Notification
 
 class UserProxy(Proxy):
 

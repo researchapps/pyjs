@@ -57,8 +57,8 @@ class Service:
                 location = location.split(",")
                 if not len(location) == 2:
                     continue
-                location = map(strip, location)
-                [x, y] = map(int, location)
+                location = list(map(strip, location))
+                [x, y] = list(map(int, location))
                 data = args[cidx+1:].lstrip()
 
                 res.append([command, x+1, y, data])
@@ -97,7 +97,7 @@ class Service:
             l = l.split(":")
             if not len(l) == 2:
                 continue
-            l = map(strip, l)
+            l = list(map(strip, l))
             res.append(l)
 
         return res

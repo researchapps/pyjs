@@ -20,11 +20,11 @@
 
 from threading import  Event,  Lock
 
-from errors import *
+from .errors import *
 
 try:
     from json import JSONDecoder, JSONEncoder
-except ImportError, e:
+except ImportError as e:
     from simplejson import JSONDecoder, JSONEncoder
 
 
@@ -131,15 +131,15 @@ class SimpleMessageHandler:
 
     def handleMessages(self, msgs):
         for msg in msgs:
-            if msg.has_key("method") and msg.has_key("params"):
-                if msg.has_key("id"):
+            if "method" in msg and "params" in msg:
+                if "id" in msg:
                     if msg["id"]:
                         self.handleRequest(msg)
                     else:
                         self.handleNotification(msg)
                 else:
                     self.handleNotification(msg)
-            elif msg.has_key("result") and msg.has_key("error"):
+            elif "result" in msg and "error" in msg:
                 self.handleResponse(msg)
             else:#unknown object
                 self.sendResponse(None, InvalidJSONMessage())
@@ -213,7 +213,7 @@ class SimpleServiceHandler(SimpleMessageHandler):
         obj=None
         try: #to get a callable obj
             obj = getMethodByName(self.service, name)
-        except MethodNameNotAllowed,e:
+        except MethodNameNotAllowed as e:
             self.sendResponse(id, None, e)
         except:
             self.sendResponse(id, None, MethodNotFound())

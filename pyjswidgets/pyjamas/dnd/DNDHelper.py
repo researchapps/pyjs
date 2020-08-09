@@ -462,7 +462,7 @@ class DNDHelper(object):
 
     def onReturningWidget(self, timer):
         try:
-            next_loc = self.return_iterator.next()
+            next_loc = next(self.return_iterator)
         except StopIteration:
             self.zapDragImage()
             return

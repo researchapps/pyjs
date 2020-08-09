@@ -241,12 +241,12 @@ class GChart (Composite, FocusHandler, KeyboardHandler,
         * stylenames that also work consistently with canvas-rendered
         * curves.
         """
-        if not kwargs.has_key('StyleName'):
+        if 'StyleName' not in kwargs:
             kwargs['StyleName'] = "gchart-GChart"
 
-        if not kwargs.has_key('XChartSize'):
+        if 'XChartSize' not in kwargs:
             kwargs['XChartSize'] = DEFAULT_X_CHARTSIZE
-        if not kwargs.has_key('YChartSize'):
+        if 'YChartSize' not in kwargs:
             kwargs['YChartSize'] = DEFAULT_Y_CHARTSIZE
 
         # Note: plotPanel (where real chart resides) won't get
@@ -2417,7 +2417,7 @@ class GChart (Composite, FocusHandler, KeyboardHandler,
     *
     """
     def setChartTitle(self, chartTitle):
-        if isinstance(chartTitle, basestring):
+        if isinstance(chartTitle, str):
             chartTitle = HTML(chartTitle)
         self.chartDecorationsChanged = True
         self.chartTitle = chartTitle

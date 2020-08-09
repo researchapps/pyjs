@@ -32,7 +32,7 @@ def get_gtk_module():
 def set_main_frame(frame):
     global main_frame
     main_frame = frame
-    from pyjamas import DOM
+    from .pyjamas import DOM
     # ok - now the main frame has been set we can initialise the
     # signal handlers etc.
     DOM.init()
@@ -54,13 +54,13 @@ def JS(code):
     try:
         return ctx.eval(code)
     except:
-        print "code", code
+        print("code", code)
         print_stack()
 
 pygwt_moduleNames = []
 
 def pygwt_processMetas():
-    from pyjamas import DOM
+    from .pyjamas import DOM
     metas = doc().getElementsByTagName("meta")
     for i in range(metas.length):
         meta = metas.item(i)
@@ -75,7 +75,7 @@ class console:
 
     @staticmethod
     def error(msg):
-        print "TODO CONSOLE:", msg
+        print("TODO CONSOLE:", msg)
 
 def debugger():
     pass

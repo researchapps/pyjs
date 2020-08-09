@@ -146,9 +146,9 @@ class TimeModuleTest(UnitTest.UnitTest):
 if __name__ == '__main__':
     from RunTests import RunTests
 
-    print "time.tzname:", time.tzname
-    print "time.timezone:", time.timezone
-    print "time.altzone:", time.altzone
+    print("time.tzname:", time.tzname)
+    print("time.timezone:", time.timezone)
+    print("time.altzone:", time.altzone)
 
     t = RunTests()
     t.add(TimeModuleTest)

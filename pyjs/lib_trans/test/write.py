@@ -28,7 +28,7 @@ def init_web():
 
 def write_std(text):
     text = tag_re.sub("",text)
-    print text,
+    print(text, end=' ')
 
 def writebr_std(text):
     text = tag_re.sub("",text)

@@ -38,16 +38,16 @@ class HTMLTable(Panel):
              ]
 
     def __init__(self, **kwargs):
-        if not kwargs.has_key('CellFormatter'):
+        if 'CellFormatter' not in kwargs:
             kwargs['CellFormatter'] = CellFormatter(self)
-        if not kwargs.has_key('RowFormatter'):
+        if 'RowFormatter' not in kwargs:
             kwargs['RowFormatter'] = RowFormatter(self)
 
         self.tableListeners = []
         self.dbltableListeners = []
         self.widgetMap = {}
 
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             self.tableElem = kwargs.pop('Element')
             fc = DOM.getFirstChild(self.tableElem)
             if fc:
@@ -132,8 +132,8 @@ class HTMLTable(Panel):
     def getIndex(self, widget):
         """ given a widget, return its index.
         """
-        for row in xrange(self.getDOMRowCount()):
-            for col in xrange(self.getDOMCellCount(row)):
+        for row in range(self.getDOMRowCount()):
+            for col in range(self.getDOMCellCount(row)):
                 if self.getWidget(row, col) is widget:
                     return (row, col)
         return None
@@ -165,7 +165,7 @@ class HTMLTable(Panel):
     def __iter__(self):
         """ only gets widgets: does not obtain HTML or Text cells!
         """
-        return self.widgetMap.itervalues()
+        return iter(self.widgetMap.values())
 
     def _onBrowserEvent(self, event, event_type):
 

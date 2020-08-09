@@ -52,8 +52,8 @@ class Scope:
         if name in self.uses or name in self.defs:
             pass # XXX warn about global following def/use
         if name in self.params:
-            raise SyntaxError, "%s in %s is global and parameter" % \
-                  (name, self.name)
+            raise SyntaxError("%s in %s is global and parameter" % \
+                  (name, self.name))
         self.globals[name] = 1
         self.module.add_def(name)
 
@@ -67,7 +67,7 @@ class Scope:
         d.update(self.defs)
         d.update(self.uses)
         d.update(self.globals)
-        return d.keys()
+        return list(d.keys())
 
     def add_child(self, child):
         self.children.append(child)
@@ -76,12 +76,12 @@ class Scope:
         return self.children
 
     def DEBUG(self):
-        print >> sys.stderr, self.name, self.nested and "nested" or ""
-        print >> sys.stderr, "\tglobals: ", self.globals
-        print >> sys.stderr, "\tcells: ", self.cells
-        print >> sys.stderr, "\tdefs: ", self.defs
-        print >> sys.stderr, "\tuses: ", self.uses
-        print >> sys.stderr, "\tfrees:", self.frees
+        print(self.name, self.nested and "nested" or "", file=sys.stderr)
+        print("\tglobals: ", self.globals, file=sys.stderr)
+        print("\tcells: ", self.cells, file=sys.stderr)
+        print("\tdefs: ", self.defs, file=sys.stderr)
+        print("\tuses: ", self.uses, file=sys.stderr)
+        print("\tfrees:", self.frees, file=sys.stderr)
 
     def check_name(self, name):
         """Return scope of name.
@@ -106,10 +106,10 @@ class Scope:
             return ()
         free = {}
         free.update(self.frees)
-        for name in self.uses.keys():
+        for name in list(self.uses.keys()):
             if name not in self.defs and name not in self.globals:
                 free[name] = 1
-        return free.keys()
+        return list(free.keys())
 
     def handle_children(self):
         for child in self.children:
@@ -166,7 +166,7 @@ class Scope:
         return child_globals
 
     def get_cell_vars(self):
-        return self.cells.keys()
+        return list(self.cells.keys())
 
 class ModuleScope(Scope):
     __super_init = Scope.__init__
@@ -279,7 +279,7 @@ class SymbolVisitor:
 
     def _do_args(self, scope, args):
         for name in args:
-            if type(name) == types.TupleType:
+            if type(name) == tuple:
                 self._do_args(scope, name)
             else:
                 scope.add_param(name)
@@ -388,7 +388,7 @@ class SymbolVisitor:
 
     # prune if statements if tests are false
 
-    _const_types = types.StringType, types.IntType, types.FloatType
+    _const_types = bytes, int, float
 
     def visitIf(self, node, scope):
         for test, body in node.tests:
@@ -424,7 +424,7 @@ if __name__ == "__main__":
         return res
 
     for file in sys.argv[1:]:
-        print file
+        print(file)
         f = open(file)
         buf = f.read()
         f.close()
@@ -438,16 +438,16 @@ if __name__ == "__main__":
         names2 = s.scopes[tree].get_names()
 
         if not list_eq(mod_names, names2):
-            print
-            print "oops", file
-            print sorted(mod_names)
-            print sorted(names2)
+            print()
+            print("oops", file)
+            print(sorted(mod_names))
+            print(sorted(names2))
             sys.exit(-1)
 
         d = {}
         d.update(s.scopes)
         del d[tree]
-        scopes = d.values()
+        scopes = list(d.values())
         del d
 
         for s in syms.get_symbols():
@@ -455,11 +455,11 @@ if __name__ == "__main__":
                 l = [sc for sc in scopes
                      if sc.name == s.get_name()]
                 if len(l) > 1:
-                    print "skipping", s.get_name()
+                    print("skipping", s.get_name())
                 else:
                     if not list_eq(get_names(s.get_namespace()),
                                    l[0].get_names()):
-                        print s.get_name()
-                        print sorted(get_names(s.get_namespace()))
-                        print sorted(l[0].get_names())
+                        print(s.get_name())
+                        print(sorted(get_names(s.get_namespace())))
+                        print(sorted(l[0].get_names()))
                         sys.exit(-1)

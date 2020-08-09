@@ -38,7 +38,7 @@ historyListeners = []
 
 
 def addHistoryListener(listener):
-    print "add listener", listener
+    print("add listener", listener)
     historyListeners.append(listener)
 
 
@@ -93,11 +93,11 @@ def removeHistoryListener(listener):
     historyListeners.remove(listener)
 
 def _first_notify():
-    print "first notify", historyToken
+    print("first notify", historyToken)
     onHistoryChanged(historyToken)
 
 def init():
-    print "init", get_main_frame(), pyjd.is_desktop
+    print("init", get_main_frame(), pyjd.is_desktop)
     if get_main_frame() is None:
         if pyjd.is_desktop:
             pyjd.add_setup_callback(init)

@@ -1,7 +1,7 @@
 from pyjamas.ui.RootPanel import RootPanel
 from pyjamas.ui.Button import Button
 
-from UnitTest import UnitTest1
+from .UnitTest import UnitTest1
 
 from pyjamas import DOM
 

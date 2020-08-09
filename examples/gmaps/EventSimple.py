@@ -39,7 +39,7 @@ class EventSimple(SimplePanel):
         self.map.addListener("click", self.clicked)
 
     def zoomChanged(self):
-        print "zoom to " + str(self.map.getZoom())
+        print("zoom to " + str(self.map.getZoom()))
         Timer(1500, self.moveToDarwin)
 
     def moveToDarwin(self, timer):

@@ -13,7 +13,7 @@ from pyjamas.ui import MouseListener
 class HyperlinkImage(Hyperlink):
     def __init__(self, img, **kwargs):
         self.mouseListeners = []
-        if not kwargs.has_key('StyleName'):
+        if 'StyleName' not in kwargs:
             kwargs['StyleName'] = 'gwt-HyperlinkImage'
         Hyperlink.__init__(self, **kwargs)
         DOM.appendChild(DOM.getFirstChild(self.getElement()), img.getElement())

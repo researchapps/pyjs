@@ -11,7 +11,7 @@
 
 """
 import subprocess
-import cStringIO
+import io
 import os
 import os.path
 import sys
@@ -58,7 +58,7 @@ def main():
     # Calculate the list of imports to use for the combined module.
 
     imports = set()
-    for demo in demoInfo.values():
+    for demo in list(demoInfo.values()):
         imports.update(extractImports(demo['src']))
 
     # Write the combined demos into a single file.
@@ -77,7 +77,7 @@ def main():
     s.append('')
     s.append('')
 
-    for demo in demoInfo.keys():
+    for demo in list(demoInfo.keys()):
         s.append(removeDocstringAndImports(demoInfo[demo]['src']))
         s.append('')
         s.append('')
@@ -86,7 +86,7 @@ def main():
     s.append('    demos = []')
 
     sortKeys = []
-    for name in demoInfo.keys():
+    for name in list(demoInfo.keys()):
         sortKeys.append((demoInfo[name]['section'], name))
     sortKeys.sort()
 
@@ -191,7 +191,7 @@ def parseDemo(fName, src):
 
     # Colourize the source code.
 
-    buff = cStringIO.StringIO()
+    buff = io.StringIO()
     pyColourize.Parser(src, pyColourize._Eriks_Style,
                        fName, buff).format(None, None)
     html = buff.getvalue()

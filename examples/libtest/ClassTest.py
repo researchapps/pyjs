@@ -88,8 +88,8 @@ class ClassTest(UnitTest):
     def testInstancePassing(self):
         s = SinkInfo(Trees)
         i = s.getInstance()
-        self.assertEquals(i.test, "Trees")
-        self.assertEquals(i.sink, "Sink")
+        self.assertEqual(i.test, "Trees")
+        self.assertEqual(i.sink, "Sink")
 
     def testBug342(self):
         try:
@@ -108,8 +108,8 @@ class ClassTest(UnitTest):
             self.assertTrue(True)
 
     def testSubAssign(self):
-        self.assertEquals(names['SubAssignBase'], 'SubAssignBase')
-        self.assertEquals(names['SubAssign'], 'SubAssign')
+        self.assertEqual(names['SubAssignBase'], 'SubAssignBase')
+        self.assertEqual(names['SubAssign'], 'SubAssign')
 
     # test Class.x
     def testClassVars(self):
@@ -117,26 +117,26 @@ class ClassTest(UnitTest):
         expected_result2=1
 
         # check class var value without instance
-        self.assertEquals(ExampleClass.x, expected_result1)
-        self.assertEquals(ExampleClass.x.upper(), expected_result1.upper())
+        self.assertEqual(ExampleClass.x, expected_result1)
+        self.assertEqual(ExampleClass.x.upper(), expected_result1.upper())
 
         # verify class var value for instances
         y = ExampleClass()
-        self.assertEquals(y.x, expected_result1)
+        self.assertEqual(y.x, expected_result1)
 
         # modify class var
         ExampleClass.x = expected_result2
-        self.assertEquals(ExampleClass.x, expected_result2)
+        self.assertEqual(ExampleClass.x, expected_result2)
 
         # verify that class var changed for NEW instances
         z = ExampleClass()
-        self.assertEquals(z.x, expected_result2)
+        self.assertEqual(z.x, expected_result2)
 
         # verify that class var changed for EXISTING instances
-        self.assertEquals(y.x, expected_result2)
+        self.assertEqual(y.x, expected_result2)
 
         # verify that the initiation of ExampleClass.c is correct
-        self.assertEquals(ExampleClass.c, 1|2)
+        self.assertEqual(ExampleClass.c, 1|2)
 
         # verify that class properties can only be reached via instance
         #
@@ -148,7 +148,7 @@ class ClassTest(UnitTest):
         try:
             ExampleClass().fail_a()
             self.fail("Failed to raise error on ExampleClass().fail_a() bug #217")
-        except (NameError, AttributeError), e:
+        except (NameError, AttributeError) as e:
             self.assertTrue(True)
         except ValueError:
             self.fail("Failed to raise NameError or AttributeError on ExampleClass().fail_a() bug #217")
@@ -233,7 +233,7 @@ class ClassTest(UnitTest):
 
             @property
             def bla(self):
-                return self.next
+                return self.__next__
 
             @property
             def next(self):
@@ -282,23 +282,23 @@ class ClassTest(UnitTest):
 
         # check parent property
         obj1 = ExampleParentClass()
-        self.assertEquals(obj1.x, expected_result1)
+        self.assertEqual(obj1.x, expected_result1)
 
         # check default inherited property
         obj1.x = expected_result2
         obj2 = ExampleChildClass()
-        self.assertEquals(obj2.x, expected_result1)
+        self.assertEqual(obj2.x, expected_result1)
 
         # change inherited property
         obj2.x = expected_result3
-        self.assertEquals(obj2.x, expected_result3)
+        self.assertEqual(obj2.x, expected_result3)
 
         # verify that parent class properties were NOT changed
-        self.assertEquals(obj1.x, expected_result2)
+        self.assertEqual(obj1.x, expected_result2)
 
         obj = ExampleChildClass(b = 222)
-        self.assertEquals(obj.prop_a, 1)
-        self.assertEquals(obj.prop_b, 222)
+        self.assertEqual(obj.prop_a, 1)
+        self.assertEqual(obj.prop_b, 222)
 
     # test Class().anObject
     def testInheritedPropertyObjects(self):
@@ -307,20 +307,20 @@ class ClassTest(UnitTest):
 
         # check parent property
         obj1 = ExampleParentObject()
-        self.assertEquals(len(obj1.x), 0)
+        self.assertEqual(len(obj1.x), 0)
 
         # check default inherited property
         obj1.x.append(expected_result2)
 
         obj2 = ExampleChildObject()
-        self.assertEquals(len(obj2.x), 1)
+        self.assertEqual(len(obj2.x), 1)
 
         # change inherited property
         obj2.x.append(expected_result1)
-        self.assertEquals(obj2.x[1], expected_result1)
+        self.assertEqual(obj2.x[1], expected_result1)
 
         # verify that parent class properties were NOT changed
-        self.assertEquals(obj1.x[0], expected_result2)
+        self.assertEqual(obj1.x[0], expected_result2)
 
     # test Class().__init__
     def testInheritedConstructors(self):
@@ -331,7 +331,7 @@ class ClassTest(UnitTest):
 
         # verify that parent.__init__ is called if there is no child.__init__()
         obj1 = ExampleChildNoConstructor()
-        self.assertEquals(obj1.x, expected_result1, "ExampleParentConstructor.__init__() was NOT called for ExampleChildNoConstructor")
+        self.assertEqual(obj1.x, expected_result1, "ExampleParentConstructor.__init__() was NOT called for ExampleChildNoConstructor")
 
         # verify that parent.__init__ is NOT called (child.__init__() is defined)
         obj2 = ExampleChildConstructor()
@@ -339,13 +339,13 @@ class ClassTest(UnitTest):
 
         # verify that parent.__init__ is explicitly called
         obj3 = ExampleChildExplicitConstructor()
-        self.assertEquals(obj3.x, expected_result1, "ExampleParentConstructor.__init__() was NOT called for ExampleChildExplicitConstructor")
+        self.assertEqual(obj3.x, expected_result1, "ExampleParentConstructor.__init__() was NOT called for ExampleChildExplicitConstructor")
 
         # verify inherited values
-        self.assertEquals(obj1.y, expected_result2, "Did not inherit property from parent")
-        self.assertEquals(obj2.y, expected_result2, "Did not inherit property from parent")
-        self.assertEquals(obj1.z, expected_result3, "Did not inherit property from grandparent")
-        self.assertEquals(obj2.z, expected_result3, "Did not inherit property from grandparent")
+        self.assertEqual(obj1.y, expected_result2, "Did not inherit property from parent")
+        self.assertEqual(obj2.y, expected_result2, "Did not inherit property from parent")
+        self.assertEqual(obj1.z, expected_result3, "Did not inherit property from grandparent")
+        self.assertEqual(obj2.z, expected_result3, "Did not inherit property from grandparent")
 
         res = getattr(obj1, "r", None)
         self.assertNotEqual(res, expected_result4, "ExampleGrandParentConstructor.__init__() was called (%s)" % res)
@@ -363,7 +363,7 @@ class ClassTest(UnitTest):
 
     def testInheritFromType(self):
 
-        i_types = [(int, 1), (float, 1.5), (str, "test"), (long, 1),
+        i_types = [(int, 1), (float, 1.5), (str, "test"), (int, 1),
                    (tuple, (1,2)), (list, [1,2]), (dict, {'1':1}), (set, set([1,2]))]
         for cls, val in i_types:
             try:
@@ -548,26 +548,26 @@ class ClassTest(UnitTest):
 
     def testIsInstance(self):
         c = ExampleChildClass()
-        self.failIf(isinstance(c, ExampleClass))
-        self.failUnless(isinstance(c, ExampleChildClass))
-        self.failUnless(isinstance(c, ExampleParentClass))
+        self.assertFalse(isinstance(c, ExampleClass))
+        self.assertTrue(isinstance(c, ExampleChildClass))
+        self.assertTrue(isinstance(c, ExampleParentClass))
 
     def testIsInstanceNested(self):
         c = ExampleChildClass()
-        self.failUnless(isinstance(c, (ExampleClass, ExampleChildClass)))
-        self.failIf(isinstance(c, (ExampleClass, ExampleParentObject)))
-        self.failUnless(isinstance(c, (ExampleClass, (ExampleChildClass,))))
+        self.assertTrue(isinstance(c, (ExampleClass, ExampleChildClass)))
+        self.assertFalse(isinstance(c, (ExampleClass, ExampleParentObject)))
+        self.assertTrue(isinstance(c, (ExampleClass, (ExampleChildClass,))))
 
     def testInstanceChecking(self):
         try:
             ExampleChildClass.get_x(ExampleChildClass())
             self.assertTrue(True)
-        except TypeError, e:
+        except TypeError as e:
             self.fail(e)
         try:
             ExampleChildClass.get_x(ExampleClass())
             self.fail('Failed to raise error for invalid instance')
-        except TypeError, e:
+        except TypeError as e:
             self.assertTrue(e.args[0].find('get_x() must be called') >= 0, e.args[0])
 
     def testIsSubclass(self):
@@ -597,8 +597,7 @@ class ClassTest(UnitTest):
         class Metaklass(type):
             def metamethod(cls):
                 return 2
-        class Klass(object):
-            __metaclass__ = Metaklass
+        class Klass(object, metaclass=Metaklass):
             def method(cls):
                 return 1
             x = 5
@@ -615,8 +614,7 @@ class ClassTest(UnitTest):
             def __init__(cls, name, bases, dct):
                 super(MetaklassDctSaver, cls).__init__(name, bases, dct)
                 cls.saved_dct = dct
-        class MyClass(object):
-            __metaclass__ = MetaklassDctSaver
+        class MyClass(object, metaclass=MetaklassDctSaver):
             a = 1
             b = 2
         try:
@@ -670,7 +668,7 @@ class ClassTest(UnitTest):
             # TypeError: no_args() takes no arguments (1 given)
             c.no_args()
             self.fail("Exception should be raised on 'c.no_args()'")
-        except TypeError, e:
+        except TypeError as e:
             self.assertEqual(e.args[0], "no_args() takes no arguments (1 given)")
 
         self.assertEqual(c.self_arg(), True)
@@ -680,7 +678,7 @@ class ClassTest(UnitTest):
             # 'TypeError: two_args() takes exactly 2 arguments (1 given)
             c.two_args()
             self.fail("Exception should be raised on 'c.two_args()'")
-        except TypeError, e:
+        except TypeError as e:
             self.assertEqual(e.args[0], "two_args() takes exactly 2 arguments (1 given)")
 
     def testSuperTest(self):
@@ -701,7 +699,7 @@ class ClassTest(UnitTest):
         try:
             z = instance.z
             self.fail("failed to raise error for instance.z")
-        except AttributeError, e:
+        except AttributeError as e:
             self.assertTrue(True)
         except:
             self.fail("failed to raise Attribute error for instance.z")
@@ -725,7 +723,7 @@ class ClassTest(UnitTest):
         try:
             c = imports.child.Child()
             self.assertEqual(c.value(teststring), teststring)
-        except AttributeError, e:
+        except AttributeError as e:
             self.fail(e.message)
 
         class C(imports.child.Child): pass
@@ -853,7 +851,7 @@ class ClassTest(UnitTest):
         try:
             x = decorated.x
             self.fail("Failed to raise error for 'del decorated.x'")
-        except AttributeError, e:
+        except AttributeError as e:
             self.assertTrue(True)
             #self.assertEqual(e[0], "'RevealAccess' object has no attribute 'val'")
         except:
@@ -869,7 +867,7 @@ class ClassTest(UnitTest):
         try:
             x = p._x
             self.fail("Failed to raise error for 'x = p._x'")
-        except AttributeError, e:
+        except AttributeError as e:
             self.assertTrue(True)
         except:
             self.fail("Failed to raise Attribute error for 'x = p._x'")
@@ -883,7 +881,7 @@ class ClassTest(UnitTest):
         try:
             x = p._x
             self.fail("Failed to raise error for 'x = p._x'")
-        except AttributeError, e:
+        except AttributeError as e:
             self.assertTrue(True)
         except:
             self.fail("Failed to raise Attribute error for 'x = p._x'")
@@ -982,7 +980,7 @@ class ClassTest(UnitTest):
         exc_raised = False
         try:
             res = obj.mtd5("b")
-        except TypeError, t:
+        except TypeError as t:
             exc_raised = True
         self.assertTrue(exc_raised, "TypeError wrong arguments count not raised")
 
@@ -997,7 +995,7 @@ class ClassTest(UnitTest):
             self.assertEqual(obj.mtd_class2("b"), "77b88")
             self.assertEqual(DecoratedMethods.mtd_class("b"), "7b8")
             self.assertEqual(DecoratedMethods.mtd_class2("b"), "77b88")
-        except TypeError, e:
+        except TypeError as e:
             msg = str(e)
             if "fnc() takes exactly 2 arguments (1 given)" in msg:
                 msg = "bug #318 - " + msg
@@ -1368,17 +1366,17 @@ class Property(object):
         if obj is None:
             return self
         if self.fget is None:
-            raise AttributeError, "unreadable attribute"
+            raise AttributeError("unreadable attribute")
         return self.fget(obj)
 
     def __set__(self, obj, value):
         if self.fset is None:
-            raise AttributeError, "can't set attribute"
+            raise AttributeError("can't set attribute")
         self.fset(obj, value)
 
     def __delete__(self, obj):
         if self.fdel is None:
-            raise AttributeError, "can't delete attribute"
+            raise AttributeError("can't delete attribute")
         self.fdel(obj)
 
     def setter(self, fset):

@@ -19,7 +19,7 @@
 """
 
 from jsonrpc import SimpleServiceHandler
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 
 class HTTPClientConnectionHandler(SimpleServiceHandler):
@@ -28,6 +28,6 @@ class HTTPClientConnectionHandler(SimpleServiceHandler):
         SimpleServiceHandler.__init__(self, service,messageDelimiter=messageDelimiter)
 
     def send(self, data):
-        req = urllib2.Request(self.url, data)
-        resp = urllib2.urlopen(req)
+        req = urllib.request.Request(self.url, data)
+        resp = urllib.request.urlopen(req)
         self.handlePartialData(resp.read())

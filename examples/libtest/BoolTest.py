@@ -8,7 +8,7 @@ class Foo:
     def __init__(self, v):
         self._v = v
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self._v>0
 
     def __len__(self):
@@ -120,15 +120,15 @@ class BoolTest(UnitTest):
             self.fail("if 0 < 1 < 2")
         i = [0, 2, 4]
         i = i.__iter__();
-        if 0 < i.next() < 4:
+        if 0 < next(i) < 4:
             self.fail("iter (0)")
         else:
             self.assertTrue(True)
-        if 0 < i.next() < 4:
+        if 0 < next(i) < 4:
             self.assertTrue(True)
         else:
             self.fail("iter (2)")
-        if 0 < i.next() < 4:
+        if 0 < next(i) < 4:
             self.fail("iter (4)")
         else:
             self.assertTrue(True)

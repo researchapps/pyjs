@@ -526,7 +526,7 @@ class BuoyService(Buoy):
         flares, events = self._build_flares(self, token)
 
         if len(events):
-            first_event_keys = [] if token=='#' else events[0].keys()
+            first_event_keys = [] if token=='#' else list(events[0].keys())
             for listener in self.listeners:
                 listener.onFlare(flares, first_event_keys)
 

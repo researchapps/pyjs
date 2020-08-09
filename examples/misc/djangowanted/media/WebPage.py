@@ -94,7 +94,7 @@ class WebApp:
 
     def onHistoryChanged(self, token):
         #log.debug("onHistoryChanged %s" % token)
-        if self.pages.has_key(token):
+        if token in self.pages:
             self.setPage(token)
             return
         self.pages.getPageByName(token, self)

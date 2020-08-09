@@ -25,7 +25,7 @@ class GetSelectionExample:
         # Make sure we got the data in the expected form
         if str(selection_data.type) == "STRING":
             # Print out the string we received
-            print "STRING TARGET: %s" % selection_data.get_text()
+            print("STRING TARGET: %s" % selection_data.get_text())
 
         elif str(selection_data.type) == "ATOM":
             # Print out the target list we received
@@ -33,11 +33,11 @@ class GetSelectionExample:
             for target in targets:
                 name = str(target)
                 if name is not None:
-                    print "%s" % name
+                    print("%s" % name)
                 else:
-                    print "(bad target)"
+                    print("(bad target)")
         else:
-            print "Selection was not returned as \"STRING\" or \"ATOM\"!"
+            print("Selection was not returned as \"STRING\" or \"ATOM\"!")
 
         return False
 

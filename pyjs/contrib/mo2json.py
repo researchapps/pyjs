@@ -34,7 +34,7 @@ def mo2json(fp):
             raise ValueError("Invalid Plural-Forms")
         nplurals = int(m.group(1))
     c = {}
-    for k, v in t._catalog.iteritems():
+    for k, v in t._catalog.items():
         if k != "":
             if not isinstance(k, tuple):
                 lst = [v]

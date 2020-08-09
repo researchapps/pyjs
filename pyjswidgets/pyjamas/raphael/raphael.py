@@ -346,7 +346,7 @@ class Raphael(Widget,RaphaelEventHandler):
             """)
 
         if attrs != None:
-            for attr in attrs.keys():
+            for attr in list(attrs.keys()):
                 value = attrs[attr]
                 JS("""
                     this['_element']['attr'](@{{attr}}, @{{value}});
@@ -507,7 +507,7 @@ class RaphaelElement(object,RaphaelEventHandler):
             The available attributes are listed in the description of the
             setAttr() method, above.
         """
-        for attr,value in attrs.items():
+        for attr,value in list(attrs.items()):
             JS("""
                this['_element']['attr'](@{{attr}}, @{{value}});
             """)
@@ -558,7 +558,7 @@ class RaphaelElement(object,RaphaelEventHandler):
         JS("""
            var jsAttrs = {};
         """)
-        for attr,value in attrs.items():
+        for attr,value in list(attrs.items()):
             JS("""
                jsAttrs[@{{attr}}] = @{{value}};
             """)
@@ -572,7 +572,7 @@ class RaphaelElement(object,RaphaelEventHandler):
            var jsAttrs = {};
         """)
         otherElement=element.getElement()
-        for attr,value in attrs.items():
+        for attr,value in list(attrs.items()):
             JS("""
                jsAttrs[@{{attr}}] = @{{value}};
             """)
@@ -773,7 +773,7 @@ class RaphaelConnectionElement(RaphaelElement):
                 for j in range(4,7):
                     dx=abs(p[i]['x']-p[j]['x'])
                     dy=abs(p[i]['y']-p[j]['y'])
-                    if ((i==j-4) or (((i<>3 and j<>6) or p[i]['x'] < p[j]['x']) and ((i<>2 and j<>7) or p[i]['x'] > p[j]['x']) and ((i<>0 and j<>5) or p[i]['y'] > p[j]['y']) and ((i<>1 and j<>4) or p[i]['y'] < p[j]['y'] ))):
+                    if ((i==j-4) or (((i!=3 and j!=6) or p[i]['x'] < p[j]['x']) and ((i!=2 and j!=7) or p[i]['x'] > p[j]['x']) and ((i!=0 and j!=5) or p[i]['y'] > p[j]['y']) and ((i!=1 and j!=4) or p[i]['y'] < p[j]['y'] ))):
                         dis.append(dy+dy)
                         d[dis[len(dis)-1]]=[i,j]
 
@@ -803,12 +803,12 @@ class RaphaelConnectionElement(RaphaelElement):
             if res1==None and res2==None:
                 res1=0
                 res2=4
-            elif res1<>None and res2==None:
+            elif res1!=None and res2==None:
                 if res1<4:
                     res2=COUNTER_MAP[res1]+4
                 else:
                     res2=COUNTER_MAP[res1]-4
-            elif res1==None and res2<>None:
+            elif res1==None and res2!=None:
                 if res2<4:
                     res1=COUNTER_MAP[res2]+4
                 else:

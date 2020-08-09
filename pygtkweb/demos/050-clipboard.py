@@ -28,12 +28,12 @@ class ClipboardExample:
             targ = {}
             for t in targets:
                 targ[str(t)] = 0
-            targ = targ.keys()
+            targ = list(targ.keys())
             targ.sort()
             info.targets = '\n'.join(targ)
         else:
             info.targets = None
-            print 'No targets for:', info.text
+            print('No targets for:', info.text)
         self.update_buttons()
         return
 
@@ -45,7 +45,7 @@ class ClipboardExample:
         cbi.text = text
         # prepend and remove duplicate
         history = [info for info in self.clipboard_history
-                   if info and info.text<>text]
+                   if info and info.text!=text]
         self.clipboard_history = ([cbi] + history)[:self.num_buttons]
         self.clipboard.request_targets(self.clipboard_targets_received, cbi)
         return

@@ -10,7 +10,7 @@ class Table:
     # Our callback.
     # The data passed to this method is printed to stdout
     def callback(self, widget, data=None):
-        print "Hello again - %s was pressed" % data
+        print("Hello again - %s was pressed" % data)
 
     # This callback quits the program
     def delete_event(self, widget, event, data=None):

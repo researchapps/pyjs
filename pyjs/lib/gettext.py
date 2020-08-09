@@ -50,15 +50,15 @@ class NullTranslations:
     def ugettext(self, message):
         if self._fallback:
             return self._fallback.ugettext(message)
-        return unicode(message)
+        return str(message)
 
     def ungettext(self, msgid1, msgid2, n):
         if self._fallback:
             return self._fallback.ungettext(msgid1, msgid2, n)
         if n == 1:
-            return unicode(msgid1)
+            return str(msgid1)
         else:
-            return unicode(msgid2)
+            return str(msgid2)
 
     def info(self):
         return self._info
@@ -72,17 +72,17 @@ class NullTranslations:
     def set_output_charset(self, charset):
         self._output_charset = charset
 
-    def install(self, unicode=False, names=None):
-        import __builtin__
-        __builtin__.__dict__['_'] = unicode and self.ugettext or self.gettext
+    def install(self, str=False, names=None):
+        import builtins
+        builtins.__dict__['_'] = str and self.ugettext or self.gettext
         if hasattr(names, "__contains__"):
             if "gettext" in names:
-                __builtin__.__dict__['gettext'] = __builtin__.__dict__['_']
+                builtins.__dict__['gettext'] = builtins.__dict__['_']
             if "ngettext" in names:
-                __builtin__.__dict__['ngettext'] = (unicode and self.ungettext
+                builtins.__dict__['ngettext'] = (str and self.ungettext
                                                              or self.ngettext)
             if "lgettext" in names:
-                __builtin__.__dict__['lgettext'] = self.lgettext
+                builtins.__dict__['lgettext'] = self.lgettext
             if "lngettext" in names:
-                __builtin__.__dict__['lngettext'] = self.lngettext
+                builtins.__dict__['lngettext'] = self.lngettext
 

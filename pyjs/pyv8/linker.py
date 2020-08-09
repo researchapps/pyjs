@@ -68,7 +68,7 @@ pyv8_load(%(js_lib_files)s);
 """
 
 def tostrlist(l):
-    l = map(lambda x: repr(x), l)
+    l = [repr(x) for x in l]
     return "[%s]" % ', '.join(l)
 
 class PyV8Linker(linker.BaseLinker):

@@ -29,7 +29,7 @@ class EntryCompletionExample:
         return
 
     def match_cb(self, completion, model, iter):
-        print model[iter][0], 'was selected'
+        print(model[iter][0], 'was selected')
         return
 
     def activate_cb(self, entry):

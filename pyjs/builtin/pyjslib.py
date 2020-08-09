@@ -82,7 +82,7 @@ def type(clsname, bases=None, methods=None):
     # creates a class, derived from bases, with methods and variables
     JS(" var mths = {}; ")
     if methods:
-        for k in methods.keys():
+        for k in list(methods.keys()):
             mth = methods[k]
             JS(" @{{!mths}}[@{{!k}}] = @{{mth}}; ")
 
@@ -136,7 +136,7 @@ object.__str__ = JS("""function (self) {
 }""")
 
 
-class basestring(object):
+class str(object):
     pass
 
 class TypeClass:
@@ -869,13 +869,13 @@ def ___import___(path, context, module_name=None, get_base=True):
         contextTopName = JS("@{{context}}['__split']('.')[0]")
 
         # Check if we already have imported this module in this context
-        if depth > 1 and sys.modules.has_key(inContextParentName):
+        if depth > 1 and inContextParentName in sys.modules:
             module = sys.modules[inContextParentName]
             if JS("typeof @{{module}}[@{{objName}}] != 'undefined'"):
                 if get_base:
                     return JS("$pyjs['loaded_modules'][@{{inContextTopName}}]")
                 return JS("@{{module}}[@{{objName}}]")
-        elif sys.modules.has_key(inContextImportName):
+        elif inContextImportName in sys.modules:
             if get_base:
                 return JS("$pyjs['loaded_modules'][@{{inContextTopName}}]")
             return sys.modules[inContextImportName]
@@ -888,7 +888,7 @@ def ___import___(path, context, module_name=None, get_base=True):
                 if get_base:
                     return JS("$pyjs['loaded_modules'][@{{inContextTopName}}]")
                 return JS("@{{module}}[@{{objName}}]")
-        if sys.modules.has_key(inContextImportName):
+        if inContextImportName in sys.modules:
             if get_base:
                 return JS("$pyjs['loaded_modules'][@{{inContextTopName}}]")
             return sys.modules[inContextImportName]
@@ -901,7 +901,7 @@ def ___import___(path, context, module_name=None, get_base=True):
                 return JS("$pyjs['loaded_modules'][@{{inContextTopName}}]")
             return module
         # Check if the topName is a valid module, if so, we stay in_context
-        if not sys.modules.has_key(inContextTopName):
+        if inContextTopName not in sys.modules:
             if JS("typeof (@{{module}} = $pyjs['loaded_modules'][@{{inContextTopName}}]) != 'function'"):
                 in_context = False
                 if JS("$pyjs['options']['dynamic_loading']"):
@@ -923,13 +923,13 @@ def ___import___(path, context, module_name=None, get_base=True):
             parentName = inContextParentName
             topName = inContextTopName
     if not in_context:
-        if parentName and sys.modules.has_key(parentName):
+        if parentName and parentName in sys.modules:
             module = sys.modules[parentName]
             if JS("typeof @{{module}}[@{{objName}}] != 'undefined'"):
                 if get_base:
                     return JS("$pyjs['loaded_modules'][@{{topName}}]")
                 return JS("@{{module}}[@{{objName}}]")
-        elif sys.modules.has_key(importName):
+        elif importName in sys.modules:
             if get_base:
                 return JS("$pyjs['loaded_modules'][@{{topName}}]")
             return sys.modules[importName]
@@ -942,7 +942,7 @@ def ___import___(path, context, module_name=None, get_base=True):
                 if get_base:
                     return JS("$pyjs['loaded_modules'][@{{topName}}]")
                 return JS("@{{module}}[@{{objName}}]")
-        if sys.modules.has_key(importName):
+        if importName in sys.modules:
             if get_base:
                 return JS("$pyjs['loaded_modules'][@{{topName}}]")
             return sys.modules[importName]
@@ -973,7 +973,7 @@ def __dynamic_load__(importName):
     global __nondynamic_modules__
     setCompilerOptions("noDebug")
     module = JS("""$pyjs['loaded_modules'][@{{importName}}]""")
-    if sys is None or dynamic is None or __nondynamic_modules__.has_key(importName):
+    if sys is None or dynamic is None or importName in __nondynamic_modules__:
         return module
     if JS("""typeof @{{module}}== 'undefined'"""):
         try:
@@ -1037,10 +1037,10 @@ class SystemExit(BaseException):
 class Exception(BaseException):
     pass
 
-class StandardError(Exception):
+class Exception(Exception):
     pass
 
-class ArithmeticError(StandardError):
+class ArithmeticError(Exception):
     pass
 
 class StopIteration(Exception):
@@ -1049,31 +1049,31 @@ class StopIteration(Exception):
 class GeneratorExit(Exception):
     pass
 
-class AssertionError(StandardError):
+class AssertionError(Exception):
     pass
 
-class TypeError(StandardError):
+class TypeError(Exception):
     pass
 
-class AttributeError(StandardError):
+class AttributeError(Exception):
     pass
 
-class NameError(StandardError):
+class NameError(Exception):
     pass
 
-class ValueError(StandardError):
+class ValueError(Exception):
     pass
 
-class ImportError(StandardError):
+class ImportError(Exception):
     pass
 
-class LookupError(StandardError):
+class LookupError(Exception):
     pass
 
-class RuntimeError(StandardError):
+class RuntimeError(Exception):
     pass
 
-class SystemError(StandardError):
+class SystemError(Exception):
     pass
 
 class KeyError(LookupError):
@@ -1914,7 +1914,7 @@ class float:
     def __repr__(self):
         return self.__v.__repr__()
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.__v.__nonzero__()
 
     def __cmp__(self, other):
@@ -4827,7 +4827,7 @@ class dict:
     def __hash__(self):
         raise TypeError("dict objects are unhashable")
 
-    def __nonzero__(self):
+    def __bool__(self):
         JS("""
         for (var i in @{{self}}['__object']){
             return true;
@@ -4960,10 +4960,10 @@ class dict:
     #See monkey patch at the end of the dict class definition
 
     def itervalues(self):
-        return self.values().__iter__();
+        return list(self.values()).__iter__();
 
     def iteritems(self):
-        return self.items().__iter__();
+        return list(self.items()).__iter__();
 
     def setdefault(self, key, default_value):
         JS("""
@@ -4989,7 +4989,7 @@ class dict:
                 raise TypeError("update expected at most 1 arguments, got %d" % len(args))
             d = args[0]
             if hasattr(d, "iteritems"):
-                for k,v in d.iteritems():
+                for k,v in d.items():
                     self[k] = v
             elif hasattr(d, "keys"):
                 for k in d:
@@ -4998,7 +4998,7 @@ class dict:
                 for k, v in d:
                     self[k] = v
         if kwargs:
-            for k,v in kwargs.iteritems():
+            for k,v in kwargs.items():
                 self[k] = v
 
     def pop(self, k, *d):
@@ -5016,7 +5016,7 @@ class dict:
                 raise
 
     def popitem(self):
-        for k, v in self.iteritems():
+        for k, v in self.items():
             return (k, v)
         raise KeyError('popitem(): dictionary is empty')
 
@@ -5028,7 +5028,7 @@ class dict:
         return self.__object
 
     def copy(self):
-        return dict(self.items())
+        return dict(list(self.items()))
 
     def clear(self):
         self.__object = JS("{}")
@@ -5591,17 +5591,17 @@ class property(object):
         if obj is None:
             return self
         if self.fget is None:
-            raise AttributeError, "unreadable attribute"
+            raise AttributeError("unreadable attribute")
         return self.fget(obj)
 
     def __set__(self, obj, value):
         if self.fset is None:
-            raise AttributeError, "can't set attribute"
+            raise AttributeError("can't set attribute")
         self.fset(obj, value)
 
     def __delete__(self, obj):
         if self.fdel is None:
-            raise AttributeError, "can't delete attribute"
+            raise AttributeError("can't delete attribute")
         self.fdel(obj)
 
     def setter(self, fset):
@@ -5804,7 +5804,7 @@ def __setslice(object, lower, upper, value):
     return null;
     """)
 
-class str(basestring):
+class str(str):
     def __new__(self, text=''):
         JS("""
         if (@{{text}}==='') {
@@ -6267,7 +6267,7 @@ def reduce(func, iterable, initializer=JS("(function(){return;})()")):
     try:
         iterable = iter(iterable)
     except:
-        raise TypeError, "reduce() arg 2 must support iteration"
+        raise TypeError("reduce() arg 2 must support iteration")
     emtpy = True
     for value in iterable:
         emtpy = False
@@ -6277,7 +6277,7 @@ def reduce(func, iterable, initializer=JS("(function(){return;})()")):
             initializer = func(initializer, value)
     if empty:
         if JS("typeof @{{initializer}}== 'undefined'"):
-            raise TypeError, "reduce() of empty sequence with no initial value"
+            raise TypeError("reduce() of empty sequence with no initial value")
         return initializer
     return initializer
 
@@ -6293,7 +6293,7 @@ def zip(*iterables):
             t = []
             i = 0
             while i < n:
-                t.append(iterables[i].next())
+                t.append(next(iterables[i]))
                 i += 1
             lst.append(tuple(t))
     except StopIteration:
@@ -8048,13 +8048,13 @@ class StringFormatSpace(object):
     def format(self, w_obj, spec):
         # added test on int, float, basestring CPython has __format__ for them
         if isinstance(w_obj, object) and \
-           not isinstance(w_obj, (int, float, basestring)):
+           not isinstance(w_obj, (int, float, str)):
             if hasattr(w_obj, '__format__'):
                 return w_obj.__format__(spec)
         if not spec:
             return w_obj
         fmt = Formatter(self, spec)
-        if isinstance(w_obj, basestring):
+        if isinstance(w_obj, str):
             return fmt.format_string(w_obj)
         elif isinstance(w_obj, int):
             return fmt.format_int_or_long(w_obj, spec)
@@ -8063,7 +8063,7 @@ class StringFormatSpace(object):
         if isinstance(w_obj, object):
             if hasattr(w_obj, '__str__'):
                 return fmt.format_string(w_obj.__str__())
-        print 'type not implemented'
+        print('type not implemented')
         return w_obj
 
 

@@ -43,7 +43,7 @@ class VarsTest(UnitTest.UnitTest):
         self.assertEqual(module_global_x, 1)
 
     def testImports(self):
-        self.failUnless(UnitTest.UnitTest())
+        self.assertTrue(UnitTest.UnitTest())
 
     def testLocalVar(self):
         VarsTest = 1
@@ -119,8 +119,8 @@ class VarsTest(UnitTest.UnitTest):
 
     def testGlobalsBltin(self):
         globs = globals()
-        globkeys = globs.keys()
-        globkeys2 = filter(lambda x: not x.startswith('__'), globkeys)
+        globkeys = list(globs.keys())
+        globkeys2 = [x for x in globkeys if not x.startswith('__')]
         if 'sys' in globkeys2:
             globkeys2.remove('sys') # `global sys` in cpython does not make
                                     #   it appear in globals()

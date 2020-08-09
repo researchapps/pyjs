@@ -28,14 +28,14 @@ app_library_dirs = [
 cx = None
 
 def pysm_print_fn(arg):
-    print arg
+    print(arg)
 
 def pysm_import_module(parent_name, module_name):
     if module_name == 'sys' or module_name == 'pyjslib':
         return
     if module_name == file_name: # HACK!  imported already
         return
-    exec "import %s as _module" % module_name
+    exec("import %s as _module" % module_name)
     cx.add_global(module_name, _module)
 
 def main():

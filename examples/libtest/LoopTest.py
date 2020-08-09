@@ -21,9 +21,9 @@ def int_fib(n):
     return int_fib(n-2)+int_fib(n-1)
 
 def long_fib(n):
-    if n<3L:
-        return 1L
-    return long_fib(n-2L)+long_fib(n-1L)
+    if n<3:
+        return 1
+    return long_fib(n-2)+long_fib(n-1)
 
 class LoopTest(UnitTest):
 
@@ -71,7 +71,7 @@ class LoopTest(UnitTest):
         while t1 - t0 == 0:
             m += 1.0
             for i in range(n):
-                long_fib(10L)
+                long_fib(10)
             t1 = time.time()
         dt = t1 - t0
         writebr("Loop4 (long): %.2f/sec" % (n*m/dt))

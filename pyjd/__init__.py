@@ -16,7 +16,7 @@ pyjdversion = '0.9'
 
 _manager = RunnerManager()
 _manager.set_conf()
-for key, value in _manager._conf.iteritems():
+for key, value in _manager._conf.items():
     setattr(pyjd, key, value)
 _manager.set_runner()
 

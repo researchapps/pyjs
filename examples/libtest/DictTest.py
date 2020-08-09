@@ -23,7 +23,7 @@ class DictTest(UnitTest):
         try:
             x = d['notthere']
             self.fail('__getitem__ must raise KeyError')
-        except KeyError, e:
+        except KeyError as e:
             self.assertEqual(e.__class__.__name__, 'KeyError')
             self.assertEqual(str(e), "'notthere'")
 
@@ -65,35 +65,35 @@ class DictTest(UnitTest):
         self.assertEqual(d[f2], 2)
 
         # keys's result has no implied order, so sort explicitly
-        keys = d.keys()
+        keys = list(d.keys())
         keys.sort()
         expected = [f1, f2]
         expected.sort()
         self.assertEqual(keys, expected)
 
         # values's result has no implied order, so sort explicitly
-        values = d.values()
+        values = list(d.values())
         values.sort()
         # already sorted
         expected = [1, 2]
         self.assertEqual(values, expected)
 
-        self.failUnless(f1 in d)
-        self.failUnless(f2 in d)
-        self.failIf(f3 in d)
+        self.assertTrue(f1 in d)
+        self.assertTrue(f2 in d)
+        self.assertFalse(f3 in d)
 
         self.assertEqual(None, d.get(f3))
         self.assertEqual(1, d.get(f3, 1))
 
         d.update({f3:3})
-        self.failUnless(f3 in d)
+        self.assertTrue(f3 in d)
         self.assertEqual(d[f3], 3)
 
         self.assertEqual(3, len(d))
 
         dd = d.copy()
         self.assertEqual(dd[f3], 3)
-        self.failIf(dd is d)
+        self.assertFalse(dd is d)
 
     def testConstructor(self):
         d = dict(([1, 1], [2,2]))
@@ -156,7 +156,7 @@ class DictTest(UnitTest):
         try:
             item = d.pop('d')
             self.fail("Failed to raise KeyError on d.pop('d')")
-        except KeyError, e:
+        except KeyError as e:
             self.assertEqual(e[0], "d")
 
         item = d.pop('b')
@@ -168,7 +168,7 @@ class DictTest(UnitTest):
         item = d.popitem()
         try:
             item = d.popitem()
-        except KeyError, e:
+        except KeyError as e:
             self.assertEqual(e[0], "popitem(): dictionary is empty")
 
     def testCmp(self):
@@ -182,20 +182,20 @@ class DictTest(UnitTest):
         self.assertEqual(cmp({'1':1, '2':2}, {'2':2, '1':1}), 0)
 
     def testEq(self):
-        self.failUnlessEqual({}, {})
-        self.failUnlessEqual({'1':1}, {'1':1})
-        self.failIfEqual({},{'1':1})
-        self.failIfEqual({'1':1},{'1':2})
+        self.assertEqual({}, {})
+        self.assertEqual({'1':1}, {'1':1})
+        self.assertNotEqual({},{'1':1})
+        self.assertNotEqual({'1':1},{'1':2})
         # test for bug 362
         try:
-            self.failIfEqual({'1':1}, [1,2], "Test for Bug 362")
+            self.assertNotEqual({'1':1}, [1,2], "Test for Bug 362")
         except TypeError:
             self.fail("Bug 362 - comparison between dict and non-dict")
 
         class DICT(dict): pass
-        self.failUnlessEqual(DICT(), {})
-        self.failUnlessEqual({}, DICT())
-        self.failUnlessEqual(DICT(a=1), dict(a=1))
+        self.assertEqual(DICT(), {})
+        self.assertEqual({}, DICT())
+        self.assertEqual(DICT(a=1), dict(a=1))
 
     def testFromkeys(self):
         d1 = {'a':1, 'b':1}
@@ -211,7 +211,7 @@ class DictTest(UnitTest):
     def testIteritems(self):
         d1 = {1:2,3:4}
         a,b = 0,0
-        for x,y in d1.iteritems():
+        for x,y in d1.items():
             a += x
             b += y
         self.assertEqual((a,b),(4,6))
@@ -221,14 +221,14 @@ class DictTest(UnitTest):
 
         d2 = DICT({1:2,3:4})
         a,b = 0,0
-        for x,y in d2.iteritems():
+        for x,y in d2.items():
             a += x
             b += y
         self.assertEqual((a,b),(4,6))
 
         d3 = dict()
         a,b = 0,0
-        for x,y in d3.iteritems():
+        for x,y in d3.items():
             a += x
             b += y
         self.assertEqual((a,b),(0,0))

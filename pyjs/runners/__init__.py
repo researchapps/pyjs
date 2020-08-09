@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 from pprint import pformat
 from os import path
-import ConfigParser
+import configparser
 
 
 class RunnerManager(object):
@@ -34,13 +34,13 @@ class RunnerManager(object):
 
     def set_conf(self, rc=path.join(_conf['home'], 'pyjdrc')):
         conf = self._conf
-        cf = ConfigParser.ConfigParser()
+        cf = configparser.ConfigParser()
         cf.read(rc)
         if cf.has_section('gui'):
             conf.update(dict(cf.items('gui')))
             conf.setdefault('engine', conf['runner'])
             conf['runner'] = conf['engine']
-        logger.info('conf:\n%s', pformat(conf.items()))
+        logger.info('conf:\n%s', pformat(list(conf.items())))
 
     def set_runner(self, runner=None):
         if runner is None:
@@ -54,7 +54,7 @@ class RunnerManager(object):
         __import__(impl)
         import pyjd
         pyjd.engine = runner
-        import importers
+        from . import importers
         importers._test_revamp()
         self._runner = sys.modules[impl]
 

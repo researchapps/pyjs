@@ -41,7 +41,7 @@ class FutureParser:
 
     def get_features(self):
         """Return list of features enabled by future statements"""
-        return self.found.keys()
+        return list(self.found.keys())
 
 class BadFutureParser:
     """Check for invalid future statements"""
@@ -69,5 +69,5 @@ if __name__ == "__main__":
         tree = parseFile(file)
         v = FutureParser()
         walk(tree, v)
-        print(v.found)
+        print((v.found))
         print()

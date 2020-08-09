@@ -27,7 +27,7 @@ class ComboBoxWrapExample:
         model = combobox.get_model()
         index = combobox.get_active()
         if index > -1:
-            print model[index][0], 'selected'
+            print(model[index][0], 'selected')
         return
 
 def main():

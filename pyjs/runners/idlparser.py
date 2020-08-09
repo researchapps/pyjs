@@ -14,13 +14,13 @@ class CoClass:
         self.parse()
 
     def pprint(self):
-        print self.name, self.uuid
+        print(self.name, self.uuid)
         for fn in self.classes:
-            print "\tclass:", fn
+            print("\tclass:", fn)
 
     def parse_attribs(self, l):
         l = l[1:-1]
-        self.properties = map(string.strip, l.split(','))
+        self.properties = list(map(string.strip, l.split(',')))
 
     def parse(self):
         while 1:
@@ -36,23 +36,23 @@ class CoClass:
                 self.classes.append(l[-1][:-1])
 
     def cls_print(self, p):
-        print "#"*30
-        print "# %s" % self.name
-        print "#"
+        print("#"*30)
+        print("# %s" % self.name)
+        print("#")
 
         ic = copy.copy(self.classes)
         ic.reverse()
-        print "class %s(%s):" % (self.name, ',\n\t\t\t'.join(ic))
-        print "\tdef __init__(self, item):"
-        print "\t\t%s.__init__(self, item)" % self.classes[0]
-        print ""
+        print("class %s(%s):" % (self.name, ',\n\t\t\t'.join(ic)))
+        print("\tdef __init__(self, item):")
+        print("\t\t%s.__init__(self, item)" % self.classes[0])
+        print("")
 
         c = self.classes[0]
         #if len(self.classes) > 1 and c.startswith('Disp'):
         #    c = self.classes[1]
         uuid = p.interfaces[c].uuid
-        print "coWrapperClasses['%s'] = %s" % (uuid, self.name)
-        print ""
+        print("coWrapperClasses['%s'] = %s" % (uuid, self.name))
+        print("")
 
 class Interface:
     def __init__(self, uuid, name, f):
@@ -68,17 +68,17 @@ class Interface:
         self.parse()
 
     def pprint(self):
-        print self.name, self.uuid
-        for fn in self.functions.keys():
-            print "\tfn:", fn
-        for fn in self.propput.keys():
-            print "\tput:", fn
-        for fn in self.propget.keys():
-            print "\tget:", fn
+        print(self.name, self.uuid)
+        for fn in list(self.functions.keys()):
+            print("\tfn:", fn)
+        for fn in list(self.propput.keys()):
+            print("\tput:", fn)
+        for fn in list(self.propget.keys()):
+            print("\tget:", fn)
 
     def parse_attribs(self, l):
         l = l[1:-1]
-        self.properties = map(string.strip, l.split(','))
+        self.properties = list(map(string.strip, l.split(',')))
 
     def parse_function(self, l):
         bracket = l.find('(')
@@ -108,33 +108,33 @@ class Interface:
                 self.parse_function(l)
 
     def cls_print(self, p):
-        print "#"*30
-        print "# %s" % self.name
-        print "#"
+        print("#"*30)
+        print("# %s" % self.name)
+        print("#")
 
-        print "class %s(object):" % self.name
-        print "\tdef __init__(self, item):"
-        print "\t\tself.__dict__['__instance__'] = item"
-        print ""
-        print "\tdef __get_instance_%s(self, kls=None):" % self.name
-        print "\t\tif kls is None:"
-        print "\t\t\tkls = MSHTML.%s" % self.name
-        print "\t\treturn Dispatch(self.__instance__.QueryInterface(kls))"
+        print("class %s(object):" % self.name)
+        print("\tdef __init__(self, item):")
+        print("\t\tself.__dict__['__instance__'] = item")
+        print("")
+        print("\tdef __get_instance_%s(self, kls=None):" % self.name)
+        print("\t\tif kls is None:")
+        print("\t\t\tkls = MSHTML.%s" % self.name)
+        print("\t\treturn Dispatch(self.__instance__.QueryInterface(kls))")
 
         for p in self.props:
             override = ''
             # *sigh*...
             if self.name == 'IHTMLDocument2' and p == 'body':
                 override = ', DispHTMLBody'
-            print "\t#%s" % p
-            print "\tdef _get_%s(self):" % p
-            print "\t\treturn wrap(self.__get_instance_%s().%s%s)" % \
-                                        (self.name, p, override)
-            print "\tdef _set_%s(self, value):" % p
-            print "\t\tself.__get_instance_%s().%s = unwrap(value)" % \
-                                        (self.name, p)
-            print "\t%s = property(_get_%s, _set_%s)" % (p, p, p)
-            print ""
+            print("\t#%s" % p)
+            print("\tdef _get_%s(self):" % p)
+            print("\t\treturn wrap(self.__get_instance_%s().%s%s)" % \
+                                        (self.name, p, override))
+            print("\tdef _set_%s(self, value):" % p)
+            print("\t\tself.__get_instance_%s().%s = unwrap(value)" % \
+                                        (self.name, p))
+            print("\t%s = property(_get_%s, _set_%s)" % (p, p, p))
+            print("")
             if p.startswith('on'):
                 f = open(self.name + ".txt", "a+")
                 f.write("%s\n" % p)
@@ -148,21 +148,21 @@ class Interface:
                 f_ = 'setProperty'
             if self.name == 'IHTMLStyle' and f == 'getAttribute':
                 f_ = 'getProperty'
-            print "\t#%s" % f_
-            print "\tdef %s(self, *args):" % f_
-            print "\t\targs = map(unwrap, args)"
+            print("\t#%s" % f_)
+            print("\tdef %s(self, *args):" % f_)
+            print("\t\targs = map(unwrap, args)")
             if f == 'print':
-                print "\t\tfn = getattr('%s', self.__get_instance_%s())" % \
-                                      (self.name, f)
-                print "\t\treturn wrap(fn(*args))"
+                print("\t\tfn = getattr('%s', self.__get_instance_%s())" % \
+                                      (self.name, f))
+                print("\t\treturn wrap(fn(*args))")
             else:
-                print "\t\treturn wrap(self.__get_instance_%s().%s(*args))" % \
-                                      (self.name, f)
-            print ""
+                print("\t\treturn wrap(self.__get_instance_%s().%s(*args))" % \
+                                      (self.name, f))
+            print("")
 
-        print "wrapperClasses['%s'] = %s" % (self.uuid, self.name)
-        print "backWrapperClasses[%s] = '%s'" % (self.name, self.uuid)
-        print
+        print("wrapperClasses['%s'] = %s" % (self.uuid, self.name))
+        print("backWrapperClasses[%s] = '%s'" % (self.name, self.uuid))
+        print()
 
 class IdlParser:
     def __init__(self, fname):
@@ -212,7 +212,7 @@ class IdlParser:
 if __name__ == '__main__':
     p = IdlParser(sys.argv[1])
 
-    print """\
+    print("""\
 # auto-generated using idlparser %s - do not edit!
 import sys
 from comtypes.client import GetModule
@@ -253,10 +253,10 @@ def wrap(item, override=None):
         return item
     return wrapperClasses[kls](item)
 
-""" % sys.argv[1]
+""" % sys.argv[1])
 
     for k in p.interface_order:
         v = p.interfaces[k]
         v.cls_print(p)
-    for k, v in p.coclasses.items():
+    for k, v in list(p.coclasses.items()):
         v.cls_print(p)

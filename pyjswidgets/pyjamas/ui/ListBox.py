@@ -29,7 +29,7 @@ class ListBox(FocusWidget, ChangeHandler):
             ]
 
     def __init__(self, **kwargs):
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']="gwt-ListBox"
+        if 'StyleName' not in kwargs: kwargs['StyleName']="gwt-ListBox"
         self.INSERT_AT_END = -1
         element = kwargs.pop('Element', None) or DOM.createSelect()
         FocusWidget.__init__(self, element, **kwargs)
@@ -41,11 +41,11 @@ class ListBox(FocusWidget, ChangeHandler):
 
     def _setWeirdProps(self, props, builderstate):
         items = {}
-        for (k, v) in props.items():
+        for (k, v) in list(props.items()):
             if not isinstance(k, int):
                 continue
             items[int(k)] = v
-        items = items.items()
+        items = list(items.items())
         items.sort()
         for (k, v) in items:
             self.addItem(*v)

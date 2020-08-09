@@ -89,7 +89,7 @@ def Node(*args):
         try:
             return nodes[kind](*args[1:])
         except TypeError:
-            print(nodes[kind], len(args), args)
+            print((nodes[kind], len(args), args))
             raise
     else:
         raise WalkerError("Can't find appropriate Node type: %s" % str(args))
@@ -107,7 +107,7 @@ class Transformer:
 
     def __init__(self):
         self._dispatch = {}
-        for value, name in symbol.sym_name.items():
+        for value, name in list(symbol.sym_name.items()):
             if hasattr(self, name):
                 self._dispatch[value] = getattr(self, name)
         self._dispatch[token.NEWLINE] = self.com_NEWLINE
@@ -780,7 +780,7 @@ class Transformer:
             # hack... changes in compile.c:parsestr and
             # tokenizer.c must be reflected here.
             if self.encoding not in ['utf-8', 'iso-8859-1']:
-                lit = unicode(lit, 'utf-8').encode(self.encoding)
+                lit = str(lit, 'utf-8').encode(self.encoding)
             return eval("# coding: %s\n%s" % (self.encoding, lit))
         else:
             return eval(lit)
@@ -1544,9 +1544,9 @@ _assign_types = [
     ]
 
 _names = {}
-for k, v in symbol.sym_name.items():
+for k, v in list(symbol.sym_name.items()):
     _names[k] = v
-for k, v in token.tok_name.items():
+for k, v in list(token.tok_name.items()):
     _names[k] = v
 
 def debug_tree(tree):

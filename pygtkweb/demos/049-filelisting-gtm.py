@@ -54,7 +54,7 @@ filexpm = [
 filepb = gtk.gdk.pixbuf_new_from_xpm_data(filexpm)
 
 class FileListModel(gtk.GenericTreeModel):
-    column_types = (gtk.gdk.Pixbuf, str, long, str, str)
+    column_types = (gtk.gdk.Pixbuf, str, int, str, str)
     column_names = ['Name', 'Size', 'Mode', 'Last Changed']
 
     def __init__(self, dname=None):
@@ -63,7 +63,7 @@ class FileListModel(gtk.GenericTreeModel):
             self.dirname = os.path.expanduser('~')
         else:
             self.dirname = os.path.abspath(dname)
-        self.files = [f for f in os.listdir(self.dirname) if f[0] <> '.']
+        self.files = [f for f in os.listdir(self.dirname) if f[0] != '.']
         self.files.sort()
         self.files = ['..'] + self.files
         return

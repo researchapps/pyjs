@@ -78,7 +78,7 @@ def jsonremote(service):
             service.add_method(func.__name__, func)
         else:
             emsg = 'Service "%s" not found' % str(service.__name__)
-            raise NotImplementedError, emsg
+            raise NotImplementedError(emsg)
         return func
     return remotify
 
@@ -107,11 +107,11 @@ from django import forms
 
 def builderrors(form):
     d = {}
-    for error in form.errors.keys():
+    for error in list(form.errors.keys()):
         if error not in d:
             d[error] = []
         for errorval in form.errors[error]:
-            d[error].append(unicode(errorval))
+            d[error].append(str(errorval))
     return d
 
 
@@ -136,17 +136,17 @@ def describe_field_errors(field):
     res = {}
     field_type = field.__class__.__name__
     msgs = {}
-    for n, m in field.error_messages.items():
-        msgs[n] = unicode(m)
+    for n, m in list(field.error_messages.items()):
+        msgs[n] = str(m)
     res['error_messages'] = msgs
     if field_type in ['ComboField', 'MultiValueField', 'SplitDateTimeField']:
-        res['fields'] = map(describe_field, field.fields)
+        res['fields'] = list(map(describe_field, field.fields))
     return res
 
 def describe_fields_errors(fields, field_names):
     res = {}
     if not field_names:
-        field_names = fields.keys()
+        field_names = list(fields.keys())
     for name in field_names:
         field = fields[name]
         res[name] = describe_field_errors(field)
@@ -160,13 +160,13 @@ def describe_field(field):
           ['help_text', 'label', 'initial', 'required']:
         res[fname] = getattr(field, fname)
     if field_type in ['ComboField', 'MultiValueField', 'SplitDateTimeField']:
-        res['fields'] = map(describe_field, field.fields)
+        res['fields'] = list(map(describe_field, field.fields))
     return res
 
 def describe_fields(fields, field_names):
     res = {}
     if not field_names:
-        field_names = fields.keys()
+        field_names = list(fields.keys())
     for name in field_names:
         field = fields[name]
         res[name] = describe_field(field)
@@ -177,7 +177,7 @@ class FormProcessor(JSONRPCService):
 
         if _formcls is None:
             JSONRPCService.__init__(self)
-            for k in forms.keys():
+            for k in list(forms.keys()):
                 s  = FormProcessor({}, forms[k])
                 self.add_method(k, s.__process)
         else:
@@ -187,7 +187,7 @@ class FormProcessor(JSONRPCService):
     def __process(self, request, params, command=None):
 
         data = {}
-        for (k, v) in params.items():
+        for (k, v) in list(params.items()):
             data[str(k)] = v
 
         f = self.formcls(data)
@@ -197,25 +197,25 @@ class FormProcessor(JSONRPCService):
                 return {'success':False, 'errors': builderrors(f)}
             return {'success':True}
 
-        elif command.has_key('describe_errors'):
+        elif 'describe_errors' in command:
             field_names = command['describe_errors']
             return describe_fields_errors(f.fields, field_names)
 
-        elif command.has_key('describe'):
+        elif 'describe' in command:
             field_names = command['describe']
             return describe_fields(f.fields, field_names)
 
-        elif command.has_key('delete'):
+        elif 'delete' in command:
             instance = f.delete(**data)
             return {'success': True}
 
-        elif command.has_key('get'):
+        elif 'get' in command:
             fields = command['get']
             instance = f.get(**fields)
             jc = dict_datetimeflatten(instance)
             return {'success': True, 'instance': jc}
 
-        elif command.has_key('update'):
+        elif 'update' in command:
             if not f.is_valid():
                 return {'success':False, 'errors': builderrors(f)}
             instance = f.save(force_update=True)
@@ -223,7 +223,7 @@ class FormProcessor(JSONRPCService):
             jc = json_convert([instance], fields=fields)[0]
             return {'success': True, 'instance': jc}
 
-        elif command.has_key('save'):
+        elif 'save' in command:
             if not f.is_valid():
                 return {'success':False, 'errors': builderrors(f)}
             instance = f.save() # XXX: if you want more, over-ride save.
@@ -231,7 +231,7 @@ class FormProcessor(JSONRPCService):
             jc = json_convert([instance], fields=fields)[0]
             return {'success': True, 'instance': jc}
 
-        elif command.has_key('html'):
+        elif 'html' in command:
             return {'success': True, 'html': f.as_table()}
 
         return "unrecognised command"
@@ -274,7 +274,7 @@ from datetime import date
 
 def dict_datetimeflatten(item):
     d = {}
-    for k, v in item.items():
+    for k, v in list(item.items()):
         k = str(k)
         if isinstance(v, datetime.date):
             d[k] = str(v)
@@ -290,7 +290,7 @@ def json_convert(l, fields=None):
         item = serialize('python', [i], fields=fields)[0]
         if fields:
             for f in fields:
-                if not item['fields'].has_key(f):
+                if f not in item['fields']:
                     lg = open("/tmp/field.txt", "a")
                     lg.write("%s %s %s\n" % (repr(item), repr(f), repr(type(getattr(i, str(f))))))
                     lg.close()

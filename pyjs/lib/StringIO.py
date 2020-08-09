@@ -34,7 +34,7 @@ __all__ = ["StringIO"]
 
 def _complain_ifclosed(closed):
     if closed:
-        raise ValueError, "I/O operation on closed file"
+        raise ValueError("I/O operation on closed file")
 
 class StringIO:
     """class StringIO([buffer])
@@ -50,7 +50,7 @@ class StringIO:
     """
     def __init__(self, buf = ''):
         # Force self.buf to be a string or unicode
-        if not isinstance(buf, basestring):
+        if not isinstance(buf, str):
             buf = str(buf)
         self.buf = buf
         self.len = len(buf)
@@ -62,7 +62,7 @@ class StringIO:
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         """A file object is its own iterator, for example iter(f) returns f
         (unless f is closed). When a file is used as an iterator, typically
         in a for loop (for example, for line in f: print line), the next()
@@ -210,7 +210,7 @@ class StringIO:
         _complain_ifclosed(self.closed)
         if not s: return
         # Force s to be a string or unicode
-        if not isinstance(s, basestring):
+        if not isinstance(s, str):
             s = str(s)
         spos = self.pos
         slen = self.len

@@ -60,7 +60,7 @@ class Global(PyV8.JSClass):
 
     def pyv8_import_module(self, parent_name, module_name):
         #print "pyv8_import_module", parent_name, module_name
-        exec "import " + module_name
+        exec("import " + module_name)
         return locals()[module_name]
 
     def pyv8_load(self, modules):
@@ -80,7 +80,7 @@ class Global(PyV8.JSClass):
                         print >> sys.stderr, "BUGGY LINE", index + 1, "-", repr(line)
                 """
                 x = self.__context__.eval(txt, fname)
-            except Exception, e:
+            except Exception as e:
                 import traceback
                 import sys
                 traceback.print_exc(file=sys.stderr)

@@ -27,7 +27,7 @@ class MultiListener(object):
         """Check for missing event functions and substitute these with """
         """the ignore method"""
         ignore = getattr(self, "ignore")
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, getattr(obj, v))
             if k in self.combinations:
                 for k1 in self.combinations[k]:

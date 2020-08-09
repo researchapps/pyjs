@@ -19,10 +19,10 @@ class FlowGraph:
     def startBlock(self, block):
         if self._debug:
             if self.current:
-                print("end", repr(self.current))
-                print("    next", self.current.next)
-                print("   ", self.current.get_children())
-            print(repr(block))
+                print(("end", repr(self.current)))
+                print(("    next", self.current.__next__))
+                print(("   ", self.current.get_children()))
+            print((repr(block)))
         self.current = block
 
     def nextBlock(self, block=None):
@@ -68,7 +68,7 @@ class FlowGraph:
 
     def emit(self, *inst):
         if self._debug:
-            print("\t", inst)
+            print(("\t", inst))
         if inst[0] in ['RETURN_VALUE', 'YIELD_VALUE']:
             self.current.addOutEdge(self.exit)
         if len(inst) == 2 and isinstance(inst[1], Block):
@@ -85,7 +85,7 @@ class FlowGraph:
         for b in self.blocks.elements():
             if b is self.exit:
                 continue
-            if not b.next:
+            if not b.__next__:
                 b.addNext(self.exit)
         order = dfs_postorder(self.entry, {})
         order.reverse()
@@ -120,14 +120,14 @@ class FlowGraph:
         for i in range(0, len(blocks) - 1):
             b = blocks[i]
             n = blocks[i + 1]
-            if not b.next or b.next[0] == default_next or b.next[0] == n:
+            if not b.__next__ or b.next[0] == default_next or b.next[0] == n:
                 continue
             # The blocks are in the wrong order.  Find the chain of
             # blocks to insert where they belong.
             cur = b
             chain = []
             elt = cur
-            while elt.next and elt.next[0] != default_next:
+            while elt.__next__ and elt.next[0] != default_next:
                 chain.append(elt.next[0])
                 elt = elt.next[0]
             # Now remove the blocks in the chain from the current
@@ -154,7 +154,7 @@ class FlowGraph:
         for b in blocks:
             index[b] = len(chains)
             cur.append(b)
-            if b.next and b.next[0] == default_next:
+            if b.__next__ and b.next[0] == default_next:
                 chains.append(cur)
                 cur = []
         chains.append(cur)
@@ -236,7 +236,7 @@ class Block:
             return "<block id=%d>" % (self.bid)
 
     def __str__(self):
-        insts = map(str, self.insts)
+        insts = list(map(str, self.insts))
         return "<block %s %d:\n%s>" % (self.label, self.bid,
                                        '\n'.join(insts))
 
@@ -257,7 +257,7 @@ class Block:
 
     def addNext(self, block):
         self.next.append(block)
-        assert len(self.next) == 1, map(str, self.next)
+        assert len(self.__next__) == 1, list(map(str, self.__next__))
 
     _uncond_transfer = ('RETURN_VALUE', 'RAISE_VARARGS', 'YIELD_VALUE',
                         'JUMP_ABSOLUTE', 'JUMP_FORWARD', 'CONTINUE_LOOP')
@@ -284,9 +284,9 @@ class Block:
             self.next = []
 
     def get_children(self):
-        if self.next and self.next[0] in self.outEdges:
+        if self.__next__ and self.next[0] in self.outEdges:
             self.outEdges.remove(self.next[0])
-        return self.outEdges.elements() + self.next
+        return self.outEdges.elements() + self.__next__
 
     def getContainedGraphs(self):
         """Return all graphs contained within this block.
@@ -399,10 +399,10 @@ class PyFlowGraph(FlowGraph):
             if opname == "SET_LINENO":
                 print()
             if len(t) == 1:
-                print("\t", "%3d" % pc, opname)
+                print(("\t", "%3d" % pc, opname))
                 pc = pc + 1
             else:
-                print("\t", "%3d" % pc, opname, t[1])
+                print(("\t", "%3d" % pc, opname, t[1]))
                 pc = pc + 3
         if io:
             sys.stdout = save
@@ -502,7 +502,7 @@ class PyFlowGraph(FlowGraph):
                          if name in cells]
         for name in self.cellvars:
             del cells[name]
-        self.cellvars = self.cellvars + cells.keys()
+        self.cellvars = self.cellvars + list(cells.keys())
         self.closure = self.cellvars + self.freevars
 
     def _lookupName(self, name, list):
@@ -594,8 +594,8 @@ class PyFlowGraph(FlowGraph):
                 try:
                     lnotab.addCode(self.opnum[opname], lo, hi)
                 except ValueError:
-                    print(opname, oparg)
-                    print(self.opnum[opname], lo, hi)
+                    print((opname, oparg))
+                    print((self.opnum[opname], lo, hi))
                     raise
         self.stage = DONE
 
@@ -738,7 +738,7 @@ class StackDepthTracker:
         for i in insts:
             opname = i[0]
             if debug:
-                print(i),
+                print((i), end=' ')
             delta = self.effect.get(opname, None)
             if delta is not None:
                 depth = depth + delta
@@ -757,7 +757,7 @@ class StackDepthTracker:
             if depth > maxDepth:
                 maxDepth = depth
             if debug:
-                print(depth, maxDepth)
+                print((depth, maxDepth))
         return maxDepth
 
     effect = {

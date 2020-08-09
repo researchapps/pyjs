@@ -19,7 +19,7 @@
 """
 
 #from pyjs.jsonrpc.mongrel2 import Mongrel2JSONRPCService, jsonremote
-from __init__ import Mongrel2JSONRPCService, jsonremote
+from .__init__ import Mongrel2JSONRPCService, jsonremote
 
 from mongrel2 import handler
 
@@ -35,6 +35,6 @@ def echo(request, data):
 
 
 while True:
-    print "WAITING FOR REQUEST"
+    print("WAITING FOR REQUEST")
     mongservice() # handles one request
 

@@ -82,13 +82,13 @@ class RichTextAreaImpl:
 
 
     def hookEvents(self):
-        print self, "hook events"
+        print(self, "hook events")
         DOM.sinkEvents(self.elem, Event.MOUSEEVENTS | Event.KEYEVENTS |
                        Event.ONCHANGE | Event.ONCLICK | Event.FOCUSEVENTS)
 
 
     def onElementInitialized(self):
-        print "onElementInitialized"
+        print("onElementInitialized")
         self.hookEvents()
 
     def setCssStyling(self):

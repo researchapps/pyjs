@@ -30,8 +30,7 @@ class CompilerTest(unittest.TestCase):
                 # Print still working message since this test can be really slow
                 if next_time <= time.time():
                     next_time = time.time() + _PRINT_WORKING_MSG_INTERVAL
-                    print >>sys.__stdout__, \
-                       '  testCompileLibrary still working, be patient...'
+                    print('  testCompileLibrary still working, be patient...', file=sys.__stdout__)
                     sys.__stdout__.flush()
 
                 if not basename.endswith(".py"):
@@ -40,7 +39,7 @@ class CompilerTest(unittest.TestCase):
                     continue
                 path = os.path.join(dir, basename)
                 if test.test_support.verbose:
-                    print "compiling", path
+                    print("compiling", path)
                 f = open(path, "U")
                 buf = f.read()
                 f.close()
@@ -50,7 +49,7 @@ class CompilerTest(unittest.TestCase):
                 else:
                     try:
                         compiler.compile(buf, basename, "exec")
-                    except Exception, e:
+                    except Exception as e:
                         args = list(e.args)
                         args[0] += "[in file %s]" % basename
                         e.args = tuple(args)
@@ -67,20 +66,20 @@ class CompilerTest(unittest.TestCase):
         c = compiler.compile("try:\n 1/0\nexcept:\n e = 1\nfinally:\n f = 1",
                              "<string>", "exec")
         dct = {}
-        exec c in dct
-        self.assertEquals(dct.get('e'), 1)
-        self.assertEquals(dct.get('f'), 1)
+        exec(c, dct)
+        self.assertEqual(dct.get('e'), 1)
+        self.assertEqual(dct.get('f'), 1)
 
     def testDefaultArgs(self):
         self.assertRaises(SyntaxError, compiler.parse, "def foo(a=1, b): pass")
 
     def testDocstrings(self):
         c = compiler.compile('"doc"', '<string>', 'exec')
-        self.assert_('__doc__' in c.co_names)
+        self.assertTrue('__doc__' in c.co_names)
         c = compiler.compile('def f():\n "doc"', '<string>', 'exec')
         g = {}
-        exec c in g
-        self.assertEquals(g['f'].__doc__, "doc")
+        exec(c, g)
+        self.assertEqual(g['f'].__doc__, "doc")
 
     def testLineNo(self):
         # Test that all nodes except Module have a correct lineno attribute.
@@ -94,21 +93,21 @@ class CompilerTest(unittest.TestCase):
         try:
             self._check_lineno(node)
         except AssertionError:
-            print node.__class__, node.lineno
+            print(node.__class__, node.lineno)
             raise
 
     def _check_lineno(self, node):
         if not node.__class__ in NOLINENO:
-            self.assert_(isinstance(node.lineno, int),
+            self.assertTrue(isinstance(node.lineno, int),
                 "lineno=%s on %s" % (node.lineno, node.__class__))
-            self.assert_(node.lineno > 0,
+            self.assertTrue(node.lineno > 0,
                 "lineno=%s on %s" % (node.lineno, node.__class__))
         for child in node.getChildNodes():
             self.check_lineno(child)
 
     def testFlatten(self):
-        self.assertEquals(flatten([1, [2]]), [1, 2])
-        self.assertEquals(flatten((1, (2,))), [1, 2])
+        self.assertEqual(flatten([1, [2]]), [1, 2])
+        self.assertEqual(flatten((1, (2,))), [1, 2])
 
     def testNestedScope(self):
         c = compiler.compile('def g():\n'
@@ -119,15 +118,15 @@ class CompilerTest(unittest.TestCase):
                              '<string>',
                              'exec')
         dct = {}
-        exec c in dct
-        self.assertEquals(dct.get('result'), 3)
+        exec(c, dct)
+        self.assertEqual(dct.get('result'), 3)
 
     def testGenExp(self):
         c = compiler.compile('list((i,j) for i in range(3) if i < 3'
                              '           for j in range(4) if j > 2)',
                              '<string>',
                              'eval')
-        self.assertEquals(eval(c), [(0, 3), (1, 3), (2, 3)])
+        self.assertEqual(eval(c), [(0, 3), (1, 3), (2, 3)])
 
     def testWith(self):
         # SF bug 1638243
@@ -139,8 +138,8 @@ class CompilerTest(unittest.TestCase):
                              '<string>',
                              'exec' )
         dct = {'TrivialContext': TrivialContext}
-        exec c in dct
-        self.assertEquals(dct.get('result'), 1)
+        exec(c, dct)
+        self.assertEqual(dct.get('result'), 1)
 
     def testWithAss(self):
         c = compiler.compile('from __future__ import with_statement\n'
@@ -151,16 +150,16 @@ class CompilerTest(unittest.TestCase):
                              '<string>',
                              'exec' )
         dct = {'TrivialContext': TrivialContext}
-        exec c in dct
-        self.assertEquals(dct.get('result'), 1)
+        exec(c, dct)
+        self.assertEqual(dct.get('result'), 1)
 
 
     def _testErrEnc(self, src, text, offset):
         try:
             compile(src, "", "exec")
-        except SyntaxError, e:
-            self.assertEquals(e.offset, offset)
-            self.assertEquals(e.text, text)
+        except SyntaxError as e:
+            self.assertEqual(e.offset, offset)
+            self.assertEqual(e.text, text)
 
     def testSourceCodeEncodingsError(self):
         # Test SyntaxError with encoding definition
@@ -194,7 +193,7 @@ class Toto:
 
 a, b = 2, 3
 [c, d] = 5, 6
-l = [(x, y) for x, y in zip(range(5), range(5,10))]
+l = [(x, y) for x, y in zip(list(range(5)), list(range(5,10)))]
 l[0]
 l[3:4]
 d = {'a': 2}
@@ -209,7 +208,7 @@ else:
     a, b = b, a
 
 try:
-    print yo
+    print(yo)
 except:
     yo = 3
 else:

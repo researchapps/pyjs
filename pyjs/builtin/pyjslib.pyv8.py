@@ -18,7 +18,7 @@ def __dynamic_load__(importName):
     return module
 
 def debugReport(msg):
-    print msg
+    print(msg)
 
 def open(fname, mode='r'):
     return JS("pyv8_open(@{{fname}}, @{{mode}});")

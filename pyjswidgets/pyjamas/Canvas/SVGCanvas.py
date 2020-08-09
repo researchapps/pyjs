@@ -1104,7 +1104,7 @@ class SVGCanvas(FocusWidget):
         @param dy Translation in Y direction
         """
         # TODO: multiply the transform with the current transform
-        print "transform NOT IMPLEMENTED YET"
+        print("transform NOT IMPLEMENTED YET")
 
     def rotate(self, angle):
         """

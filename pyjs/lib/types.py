@@ -2,7 +2,7 @@
 
 Types that are part of optional modules (e.g. array) are not listed.
 """
-import sys
+from . import sys
 
 # Iterators in Python aren't a matter of type but of protocol.  A large
 # and changing number of builtin types implement *some* flavor of
@@ -14,7 +14,7 @@ TypeType = type
 ObjectType = object
 
 IntType = int
-LongType = long
+LongType = int
 FloatType = float
 BooleanType = bool
 try:
@@ -28,7 +28,7 @@ StringType = str
 # types.StringTypes", you should use "isinstance(x, basestring)".  But
 # we keep around for compatibility with Python 2.2.
 try:
-    UnicodeType = unicode
+    UnicodeType = str
     StringTypes = (StringType, UnicodeType)
 except NameError:
     StringTypes = (StringType,)

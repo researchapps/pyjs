@@ -118,7 +118,7 @@ class UIObject(Applier):
             getStyleAttribute(self, attr) - returns value
             getStyleAttribute(self, (attr1,attr2,...)) - returns dictionary of attr:value pairs
         """
-        if isinstance(attribute, basestring):
+        if isinstance(attribute, str):
             return DOM.getStyleAttribute(self.getElement(), attribute)
         # if attribute is not a string, assume it is iterable,
         # and return the multi-attribute form
@@ -212,7 +212,7 @@ class UIObject(Applier):
             return
         # assume multi value form
         el = self.getElement()
-        for attr, val in attribute.items():
+        for attr, val in list(attribute.items()):
             DOM.setStyleAttribute(el, attr, val)
 
     def setTitle(self, title):

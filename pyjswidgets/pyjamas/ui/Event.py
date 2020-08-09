@@ -85,7 +85,7 @@ eventmap = {
 }
 
 def _create_eventmap():
-    for bit, bitmap in eventbits.iteritems():
+    for bit, bitmap in eventbits.items():
         eventmap[bitmap[0]] = bit
 
 def init():

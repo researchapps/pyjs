@@ -8,7 +8,7 @@
 #       https://github.com/drkjam/netaddr/
 """Fallback routines for Python's standard library socket module"""
 
-from struct import unpack as _unpack, pack as _pack
+from .struct import unpack as _unpack, pack as _pack
 
 #from netaddr.compat import _bytes_join
 def _bytes_join(*args): return ''.join(*args)

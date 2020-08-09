@@ -245,10 +245,10 @@ class SRE_Match:
             return tuple(grouplist)
 
     def __copy__():
-        raise TypeError, "cannot copy this pattern object"
+        raise TypeError("cannot copy this pattern object")
 
     def __deepcopy__():
-        raise TypeError, "cannot copy this pattern object"
+        raise TypeError("cannot copy this pattern object")
 
 
 class SRE_Pattern:
@@ -406,10 +406,10 @@ class SRE_Pattern:
         raise NotImplementedError('scanner')
 
     def __copy__(self):
-        raise TypeError, "cannot copy this pattern object"
+        raise TypeError("cannot copy this pattern object")
 
     def __deepcopy__(self):
-        raise TypeError, "cannot copy this pattern object"
+        raise TypeError("cannot copy this pattern object")
 
 
 

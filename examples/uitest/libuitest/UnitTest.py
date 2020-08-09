@@ -1,4 +1,4 @@
-from write import write, writebr
+from .write import write, writebr
 import sys
 
 IN_BROWSER = sys.platform in ['mozilla', 'ie6', 'opera', 'oldmoz', 'safari']
@@ -20,7 +20,7 @@ class GetTestOutput:
 
     def onCompletion(self, responseText):
         # TODO - cope with unicode / utf-8 test results
-        print "onCompletion", self.unittest.tests_outstanding, self.test_name
+        print("onCompletion", self.unittest.tests_outstanding, self.test_name)
         self.unittest.async_test_name = self.test_name
         e1 = DOM.getElementById('testcompare1')
         e2 = DOM.getElementById('testcompare2')
@@ -31,20 +31,20 @@ class GetTestOutput:
         ok = True
         while ok:
             try:
-                ec1 = i1.next()
-                ec2 = i2.next()
+                ec1 = next(i1)
+                ec2 = next(i2)
             except StopIteration:
                 break
             ok = ok and (ec1.nodeType == ec2.nodeType)
             if not ok:
                 break
-            print ec1.nodeName, ec1.nodeValue
+            print(ec1.nodeName, ec1.nodeValue)
             ok = ok and (ec1.nodeName == ec2.nodeName)
             ok = ok and (ec1.nodeValue == ec2.nodeValue)
             if not ok:
                 break
             if hasattr(ec1, 'getInnerText') and hasattr(ec2, 'getInnerText'):
-                print ec1.getInnerText()
+                print(ec1.getInnerText())
                 ok = ok and (ec1.getInnerText() == ec2.getInnerText())
             if not ok:
                 break
@@ -89,13 +89,13 @@ class UnitTest1:
         self.tests_outstanding = None
 
         # Synonyms for assertion methods
-        self.assertEqual = self.assertEquals = self.failUnlessEqual
-        self.assertNotEqual = self.assertNotEquals = self.failIfEqual
-        self.assertAlmostEqual = self.assertAlmostEquals = self.failUnlessAlmostEqual
-        self.assertNotAlmostEqual = self.assertNotAlmostEquals = self.failIfAlmostEqual
-        self.assertRaises = self.failUnlessRaises
-        self.assert_ = self.assertTrue = self.failUnless
-        self.assertFalse = self.failIf
+        self.assertEqual = self.assertEqual = self.assertEqual
+        self.assertNotEqual = self.assertNotEqual = self.assertNotEqual
+        self.assertAlmostEqual = self.assertAlmostEqual = self.assertAlmostEqual
+        self.assertNotAlmostEqual = self.assertNotAlmostEqual = self.assertNotAlmostEqual
+        self.assertRaises = self.assertRaises
+        self.assertTrue = self.assertTrue = self.assertTrue
+        self.assertFalse = self.assertFalse
 
     def do_test(self, output, name):
         handler = GetTestOutput(self, self.current_test_name, output)
@@ -151,7 +151,7 @@ class UnitTest1:
         Timer(1, self)
 
     def onTimer(self, timer):
-        print self.test_idx
+        print(self.test_idx)
         if self.test_idx is 'DONE':
             self.check_start_next_test()
             return
@@ -293,7 +293,7 @@ class UnitTest1:
         self.startTest()
         try:
             callableObj(*args, **kwargs)
-        except excClass, exc:
+        except excClass as exc:
             return
         else:
             if hasattr(excClass, '__name__'):

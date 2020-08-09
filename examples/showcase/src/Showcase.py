@@ -133,7 +133,7 @@ class Showcase:
 
         # Open the branches of the tree.
 
-        for section in sections.keys():
+        for section in list(sections.keys()):
             sections[section].setState(True, fireEvents=False)
 
 

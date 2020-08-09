@@ -30,13 +30,13 @@ class Hyperlink(Widget, ClickHandler):
         self.setElement(Element)
         DOM.appendChild(self.getElement(), self.anchorElem)
 
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']="gwt-Hyperlink"
+        if 'StyleName' not in kwargs: kwargs['StyleName']="gwt-Hyperlink"
         if text:
             if asHTML:
                 kwargs['HTML'] = text
             else:
                 kwargs['Text'] = text
-        if not kwargs.has_key('TargetHistoryToken'):
+        if 'TargetHistoryToken' not in kwargs:
             kwargs['TargetHistoryToken'] = None
 
         Widget.__init__(self, **kwargs)

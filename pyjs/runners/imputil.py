@@ -13,7 +13,7 @@ Exported classes:
 # note: avoid importing non-builtin modules
 import imp                      ### not available in JPython?
 import sys
-import __builtin__
+import builtins
 
 # for the DirectoryImporter
 import struct
@@ -168,7 +168,7 @@ class ImportManager:
         # If the importer does not exist, then we have to bail. A missing
         # importer means that something else imported the module, and we have
         # no knowledge of how to get sub-modules out of the thing.
-        raise ImportError, 'No module named ' + fqname
+        raise ImportError('No module named ' + fqname)
 
     def _determine_import_context(self, globals):
         """Returns the context in which a module should be imported.
@@ -213,7 +213,7 @@ class ImportManager:
         # scan sys.path looking for a location in the filesystem that contains
         # the module, or an Importer object that can import the module.
         for item in sys.path:
-            if isinstance(item, _StringType) or isinstance(item, basestring):
+            if isinstance(item, _StringType) or isinstance(item, str):
                 module = self.fs_imp.import_from_dir(item, name)
             else:
                 module = item.import_top(name)
@@ -235,7 +235,7 @@ class ImportManager:
         # we don't know what to do (yet)
         ### we should blast the module dict and do another get_code(). need to
         ### flesh this out and add proper docco...
-        raise SystemError, "reload not yet implemented"
+        raise SystemError("reload not yet implemented")
 
 
 class Importer:
@@ -305,8 +305,9 @@ class Importer:
             setattr(parent, modname, module)
         return module
 
-    def _process_result(self, (ispkg, code, values), fqname):
+    def _process_result(self, xxx_todo_changeme, fqname):
         # did get_code() return an actual module? (rather than a code object)
+        (ispkg, code, values) = xxx_todo_changeme
         is_module = isinstance(code, _ModuleType)
 
         # use the returned module, or create a new one to exec code into
@@ -328,7 +329,7 @@ class Importer:
         # execute the code within the module's namespace
         if not is_module:
             try:
-                exec code in module.__dict__
+                exec(code, module.__dict__)
             except:
                 if fqname in sys.modules:
                     del sys.modules[fqname]
@@ -350,7 +351,7 @@ class Importer:
             fqname = "%s.%s" % (m.__name__, part)
             m = self._import_one(m, part, fqname)
             if not m:
-                raise ImportError, "No module named " + fqname
+                raise ImportError("No module named " + fqname)
         return m
 
     def _import_fromlist(self, package, fromlist):
@@ -369,7 +370,7 @@ class Importer:
                 subname = "%s.%s" % (package.__name__, sub)
                 submod = self._import_one(package, sub, subname)
                 if not submod:
-                    raise ImportError, "cannot import name " + subname
+                    raise ImportError("cannot import name " + subname)
 
     def _do_import(self, parent, parts, fromlist):
         """Attempt to import the module relative to parent.
@@ -421,7 +422,7 @@ class Importer:
             object, then these names/values will be inserted *after* the module
             has been loaded/initialized.
         """
-        raise RuntimeError, "get_code not implemented"
+        raise RuntimeError("get_code not implemented")
 
 
 ######################################################################
@@ -448,7 +449,7 @@ def _compile(pathname, timestamp):
     codestring = open(pathname, 'rU').read()
     if codestring and codestring[-1] != '\n':
         codestring = codestring + '\n'
-    code = __builtin__.compile(codestring, pathname, 'exec')
+    code = builtins.compile(codestring, pathname, 'exec')
 
     # try to cache the compiled code
     try:
@@ -496,7 +497,7 @@ def _os_bootstrap():
                 a = a + ':'
             return a + b
     else:
-        raise ImportError, 'no os specific module found'
+        raise ImportError('no os specific module found')
 
     if join is None:
         def join(a, b, sep=sep):
@@ -519,7 +520,7 @@ def _os_path_isdir(pathname):
         s = _os_stat(pathname)
     except OSError:
         return None
-    return (s.st_mode & 0170000) == 0040000
+    return (s.st_mode & 0o170000) == 0o040000
 
 def _timestamp(pathname):
     "Return the file modification time as a Long."
@@ -527,7 +528,7 @@ def _timestamp(pathname):
         s = _os_stat(pathname)
     except OSError:
         return None
-    return long(s.st_mtime)
+    return int(s.st_mtime)
 
 
 ######################################################################
@@ -614,7 +615,7 @@ class _FilesystemImporter(Importer):
 
 def py_suffix_importer(filename, finfo, fqname):
     file = filename[:-3] + _suffix
-    t_py = long(finfo[8])
+    t_py = int(finfo[8])
     t_pyc = _timestamp(file)
 
     code = None
@@ -645,13 +646,13 @@ class DynLoadSuffixImporter:
 ######################################################################
 
 def _print_importers():
-    items = sys.modules.items()
+    items = list(sys.modules.items())
     items.sort()
     for name, module in items:
         if module:
-            print name, module.__dict__.get('__importer__', '-- no importer')
+            print(name, module.__dict__.get('__importer__', '-- no importer'))
         else:
-            print name, '-- non-existent module'
+            print(name, '-- non-existent module')
 
 def _test_revamp():
     ImportManager().install()

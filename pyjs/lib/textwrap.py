@@ -7,7 +7,7 @@
 
 __revision__ = "$Id$"
 
-import string, re
+from . import string, re
 
 __all__ = ['TextWrapper', 'wrap', 'fill', 'dedent']
 
@@ -66,7 +66,7 @@ class TextWrapper:
     whitespace_trans = string.maketrans(_whitespace, ' ' * len(_whitespace))
 
     unicode_whitespace_trans = {}
-    uspace = ord(u' ')
+    uspace = ord(' ')
     for x in map(ord, _whitespace):
         unicode_whitespace_trans[x] = uspace
 
@@ -142,7 +142,7 @@ class TextWrapper:
         if self.replace_whitespace:
             if isinstance(text, str):
                 text = text.translate(self.whitespace_trans)
-            elif isinstance(text, unicode):
+            elif isinstance(text, str):
                 text = text.translate(self.unicode_whitespace_trans)
         return text
 
@@ -162,7 +162,7 @@ class TextWrapper:
           'use', ' ', 'the', ' ', '-b', ' ', option!'
         otherwise.
         """
-        if isinstance(text, unicode):
+        if isinstance(text, str):
             if self.break_on_hyphens:
                 pat = self.wordsep_re_uni
             else:
@@ -173,7 +173,7 @@ class TextWrapper:
             else:
                 pat = self.wordsep_simple_re
         chunks = pat.split(text)
-        chunks = filter(None, chunks)  # remove empty chunks
+        chunks = [_f for _f in chunks if _f]  # remove empty chunks
         return chunks
 
     def _fix_sentence_endings(self, chunks):
@@ -417,4 +417,4 @@ def dedent(text):
 if __name__ == "__main__":
     #print dedent("\tfoo\n\tbar")
     #print dedent("  \thello there\n  \t  how are you?")
-    print dedent("Hello there.\n  This is indented.")
+    print(dedent("Hello there.\n  This is indented."))

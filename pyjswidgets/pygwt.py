@@ -1,4 +1,4 @@
-from __pyjamas__ import get_main_frame, doc, JS
+from .__pyjamas__ import get_main_frame, doc, JS
 
 sNextHashId = 0
 

@@ -4,7 +4,7 @@
 
 import sys
 import UnitTest
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 def test(a):
    return None
@@ -51,13 +51,13 @@ class NoInlineCodeTest(UnitTest.UnitTest):
         fn()
 
     def test_long(self):
-        i1 = long(1)
+        i1 = int(1)
         def fn():
-            i2 = 1L
+            i2 = 1
             long = test
-            i3 = long(1)
-            i4 = 1L
-            self.assertEqual(i1, 1L)
+            i3 = int(1)
+            i4 = 1
+            self.assertEqual(i1, 1)
             self.assertEqual(i1, i2)
             self.assertNotEqual(i1, i3)
             self.assertEqual(i1, i4)
@@ -132,7 +132,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             ArithmeticError = bool
             try:
                 a = 1/0
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, ArithmeticError))
             else:
@@ -145,7 +145,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             AttributeError = bool
             try:
                 a = e1.noooo
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, AttributeError))
             else:
@@ -158,7 +158,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             BaseException = bool
             try:
                 a = 1/0
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, BaseException))
             else:
@@ -171,7 +171,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             Exception = bool
             try:
                 a = 1/0
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, Exception))
             else:
@@ -184,7 +184,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             GeneratorExit = bool
             try:
                 a = 1/0
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, GeneratorExit))
             else:
@@ -197,7 +197,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             ImportError = bool
             try:
                 import nosuchmodule
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, ImportError))
             else:
@@ -210,7 +210,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             IndexError = bool
             try:
                 a = [0][1]
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, IndexError))
             else:
@@ -223,7 +223,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             KeyError = bool
             try:
                 a = dict(a=1)['b']
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, KeyError))
             else:
@@ -236,7 +236,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             LookupError = bool
             try:
                 a = set([1]).remove(2)
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, LookupError))
             else:
@@ -250,7 +250,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             NameError = bool
             try:
                 a = nosuchname
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, NameError))
             else:
@@ -264,9 +264,9 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             RuntimeError = bool
             try:
                 a = dict(a=1,b=2,c=3)
-                for k, v in a.iteritems():
+                for k, v in a.items():
                     a['_%s' % k] = v
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, RuntimeError))
             else:
@@ -274,14 +274,14 @@ class NoInlineCodeTest(UnitTest.UnitTest):
         fn()
 
     def test_StandardError(self):
-        e1 = StandardError
+        e1 = Exception
         def fn():
-            StandardError = bool
+            Exception = bool
             try:
                 a = 1/0
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
-                self.assertFalse(isinstance(e, StandardError))
+                self.assertFalse(isinstance(e, Exception))
             else:
                 self.fail("Failed to raise StandardError")
         fn()
@@ -295,9 +295,9 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             StopIteration = bool
             try:
                 a = g()
-                a.next()
-                a.next()
-            except e1, e:
+                next(a)
+                next(a)
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, StopIteration))
             else:
@@ -310,7 +310,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             TypeError = bool
             try:
                 a = 1 + 'a'
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, TypeError))
             else:
@@ -323,7 +323,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             ValueError = bool
             try:
                 a = list([1]).index(2)
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, ValueError))
             else:
@@ -336,7 +336,7 @@ class NoInlineCodeTest(UnitTest.UnitTest):
             ZeroDivisionError = bool
             try:
                 a = 1/0
-            except e1, e:
+            except e1 as e:
                 self.assertTrue(isinstance(e, e1))
                 self.assertFalse(isinstance(e, ZeroDivisionError))
             else:

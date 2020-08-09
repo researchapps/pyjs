@@ -77,7 +77,7 @@ class PanelBase(object):
     def __len__(self):
         return len(self.getChildren())
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self is not None
 
     def __iter__(self):

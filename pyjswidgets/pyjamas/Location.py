@@ -11,7 +11,7 @@ def makeUrlDict(urlstring):
 
 def makeUrlStringFromDict(d):
     pairs = []
-    for k,v in d.iteritems():
+    for k,v in d.items():
         pairs.append(k+"="+v)
     return "&".join(pairs)
 

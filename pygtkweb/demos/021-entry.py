@@ -9,7 +9,7 @@ import gtk
 class EntryExample:
     def enter_callback(self, widget, entry):
         entry_text = entry.get_text()
-        print "Entry contents: %s\n" % entry_text
+        print("Entry contents: %s\n" % entry_text)
 
     def entry_toggle_editable(self, checkbutton, entry):
         entry.set_editable(checkbutton.get_active())

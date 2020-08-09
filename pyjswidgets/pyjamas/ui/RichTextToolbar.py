@@ -473,7 +473,7 @@ class RichTextToolbar(Composite, ClickHandler, ChangeHandler):
         self.trigger = True
 
     def onFocus(self, event):
-        print "focus"
+        print("focus")
         pass
 
     def onLostFocus(self, event):
@@ -481,14 +481,14 @@ class RichTextToolbar(Composite, ClickHandler, ChangeHandler):
         self.checkForChange()
 
     def onMouseOut(self, sender):
-        print "mouse out"
+        print("mouse out")
         if self.isInText  and  self.isOnTextBorder(sender):
             self.isInText = False
             self.captureSelection()
             self.endSelTimer()
 
     def onMouseOver(self, sender):
-        print "mouse over"
+        print("mouse over")
         if not self.isInText:
             self.isInText = True
             self.richText.setFocus(True)
@@ -578,10 +578,10 @@ class RichTextToolbar(Composite, ClickHandler, ChangeHandler):
         it = DOM.IterWalkChildren(element, True)
         while True:
             try:
-                node = it.next()
+                node = next(it)
             except StopIteration:
                 break
-            if node.nodeType == 3 and unicode(node.data) == u'':
+            if node.nodeType == 3 and str(node.data) == '':
                 DOM.removeChild(node.parentNode, node)
 
         rng.setRange(element)
@@ -589,17 +589,17 @@ class RichTextToolbar(Composite, ClickHandler, ChangeHandler):
         it = DOM.IterWalkChildren(rng.m_document, True)
         while True:
             try:
-                node = it.next()
+                node = next(it)
             except StopIteration:
                 break
-            if node.nodeType == 3 and unicode(node.data) == u'':
+            if node.nodeType == 3 and str(node.data) == '':
                 DOM.removeChild(node.parentNode, node)
 
         # clears out all nodes with no children.
         it = DOM.IterWalkChildren(rng.m_document)
         while True:
             try:
-                node = it.next()
+                node = next(it)
             except StopIteration:
                 break
             if node.firstChild or not csm.identify(node):
@@ -609,7 +609,7 @@ class RichTextToolbar(Composite, ClickHandler, ChangeHandler):
         it = DOM.IterWalkChildren(rng.m_document, True)
         while True:
             try:
-                node = it.next()
+                node = next(it)
             except StopIteration:
                 break
             if not csm.identify(node):
@@ -668,7 +668,7 @@ class RichTextToolbar(Composite, ClickHandler, ChangeHandler):
             Selection.getSelection(window)
 
         except:
-            print "Error getting the selection"
+            print("Error getting the selection")
             traceback.print_exc()
 
     def getWindow(self, iFrame=None):
@@ -854,7 +854,7 @@ class EventLinkPopup(PopupPanel):
 
 
         except:
-            print "exception"
+            print("exception")
             traceback.print_exc()
             return False
 
@@ -868,7 +868,7 @@ class EventLinkPopup(PopupPanel):
         if not link:
             return False
 
-        print self.m_origAnchorStart, self.m_origAnchorEnd
+        print(self.m_origAnchorStart, self.m_origAnchorEnd)
 
         if (self.m_origAnchorStart is not None)  and  self.m_fillOutCB.getValue():
             # Expand selection to these bounds
@@ -889,7 +889,7 @@ class EventLinkPopup(PopupPanel):
             sp = self.m_range.getStartPoint()
             startNode = sp.getTextNode()
             offset = sp.getOffset()
-            print "sp", sp, startNode, offset
+            print("sp", sp, startNode, offset)
             parentEle = startNode.parentElement
             text = startNode.data
 

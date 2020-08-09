@@ -8,7 +8,7 @@ import gtk
 
 class RadioButtons:
     def callback(self, widget, data=None):
-        print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
+        print("%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()]))
 
     def close_application(self, widget, event, data=None):
         gtk.main_quit()

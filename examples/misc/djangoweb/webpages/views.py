@@ -1,12 +1,12 @@
 # Create your views here.
 
-from jsonrpc import *
+from .jsonrpc import *
 from djangoweb.webpages.models import Page
 from django.template import loader
 from django.shortcuts import render_to_response
 from django.template import RequestContext, Template
 from django.http import HttpResponseRedirect, HttpResponse
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 service = JSONRPCService()
 

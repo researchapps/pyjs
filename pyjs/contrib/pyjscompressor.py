@@ -206,7 +206,7 @@ def getsmallpath(path, max_chars):
 
 def compress_all(path):
     # Print headers for progress output
-    print('%45s  %s' % ('Files', 'Compression'))
+    print(('%45s  %s' % ('Files', 'Compression')))
 
     global num_procs
 
@@ -250,7 +250,7 @@ def compress_all(path):
 
                     ratio = getcompression(dp, dn)
                     smallpath = getsmallpath(path, 40)
-                    print('%45s  %4.1f%%' % (smallpath, ratio))
+                    print(('%45s  %4.1f%%' % (smallpath, ratio)))
             except KeyboardInterrupt:
                 # Stop child processes, and pass on the error to caller
                 proc_pool.terminate()
@@ -267,13 +267,13 @@ def compress_all(path):
                 n_size += dn
                 ratio = getcompression(dp, dn)
                 smallpath = getsmallpath(path, 40)
-                print('%45s  %4.1f%%' % (smallpath, ratio))
+                print(('%45s  %4.1f%%' % (smallpath, ratio)))
 
     compression = getcompression(p_size, n_size)
 
     sizes = "Initial size: %.1fKiB  Final size: %.1fKiB" % \
             (p_size / 1024., n_size / 1024.)
-    print('%s %s' % (sizes.ljust(51), "%4.1f%%" % compression))
+    print(('%s %s' % (sizes.ljust(51), "%4.1f%%" % compression)))
 
 def dopyjscompressor(directory, c_path=compiler_path, n_procs=0, opts='SIMPLE_OPTIMIZATIONS', dbg=False):
     global compiler_path
@@ -316,7 +316,7 @@ def dopyjscompressor(directory, c_path=compiler_path, n_procs=0, opts='SIMPLE_OP
             print("Could not determine CPU Count. Using One process")
             num_procs = 1
 
-    print("Running %d processes" % num_procs)
+    print(("Running %d processes" % num_procs))
 
     try:
         compress_all(directory)

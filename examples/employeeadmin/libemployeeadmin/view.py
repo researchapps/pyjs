@@ -7,9 +7,9 @@ Addapted for pyjamas: Kees Bos
 
 from puremvc.patterns.mediator import Mediator
 
-import model, vo
-import ApplicationConstants
-from ApplicationConstants import Command, Notification
+from . import model, vo
+from . import ApplicationConstants
+from .ApplicationConstants import Command, Notification
 
 from pyjamas.Window import alert
 

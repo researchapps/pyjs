@@ -7,7 +7,7 @@ from pyjamas.ui.VerticalPanel import VerticalPanel
 from pyjamas.ui.FlexTable import FlexTable
 from pyjamas.ui.Label import Label
 
-from Grid import Grid
+from .Grid import Grid
 
 import time
 
@@ -66,12 +66,12 @@ class Summary(FlexTable):
             self.removeRow(0)
         self.rows = 0
         self.addHeader()
-        projects = timelines.keys()
+        projects = list(timelines.keys())
         projects.sort()
         for project in projects:
             self.addRow([self.HHMM(timelines[project][0]), timelines[project][1]])
             descriptions = timelines[project][2]
-            descriptions = descriptions.keys()
+            descriptions = list(descriptions.keys())
             descriptions.sort()
             for desc in descriptions:
                 if timelines[project][2][desc][1]:

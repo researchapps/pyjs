@@ -23,7 +23,7 @@ def get_listener(eventtype, item):
 
 def set_listener(eventtype, item, listener):
     #print "set_listener", eventtype, item, listener
-    if not listeners.has_key(eventtype):
+    if eventtype not in listeners:
         listeners[eventtype] = {}
     if hasattr(item, "__instance__"):
         listeners[eventtype][item.__instance__] = listener

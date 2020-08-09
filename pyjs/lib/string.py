@@ -32,7 +32,7 @@ printable = digits + letters + punctuation + whitespace
 
 # Case conversion helpers
 # Use str to convert Unicode literal in case of -U
-l = map(chr, xrange(256))
+l = list(map(chr, range(256)))
 _idmap = str('').join(l)
 del l
 
@@ -67,12 +67,12 @@ def maketrans(fromstr, tostr):
 
     """
     if len(fromstr) != len(tostr):
-        raise ValueError, "maketrans arguments must have same length"
+        raise ValueError("maketrans arguments must have same length")
     global _idmapL
     if not _idmapL:
         _idmapL = list(_idmap)
     L = _idmapL[:]
-    fromstr = map(ord, fromstr)
+    fromstr = list(map(ord, fromstr))
     for i in range(len(fromstr)):
         L[fromstr[i]] = tostr[i]
     return ''.join(L)
@@ -80,7 +80,7 @@ def maketrans(fromstr, tostr):
 
 
 ####################################################################
-import re as _re
+from . import re as _re
 
 class _multimap:
     """Helper class for combining multiple mappings.

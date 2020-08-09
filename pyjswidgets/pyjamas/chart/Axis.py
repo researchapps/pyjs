@@ -290,7 +290,7 @@ class Axis:
         if tickWidget is None:
             tiickWidget = self.formatAsTickLabel(tickPosition)
 
-        if isinstance(tickWidget, basestring):
+        if isinstance(tickWidget, str):
             if widthUpperBound is None and heightUpperBound is None:
                 widthUpperBound = NAI
                 heightUpperBound = NAI
@@ -1069,7 +1069,7 @@ class Axis:
         ** @see #setAxisLabelThickness setAxisLabelThickness
         **
         """
-        if isinstance(axisLabel, basestring):
+        if isinstance(axisLabel, str):
             axisLabel = HTML(axisLabel)
         self.axisLabel = axisLabel
         self.chartDecorationsChanged = True

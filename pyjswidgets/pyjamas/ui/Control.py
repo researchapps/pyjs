@@ -108,7 +108,7 @@ class Control(FocusWidget, MouseHandler, MouseWheelHandler):
                          mouse_y - self.getAbsoluteTop(), True)
 
     def onMouseWheel(self, sender, velocity):
-        print "mouse wheel", sender, velocity
+        print("mouse wheel", sender, velocity)
         if self.dragging: # don't accept wheel events if dragging!
             return
         new_value = self.processValue(self.value - self.step * velocity)
@@ -180,8 +180,8 @@ class Control(FocusWidget, MouseHandler, MouseWheelHandler):
 
     def onEventPreview(self, event):
         etype = DOM.eventGetType(event)
-        print "control preview", etype, self._event_targets_control(event), \
-                     DOM.getCaptureElement() is not None
+        print("control preview", etype, self._event_targets_control(event), \
+                     DOM.getCaptureElement() is not None)
         if etype == "keydown":
             return self._event_targets_control(event)
         elif etype == "keyup":

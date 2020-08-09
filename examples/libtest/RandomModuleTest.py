@@ -36,7 +36,7 @@ class RandomModuleTest(UnitTest):
     def test_zeroinputs(self):
         # Verify that distributions can handle a series of zero inputs'
         g = random.Random()
-        xx = [g.random() for i in xrange(50)]
+        xx = [g.random() for i in range(50)]
         x = [0.0]
         xx = xx.__add__(x.__mul__(5))
         x = xx[:]
@@ -85,7 +85,7 @@ class RandomModuleTest(UnitTest):
         # Only works for distributions which do not consume variates in pairs
         g = random.Random()
         N = 5000
-        xx = [i/float(N) for i in xrange(1,N)]
+        xx = [i/float(N) for i in range(1,N)]
         dists = [
                 (g.uniform, (1.0,10.0), (10.0+1.0)/2, (10.0-1.0)**2/12),
                 (g.expovariate, (1.5,), 1/1.5, 1/1.5**2),
@@ -99,7 +99,7 @@ class RandomModuleTest(UnitTest):
             x = xx[:]
             g.random = getattr(x, 'pop')
             y = []
-            for i in xrange(len(x)):
+            for i in range(len(x)):
                 try:
                     y.append(variate(*args))
                 except IndexError:

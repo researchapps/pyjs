@@ -46,15 +46,15 @@ class CookieExample:
             #clicked the set cookie button
             text = self.text_area.getText()
             #print goes to console.log
-            print "setting cookie to:", text
+            print("setting cookie to:", text)
             #Note: this sets the cookie on the top level
             setCookie(COOKIE_NAME, text, 10000, path='/')
         else:
             cookie_text = getCookie(COOKIE_NAME)
             if cookie_text is None:
-                print "No Cookie"
+                print("No Cookie")
             else:
-                print "myCookie", cookie_text
+                print("myCookie", cookie_text)
                 self.status.setText(cookie_text)
 
 

@@ -40,7 +40,7 @@ class GridWidget(AbsolutePanel):
 
     def onClick(self, sender):
         if sender == self.clearb:
-            print "clear"
+            print("clear")
             self.g.clear()
             return
         elif sender==self.addb:

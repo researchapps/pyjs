@@ -9,7 +9,7 @@ import gtk
 
 # Check for new pygtk: this is new class in PyGtk 2.4
 if gtk.pygtk_version < (2,3,90):
-   print "PyGtk 2.3.90 or later required for this example"
+   print("PyGtk 2.3.90 or later required for this example")
    raise SystemExit
 
 dialog = gtk.FileChooserDialog("Open..",
@@ -38,7 +38,7 @@ dialog.add_filter(filter)
 
 response = dialog.run()
 if response == gtk.RESPONSE_OK:
-    print dialog.get_filename(), 'selected'
+    print(dialog.get_filename(), 'selected')
 elif response == gtk.RESPONSE_CANCEL:
-    print 'Closed, no files selected'
+    print('Closed, no files selected')
 dialog.destroy()

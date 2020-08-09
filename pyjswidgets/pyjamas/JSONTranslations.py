@@ -4,8 +4,8 @@
 
 from gettext import NullTranslations
 import re
-from JSONService import loads
-from HTTPRequest import HTTPRequest
+from .JSONService import loads
+from .HTTPRequest import HTTPRequest
 
 try:
     from gettext import c2py
@@ -64,7 +64,7 @@ class JSONTranslations(NullTranslations):
     def parse_json(self, text):
         json = loads(text)
         self._catalog.update(json)
-        for k, v in self._catalog[""].iteritems():
+        for k, v in self._catalog[""].items():
             k = k.lower()
             if k == 'plural-forms':
                 self.nplurals = int(self.re_nplurals.search(v).group(1))

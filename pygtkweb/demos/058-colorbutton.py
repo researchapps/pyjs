@@ -24,8 +24,8 @@ class ColorButtonExample:
     def color_set_cb(self, colorbutton):
         color = colorbutton.get_color()
         alpha = colorbutton.get_alpha()
-        print 'You have selected the color:', \
-              color.red, color.green, color.blue, 'with alpha:', alpha
+        print('You have selected the color:', \
+              color.red, color.green, color.blue, 'with alpha:', alpha)
         return
 
 def main():

@@ -24,7 +24,7 @@ class Coverage:
 
     def output(self, *files):
 
-        print """
+        print("""
         <html>
         <head>
         <title>Coverage for %s</title>
@@ -66,17 +66,17 @@ class Coverage:
         </style>
         </head>
         <body>
-        """ % self.testset_name
+        """ % self.testset_name)
 
-        print """
+        print("""
             <h1>Coverage for %s</h1>
-        """ % self.testset_name
+        """ % self.testset_name)
 
         for filename in files:
-            print """
+            print("""
             <h2>%s</h2>
             <table>
-            """ % filename
+            """ % filename)
 
             code = open(filename).readlines()
             for lineno, line in enumerate(code):
@@ -89,16 +89,16 @@ class Coverage:
                 else:
                     klass = "hit"
                 klass2 = klass + "-line"
-                print """<tr><td class="lineno">%s</td><td class="%s">%s</td><td class="%s">%s</td></tr>""" % (lineno + 1, klass, count, klass2, line.strip("\n"))
+                print("""<tr><td class="lineno">%s</td><td class="%s">%s</td><td class="%s">%s</td></tr>""" % (lineno + 1, klass, count, klass2, line.strip("\n")))
 
-            print """
+            print("""
             </table>
-            """
+            """)
 
-        print """
+        print("""
         </body>
         </html>
-        """
+        """)
 
 # Tester
 

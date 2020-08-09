@@ -8,10 +8,10 @@ API for SWFUpload http://swfupload.org
 """
 
 from pyjamas.ui.FlashPanel import FlashPanel
-import DeferredHandler
+from . import DeferredHandler
 
 from pyjamas import DOM
-from urllib import quote
+from urllib.parse import quote
 from __pyjamas__ import wnd, JS
 
 

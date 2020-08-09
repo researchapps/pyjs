@@ -11,8 +11,8 @@ class GeneratorTest(UnitTest):
             yield 2
 
         g = fn()
-        self.assertEqual(g.next(), 1)
-        self.assertEqual(g.next(), 2)
+        self.assertEqual(next(g), 1)
+        self.assertEqual(next(g), 2)
 
         for i, g in enumerate(fn()):
             self.assertEqual(i, g-1)
@@ -47,8 +47,8 @@ class GeneratorTest(UnitTest):
                 yield i
 
         g = fn()
-        self.assertEqual(g.next(), 1)
-        self.assertEqual(g.next(), 2)
+        self.assertEqual(next(g), 1)
+        self.assertEqual(next(g), 2)
 
         for i, g in enumerate(fn()):
             self.assertEqual(i, g-1)
@@ -173,7 +173,7 @@ class GeneratorTest(UnitTest):
                         raise TypeError(i)
                     elif i == 3:
                         raise KeyError(i)
-                except TypeError, e:
+                except TypeError as e:
                     yield "TypeError %d (1)" % i
                     yield "TypeError %d (2)" % i
                 except:
@@ -222,7 +222,7 @@ class GeneratorTest(UnitTest):
                         raise KeyError(i)
                     else:
                         break
-                except TypeError, e:
+                except TypeError as e:
                     yield "TypeError %d (1)" % i
                     yield "TypeError %d (2)" % i
                 except:
@@ -265,8 +265,8 @@ class GeneratorTest(UnitTest):
                 value = (yield value)
 
         g = fn(1)
-        self.assertEqual(g.next(), 1)
-        self.assertEqual(g.next(), None)
+        self.assertEqual(next(g), 1)
+        self.assertEqual(next(g), None)
         self.assertEqual(g.send(2), 2)
 
     def testThrow(self):
@@ -276,25 +276,25 @@ class GeneratorTest(UnitTest):
 
         g = fn()
         try:
-            r = g.throw(TypeError, 'test1')
+            r = g.throw(TypeError('test1'))
             self.fail("Exception expected (1)")
-        except TypeError, e:
+        except TypeError as e:
             self.assertTrue(e, 'test1')
         try:
-            r = g.next()
+            r = next(g)
             self.fail("StopIteration expected (1)")
         except StopIteration:
             self.assertTrue(True)
 
         g = fn()
-        self.assertEqual(g.next(), 1)
+        self.assertEqual(next(g), 1)
         try:
-            r = g.throw(TypeError, 'test2')
+            r = g.throw(TypeError('test2'))
             self.fail("Exception expected (2)")
-        except TypeError, e:
+        except TypeError as e:
             self.assertTrue(e, 'test2')
         try:
-            r = g.next()
+            r = next(g)
             self.fail("StopIteration expected (2)")
         except StopIteration:
             self.assertTrue(True)
@@ -309,20 +309,20 @@ class GeneratorTest(UnitTest):
 
         g = fn()
         try:
-            r = g.throw(TypeError, 'test3')
+            r = g.throw(TypeError('test3'))
             self.fail("Exception expected (3)")
-        except TypeError, e:
+        except TypeError as e:
             self.assertTrue(e, 'test3')
 
         g = fn()
-        self.assertEqual(g.next(), 1)
+        self.assertEqual(next(g), 1)
         try:
-            r = g.throw(TypeError, 'test4')
+            r = g.throw(TypeError('test4'))
             self.assertEqual(r, 3)
-        except TypeError, e:
+        except TypeError as e:
             self.fail("No exception expected (4)")
         try:
-            r = g.next()
+            r = next(g)
             self.fail("StopIteration expected (4)")
         except StopIteration:
             self.assertTrue(True)
@@ -351,7 +351,7 @@ class GeneratorTest(UnitTest):
         except:
             self.fail("No exception expected (1a)")
         try:
-            r = g.next()
+            r = next(g)
             self.fail("StopIteration expected (1)")
         except StopIteration:
             self.assertTrue(True)
@@ -362,14 +362,14 @@ class GeneratorTest(UnitTest):
             self.fail("No exception expected (1b)")
 
         g = fn()
-        self.assertEqual(g.next(), 1)
+        self.assertEqual(next(g), 1)
         try:
             r = g.close()
             self.assertEqual(r, None)
-        except TypeError, e:
+        except TypeError as e:
             self.fail("No exception expected (2)")
         try:
-            r = g.next()
+            r = next(g)
             self.fail("StopIteration expected (2)")
         except StopIteration:
             self.assertTrue(True)
@@ -384,15 +384,15 @@ class GeneratorTest(UnitTest):
         try:
             r = g.close()
             self.assertEqual(r, None)
-        except TypeError, e:
+        except TypeError as e:
             self.fail("No exception expected (3)")
 
         g = fn()
-        self.assertEqual(g.next(), 1)
+        self.assertEqual(next(g), 1)
         try:
             r = g.close()
             self.fail("RuntimeError expected (4)")
-        except RuntimeError, e:
+        except RuntimeError as e:
             self.assertEqual(e[0], 'generator ignored GeneratorExit')
 
 
@@ -408,19 +408,19 @@ class GeneratorTest(UnitTest):
         g = fib()
         r = []
         for i in range(6):
-            r.append(g.next())
+            r.append(next(g))
         self.assertEqual(r, [1, 1, 2, 3, 5, 8])
 
     def testPEP255_recursion(self):
         me = None
         def g():
-            i = me.next()
+            i = next(me)
             yield i
         me = g()
         try:
-            me.next()
+            next(me)
             self.fail("ValueError expected")
-        except ValueError, e:
+        except ValueError as e:
             self.assertEqual(e[0], 'generator already executing')
 
     def testPEP255_return(self):
@@ -448,14 +448,14 @@ class GeneratorTest(UnitTest):
             yield 42   # and we'll never get here
         k = g()
         try:
-            k.next()
+            next(k)
             self.fail("Exception expected")
-        except ZeroDivisionError, e:
+        except ZeroDivisionError as e:
             self.assertTrue(True)
         except:
             self.assertTrue(True, "ZeroDivisionError expected")
         try:
-            k.next()
+            next(k)
             self.fail("StopIteration expected")
         except StopIteration:
             self.assertTrue(True)
@@ -565,12 +565,12 @@ class GeneratorTest(UnitTest):
     def testGenExp(self):
 
         g = (child for child in [1,2,3])
-        self.assertEqual(g.next(), 1)
-        self.assertEqual(g.next(), 2)
+        self.assertEqual(next(g), 1)
+        self.assertEqual(next(g), 2)
 
         try:
-            g.throw(KeyError, 'test')
-        except KeyError, e:
+            g.throw(KeyError('test'))
+        except KeyError as e:
             self.assertEqual(e[0], 'test')
 
         if any(isinstance(child, int) for child in [1,2,3]):
@@ -585,8 +585,8 @@ class GeneratorTest(UnitTest):
         # #269 - whoops!  webkit barfs / infinite loop on this one
         a = A()
         g = (child for child in a.fn())
-        self.assertEqual(g.next(), 1)
-        self.assertEqual(g.next(), 2)
+        self.assertEqual(next(g), 1)
+        self.assertEqual(next(g), 2)
 
     def testTupleReturn(self):
         lst = []

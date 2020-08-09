@@ -54,7 +54,7 @@ class FontButtonExample:
         return
     def font_set_cb(self, fontbutton):
         font = fontbutton.get_font_name()
-        print 'You have selected the font:', font
+        print('You have selected the font:', font)
         return
 
 def main():

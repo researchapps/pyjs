@@ -1,7 +1,7 @@
 try:
     import pyjslib
 except:
-    import __builtin__ as pyjslib
+    import builtins as pyjslib
 from UnitTest import UnitTest
 
 class Foo:pass

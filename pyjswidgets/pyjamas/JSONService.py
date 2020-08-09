@@ -8,7 +8,7 @@
 """
 
 import sys
-from HTTPRequest import HTTPRequest
+from .HTTPRequest import HTTPRequest
 
 try:
     # included in python 2.6...
@@ -162,10 +162,10 @@ def create_object(items):
     modulename = clsname[:dot]
     clsname = clsname[dot+1:]
     vars = {}
-    exec "from %s import %s as kls" % (modulename, clsname) in vars
+    exec("from %s import %s as kls" % (modulename, clsname), vars)
     kls = vars['kls']
     vars = {}
-    for (k, v) in items.items():
+    for (k, v) in list(items.items()):
         vars[str(k)] = v
     return kls(**vars)
 

@@ -23,7 +23,7 @@ import encodings
 import encodings.cp437
 
 
-from windows import *
+from .windows import *
 from ctypes import *
 from ctypes.wintypes import *
 
@@ -70,7 +70,7 @@ except:
 atl = windll.atl                  # If this fails, you need atl.dll
 
 # do this after gen stuff, above
-import mshtmlevents
+from . import mshtmlevents
 
 SID_SShellBrowser = GUID("{000214E2-0000-0000-C000-000000000046}")
 
@@ -84,7 +84,7 @@ class IPlayer2(IUnknown):
 
 class IOleWindow(IUnknown):
     _case_insensitive_ = True
-    u'IOleWindow Interface'
+    'IOleWindow Interface'
     _iid_ = GUID('{00000114-0000-0000-C000-000000000046}')
     _idlflags_ = []
 
@@ -131,24 +131,24 @@ class IServiceProvider(IUnknown):
 class EventSink(object):
     # some DWebBrowserEvents
     def OnVisible(self, this, *args):
-        print "OnVisible", args
+        print("OnVisible", args)
 
     def BeforeNavigate(self, this, *args):
-        print "BeforeNavigate", args
+        print("BeforeNavigate", args)
 
     def NavigateComplete(self, this, *args):
-        print "NavigateComplete", this, args
+        print("NavigateComplete", this, args)
         return
 
     # some DWebBrowserEvents2
     def BeforeNavigate2(self, this, *args):
-        print "BeforeNavigate2", args
+        print("BeforeNavigate2", args)
 
     def NavigateComplete2(self, this, *args):
-        print "NavigateComplete2", args
+        print("NavigateComplete2", args)
 
     def DocumentComplete(self, this, *args):
-        print "DocumentComplete", args
+        print("DocumentComplete", args)
         if self.workaround_ignore_first_doc_complete == False:
             # ignore first about:blank.  *sigh*...
             # TODO: work out how to parse *args byref VARIANT
@@ -159,13 +159,13 @@ class EventSink(object):
         self._loaded()
 
     def NewWindow2(self, this, *args):
-        print "NewWindow2", args
+        print("NewWindow2", args)
         return
         v = cast(args[1]._.c_void_p, POINTER(VARIANT))[0]
         v.value = True
 
     def NewWindow3(self, this, *args):
-        print "NewWindow3", args
+        print("NewWindow3", args)
         return
         v = cast(args[1]._.c_void_p, POINTER(VARIANT))[0]
         v.value = True
@@ -212,14 +212,14 @@ class EventHandler(object):
             if idx > 0:
                 name = name[idx+1:]
             #return EventCaller(self, name)
-            exec fn_txt % (name[2:], name[2:])
+            exec(fn_txt % (name[2:], name[2:]))
             #exec fn_txt % (name[2:])
             #print event_fn
             return new.instancemethod(event_fn, self)
         raise AttributeError(name)
 
     def addEventListener(self, name, fn):
-        if not self._listeners.has_key(name):
+        if name not in self._listeners:
             self._listeners[name] = []
         self._listeners[name].append(fn)
 
@@ -261,11 +261,11 @@ class Browser(EventSink):
         self.pBrowser.RegisterAsBrowser = True
         self.pBrowser.AddRef()
 
-        print dir(SHDocVw)
-        print SHDocVw.IWebBrowser
-        print SHDocVw.IWebBrowser2
+        print(dir(SHDocVw))
+        print(SHDocVw.IWebBrowser)
+        print(SHDocVw.IWebBrowser2)
 
-        print dir(MSHTML)
+        print(dir(MSHTML))
 
         self.conn = mshtmlevents.GetEvents(self.pBrowser, sink=self,
                         interface=SHDocVw.DWebBrowserEvents2)

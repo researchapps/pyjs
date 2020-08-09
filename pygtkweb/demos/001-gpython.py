@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import __builtin__
+import builtins
 import __main__
 import codeop
 import keyword
@@ -33,8 +33,8 @@ class Completer:
         self.locals = lokals
 
         self.completions = keyword.kwlist + \
-                           __builtin__.__dict__.keys() + \
-                           __main__.__dict__.keys()
+                           list(builtins.__dict__.keys()) + \
+                           list(__main__.__dict__.keys())
     def complete (self, text, state):
         if state == 0:
             if "." in text:
@@ -49,7 +49,7 @@ class Completer:
     def update (self, locs):
         self.locals = locs
 
-        for key in self.locals.keys ():
+        for key in list(self.locals.keys ()):
             if not key in self.completions:
                 self.completions.append (key)
 
@@ -137,7 +137,7 @@ class GtkInterpreter (threading.Thread):
         Return true if executed the code.
         Returns false if deferring execution until complete block available.
         """
-        if (not code) or (code[-1]<>'\n'): code = code +'\n' # raw_input strips newline
+        if (not code) or (code[-1]!='\n'): code = code +'\n' # raw_input strips newline
         self.completer.update (self.locs)
         self.ready.acquire()
         self.new_cmd = code
@@ -156,7 +156,7 @@ class GtkInterpreter (threading.Thread):
 # Read user input in a loop, and send each line to the interpreter thread.
 
 def signal_handler (*args):
-    print "SIGNAL:", args
+    print("SIGNAL:", args)
     sys.exit()
 
 if __name__=="__main__":
@@ -171,14 +171,14 @@ if __name__=="__main__":
     if len (sys.argv) > 1:
         for file in open (sys.argv[1]).readlines ():
             interpreter.feed (file)
-    print 'Interactive GTK Shell'
+    print('Interactive GTK Shell')
 
     try:
         while 1:
-            command = raw_input (prompt) + '\n' # raw_input strips newlines
+            command = input (prompt) + '\n' # raw_input strips newlines
             prompt = interpreter.feed (command) and '>>> ' or '... '
     except (EOFError, KeyboardInterrupt): pass
 
     interpreter.kill()
-    print
+    print()
 

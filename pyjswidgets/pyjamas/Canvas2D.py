@@ -22,7 +22,7 @@ from __pyjamas__ import JS
 
 class Canvas(FocusWidget):
     def __init__(self, Width=0, Height=0, **kwargs):
-        if not kwargs.has_key('StyleName'):
+        if 'StyleName' not in kwargs:
             kwargs['StyleName'] = 'gwt-Canvas'
         kwargs['Width'] = Width
         kwargs['Height'] = Height

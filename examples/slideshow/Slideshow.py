@@ -82,7 +82,7 @@ class Slideshow:
         self.curInfo = info
 
         #Logger.write("showing " + info.getName())
-        if self.curSink <> None:
+        if self.curSink != None:
             self.curSink.onHide()
             #Logger.write("removing " + self.curSink)
             self.sinkContainer.remove(self.curSink)

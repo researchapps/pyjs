@@ -24,7 +24,7 @@ class MouseInputControl(InputControl):
     def __init__(self, min_value, max_value, start_value=None, step=None,
                        **kwargs):
 
-        if not kwargs.has_key("StyleName"):
+        if "StyleName" not in kwargs:
             kwargs['StyleName'] = "gwt-MouseInputControl"
         InputControl.__init__(self, min_value, max_value, start_value,
                                 step, **kwargs)

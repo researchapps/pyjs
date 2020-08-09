@@ -155,7 +155,7 @@ class FunctionTest(UnitTest):
             try:
                 local_lookup3()
                 self.fail("lookup3")
-            except NotImplementedError, e:
+            except NotImplementedError as e:
                 self.assertTrue(True)
 
         def local_lookup2():

@@ -28,9 +28,9 @@ class Button(ButtonBase):
         @param listener: A new click listener; see addClickListener()
 
         """
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']="gwt-Button"
+        if 'StyleName' not in kwargs: kwargs['StyleName']="gwt-Button"
         if html: kwargs['HTML'] = html
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
         else:
             element = DOM.createButton()

@@ -24,7 +24,7 @@ class CeleryEchoView(JSONRPCView):
         # assuming it will have the key "task_id" with a valid Celery
         # task id.
         if(request.json["method"] == "get_result"):
-            if(isinstance(self.params, (dict,))):
+            if(isinstance(self.params, dict)):
                 task_id = self.params["task_id"]
                 # Ok, as I want to force a few rounds of asking for a result,
                 # I cannot use get as it is aliased to wait().
@@ -45,7 +45,7 @@ class CeleryEchoView(JSONRPCView):
                 msg += "required to be a dictionary"
                 self.json_response["error"] = {"code":-32602, "message":msg}
 
-        elif(isinstance(self.params, (list,))):
+        elif(isinstance(self.params, list)):
             # countdown for 5 seconds so we have a few requests from pyjamas
             # for a result
             res = celery_echo.apply_async(

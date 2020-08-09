@@ -26,7 +26,7 @@ class TextWindow(AbsolutePanel):
 
     def _get_label(self, x, y):
 
-        if not self.text[x].has_key(y):
+        if y not in self.text[x]:
             xpos = x * self.fontsize
             ypos = y * self.fontheight
             txt = Label(' ')

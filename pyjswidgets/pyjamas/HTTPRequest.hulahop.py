@@ -2,7 +2,7 @@
 class XULrunnerHackCallback:
     def __init__(self, htr, mode, user, pwd, url, postData=None, handler=None,
                  return_xml=False, content_type=None, headers=None):
-        print "XMLHttpRequest using xulrunner hack callback", mode, url
+        print("XMLHttpRequest using xulrunner hack callback", mode, url)
         self.htr = htr
         self.mode = mode
         self.user = user

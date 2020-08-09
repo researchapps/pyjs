@@ -26,7 +26,7 @@ and networks.
 
 __version__ = '2.1.9'
 
-import struct
+from . import struct
 
 IPV4LENGTH = 32
 IPV6LENGTH = 128
@@ -510,7 +510,7 @@ class _BaseIP(_IPAddrBase):
         return  '%s' % self._string_from_ip_int(self._ip)
 
     def __hash__(self):
-        return hash(hex(long(self._ip)))
+        return hash(hex(int(self._ip)))
 
     def _get_address_key(self):
         return (self._version, self)
@@ -1058,7 +1058,7 @@ class _BaseV4(object):
 
         """
         octets = []
-        for _ in xrange(4):
+        for _ in range(4):
             octets.insert(0, str(ip_int & 0xFF))
             ip_int >>= 8
         return '.'.join(octets)
@@ -1198,7 +1198,7 @@ class IPv4Address(_BaseV4, _BaseIP):
         _BaseV4.__init__(self, address)
 
         # Efficient constructor from integer.
-        if isinstance(address, (int, long)):
+        if isinstance(address, int):
             self._ip = address
             if address < 0 or address > self._ALL_ONES:
                 raise AddressValueError(address)
@@ -1285,7 +1285,7 @@ class IPv4Network(_BaseV4, _BaseNet):
         _BaseV4.__init__(self, address)
 
         # Efficient constructor from integer.
-        if isinstance(address, (int, long)):
+        if isinstance(address, int):
             self._ip = address
             self.ip = IPv4Address(self._ip)
             self._prefixlen = self._max_prefixlen
@@ -1445,7 +1445,7 @@ class _BaseV6(object):
             ipv4_string = fields.pop()
             ipv4_int = IPv4Network(ipv4_string)._ip
             octets = []
-            for _ in xrange(2):
+            for _ in range(2):
                 octets.append(hex(ipv4_int & 0xFFFF).lstrip('0x').rstrip('L'))
                 ipv4_int >>= 16
             fields.extend(reversed(octets))
@@ -1557,7 +1557,7 @@ class _BaseV6(object):
                 sep = len(hextet[0].split(':')) + len(hextet[1].split(':'))
                 new_ip = hextet[0].split(':')
 
-                for _ in xrange(8 - sep):
+                for _ in range(8 - sep):
                     new_ip.append('0000')
                 new_ip += hextet[1].split(':')
 
@@ -1646,7 +1646,7 @@ class _BaseV6(object):
         """
         if ip_str.count('::') == 1:
             return True
-        if filter(lambda x: len(x) < 4, ip_str.split(':')):
+        if [x for x in ip_str.split(':') if len(x) < 4]:
             return True
         return False
 
@@ -1829,7 +1829,7 @@ class IPv6Address(_BaseV6, _BaseIP):
         _BaseV6.__init__(self, address)
 
         # Efficient constructor from integer.
-        if isinstance(address, (int, long)):
+        if isinstance(address, int):
             self._ip = address
             if address < 0 or address > self._ALL_ONES:
                 raise AddressValueError(address)
@@ -1909,7 +1909,7 @@ class IPv6Network(_BaseV6, _BaseNet):
         _BaseV6.__init__(self, address)
 
         # Efficient constructor from integer.
-        if isinstance(address, (int, long)):
+        if isinstance(address, int):
             self._ip = address
             self.ip = IPv6Address(self._ip)
             self._prefixlen = self._max_prefixlen

@@ -44,7 +44,7 @@ class Mappings(object):
                 yield (o, self[o])
 
         def items(self):
-            return list(self.iteritems())
+            return list(self.items())
 
         def keys(self):
             return list(self)
@@ -63,7 +63,7 @@ class Mappings(object):
     _grp_sig_hash = set(_grp_sig)
 
     if six.PY2:
-        _opt_types = {str: 'string', int: 'int', long: 'long',
+        _opt_types = {str: 'string', int: 'int', int: 'long',
                       float: 'float', complex: 'complex',
                       NO_DEFAULT: 'string'}
     elif six.PY3:
@@ -113,7 +113,7 @@ class Mappings(object):
             try:
                 kwds[None]
             except TypeError:
-                kwds= dict(zip(getattr(self, sig), kwds))
+                kwds= dict(list(zip(getattr(self, sig), kwds)))
             except KeyError:
                 pass
         if set(kwds.keys()) != getattr(self, sig_hash):
@@ -220,7 +220,7 @@ class Mappings(object):
             yield (o, self[o])
 
     def items(self):
-        return list(self.iteritems())
+        return list(self.items())
 
     def keys(self):
         return list(self)
@@ -238,7 +238,7 @@ class Mappings(object):
 
     def bind(self, parser):
         for x in (self._groups, self):
-            for k, o in x.iteritems():
+            for k, o in x.items():
                 for key, pub, pos, alt in [('names', True, True, None),
                                            ('nonames', False, False, None),
                                            ('aliases', False, True, o['names']),

@@ -45,7 +45,7 @@ class MenuItem(UIObject, InnerHTML, InnerText):
         self.parentMenu = None
         self.subMenu = None
 
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
         else:
             element = DOM.createTD()
@@ -62,7 +62,7 @@ class MenuItem(UIObject, InnerHTML, InnerText):
         if subMenu:
             kwargs['SubMenu'] = subMenu
 
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']="gwt-MenuItem"
+        if 'StyleName' not in kwargs: kwargs['StyleName']="gwt-MenuItem"
 
         UIObject.__init__(self, **kwargs)
         self.sinkEvents(Event.ONCLICK | Event.ONMOUSEOVER | Event.ONMOUSEOUT)

@@ -22,7 +22,7 @@ class ComboBoxEntryExample:
         return
 
     def changed_cb(self, entry):
-        print 'I like', entry.get_text(), 'pie'
+        print('I like', entry.get_text(), 'pie')
         return
 
 def main():

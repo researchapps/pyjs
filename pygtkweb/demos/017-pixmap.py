@@ -38,7 +38,7 @@ class PixmapExample:
 
     # is invoked when the button is clicked.  It just prints a message.
     def button_clicked(self, widget, data=None):
-        print "button clicked"
+        print("button clicked")
 
     def __init__(self):
         # create the main window, and attach delete_event signal to terminating

@@ -9,7 +9,7 @@ class Item(Model):
     updated_date = DateField(auto_now=True)
 
     def __unicode__(self):
-        return unicode(self.description)
+        return str(self.description)
 
 class FlagType(Model):
     name = CharField(max_length=50)

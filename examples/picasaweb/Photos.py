@@ -100,7 +100,7 @@ class Photos(Composite):
             hp = HorizontalPanel()
             hp.add(self.up)
             hp.add(self.prev)
-            hp.add(self.next)
+            hp.add(self.__next__)
             hp.setSpacing(8)
             self.vp.add(hp)
             self.vp.add(self.fullsize)
@@ -123,7 +123,7 @@ class Photos(Composite):
                     self.vp.add(self.grid)
                     self.fillGrid(self.photos, "photos")
                 else:
-                    if sender == self.next:
+                    if sender == self.__next__:
                         if self.pos >= len(self.photos):
                             return
                         self.pos +=1
@@ -177,8 +177,8 @@ class Photos(Composite):
         self.photos = []
         for ph in photo_list:
             aphoto = {}
-            aphoto['thumb'] = HTML('<img src="' + ph[u"media$group"][u"media$thumbnail"][1][u"url"] + '"/>')
-            aphoto['full'] = ph[u"media$group"][u"media$content"][0][u"url"]
+            aphoto['thumb'] = HTML('<img src="' + ph["media$group"]["media$thumbnail"][1]["url"] + '"/>')
+            aphoto['full'] = ph["media$group"]["media$content"][0]["url"]
             self.photos.append(aphoto)
 
     def parseAlbums(self, items):
@@ -186,10 +186,10 @@ class Photos(Composite):
         self.albums = []
         for al in album_list:
             analbum = {}
-            analbum['title'] = HTML(al[u"title"][u"$t"])
-            analbum['thumb'] = HTML('<img src="' + al[u"media$group"][u"media$thumbnail"][0][u"url"] + '"/>')
-            url = al[u"id"][u"$t"]
-            analbum['id'] = url.split(u'albumid/')[1].split(u'?alt')[0]
+            analbum['title'] = HTML(al["title"]["$t"])
+            analbum['thumb'] = HTML('<img src="' + al["media$group"]["media$thumbnail"][0]["url"] + '"/>')
+            url = al["id"]["$t"]
+            analbum['id'] = url.split('albumid/')[1].split('?alt')[0]
             self.albums.append(analbum)
 
 

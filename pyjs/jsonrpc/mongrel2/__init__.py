@@ -26,9 +26,9 @@ class Mongrel2JSONRPCService(JSONRPCServiceBase):
         JSONRPCServiceBase.__init__(self)
 
     def __call__(self):
-        print "call"
+        print("call")
         req = self.__conn.recv()
-        print req
+        print(req)
         response = self.process(req.body)
         self.__conn.reply_http(req, response)
 

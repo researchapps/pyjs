@@ -11,7 +11,7 @@ class HelloWorld2:
     # Our new improved callback.  The data passed to this method
     # is printed to stdout.
     def callback(self, widget, data):
-        print "Hello again - %s was pressed" % data
+        print("Hello again - %s was pressed" % data)
 
     # another callback
     def delete_event(self, widget, event, data=None):

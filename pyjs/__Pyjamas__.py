@@ -33,7 +33,7 @@ class JS(__Pyjamas__):
                 return name[1:]
             jsname = self.translator.get_jsname(name)
             return jsname
-        for k, v in translator.const_str.iteritems():
+        for k, v in translator.const_str.items():
             if v == code:
                 # Remove the string constant
                 translator.const_str[k] = None

@@ -1,5 +1,5 @@
-from UnitTest import UnitTest
-import RunTests
+from .UnitTest import UnitTest
+from . import RunTests
 import os
 import sys
 

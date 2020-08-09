@@ -19643,7 +19643,7 @@ def __dynamic_load__(importName):
     global __nondynamic_modules__
     setCompilerOptions("noDebug")
     module = JS("""$pyjs.loaded_modules[@{{importName}}]""")
-    if sys is None or dynamic is None or __nondynamic_modules__.has_key(importName):
+    if sys is None or dynamic is None or importName in __nondynamic_modules__:
         return module
     if JS("""typeof @{{module}} == "undefined" """):
         try:
@@ -19689,40 +19689,40 @@ class KeyboardInterrupt(BaseException):
 class Exception(BaseException):
     pass
 
-class StandardError(Exception):
+class Exception(Exception):
     pass
 
-class AssertionError(StandardError):
+class AssertionError(Exception):
     pass
 
 class GeneratorExit(Exception):
     pass
 
-class TypeError(StandardError):
+class TypeError(Exception):
     pass
 
-class AttributeError(StandardError):
+class AttributeError(Exception):
     pass
 
-class NameError(StandardError):
+class NameError(Exception):
     pass
 
-class ValueError(StandardError):
+class ValueError(Exception):
     pass
 
-class ImportError(StandardError):
+class ImportError(Exception):
     pass
 
-class LookupError(StandardError):
+class LookupError(Exception):
     pass
 
-class RuntimeError(StandardError):
+class RuntimeError(Exception):
     pass
 
-class ArithmeticError(StandardError):
+class ArithmeticError(Exception):
     pass
 
-class SystemError(StandardError):
+class SystemError(Exception):
     pass
 
 class KeyError(LookupError):
@@ -20407,7 +20407,7 @@ def update(self, *args, **kwargs):
             raise TypeError("update expected at most 1 arguments, got %d" % len(args))
         d = args[0]
         if hasattr(d, "iteritems"):
-            for k,v in d.iteritems():
+            for k,v in d.items():
                 self[k] = v
         elif hasattr(d, "keys"):
             for k in d:
@@ -20416,7 +20416,7 @@ def update(self, *args, **kwargs):
             for k, v in d:
                 self[k] = v
     if kwargs:
-        for k,v in kwargs.iteritems():
+        for k,v in kwargs.items():
             self[k] = v
 dict.update = update
 del update
@@ -20939,17 +20939,17 @@ class property(object):
         if obj is None:
             return self
         if self.fget is None:
-            raise AttributeError, "unreadable attribute"
+            raise AttributeError("unreadable attribute")
         return self.fget(obj)
 
     def __set__(self, obj, value):
         if self.fset is None:
-            raise AttributeError, "can't set attribute"
+            raise AttributeError("can't set attribute")
         self.fset(obj, value)
 
     def __delete__(self, obj):
         if self.fdel is None:
-            raise AttributeError, "can't delete attribute"
+            raise AttributeError("can't delete attribute")
         self.fdel(obj)
 
     def setter(self, fset):
@@ -20970,8 +20970,8 @@ class enumerate(object):
     def __iter__(self):
         return self
 
-    def next(self):
-        v = self.iter.next()
+    def __next__(self):
+        v = next(self.iter)
         if v is StopIter:
             return v
         v = (self.index, v)
@@ -21563,7 +21563,7 @@ def reduce(func, iterable, initializer=JS("null")):
     try:
         iterable = iter(iterable)
     except:
-        raise TypeError, "reduce() arg 2 must support iteration"
+        raise TypeError("reduce() arg 2 must support iteration")
     empty = True
     for value in iterable:
         empty = False
@@ -21573,7 +21573,7 @@ def reduce(func, iterable, initializer=JS("null")):
             initializer = func(initializer, value)
     if empty:
         if JS("""@{{initializer}} === null || typeof @{{initializer}} == "undefined" """):
-            raise TypeError, "reduce() of empty sequence with no initial value"
+            raise TypeError("reduce() of empty sequence with no initial value")
         return initializer
     return initializer
 
@@ -21589,7 +21589,7 @@ def zip(*iterables):
             t = []
             i = 0
             while i < n:
-                t.append(iterables[i].next())
+                t.append(next(iterables[i]))
                 i += 1
             lst.append(tuple(t))
     except StopIteration:
@@ -22251,7 +22251,7 @@ _handle_exception = JS("""function(err) {
 init()
 
 a = {'a': 1}
-for b in a.iteritems():
+for b in a.items():
     pass
 
 class Foo(object):

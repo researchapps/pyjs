@@ -110,7 +110,7 @@ ed.load();
 tinymce.add(ed);
 """ % self.editor_id
 
-        print new_script.innerHTML
+        print(new_script.innerHTML)
 
         DOM.setElemAttribute(new_script, "type", "text/javascript")
         doc().body.appendChild(new_script)
@@ -146,7 +146,7 @@ ed.init();
 ed.render();
 """ % self.editor_id
 
-        print new_script.innerHTML
+        print(new_script.innerHTML)
 
         DOM.setElemAttribute(new_script, "type","text/javascript")
         doc().body.appendChild(new_script)
@@ -174,7 +174,7 @@ ed.remove();
     def onTimer(self, timer):
 
         iframe = doc().getElementById("__edit_%s" % self.editor_id)
-        print dir(iframe)
+        print(dir(iframe))
         txt = iframe.innerText
         if not txt:
             return

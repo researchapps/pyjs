@@ -45,10 +45,10 @@ def main():
     if options.output != '-':
         options.output = os.path.abspath(options.output)
 
-    file_names = map(os.path.abspath, args)
+    file_names = list(map(os.path.abspath, args))
     for fn in file_names:
         if not os.path.isfile(fn):
-            print >> sys.stderr, "Input file not found %s" % fn
+            print("Input file not found %s" % fn, file=sys.stderr)
             sys.exit(1)
 
     imports, js = translate(file_names, options.output,
@@ -57,12 +57,12 @@ def main():
     if options.list_imports:
         if imports:
             print ('/*')
-            print ('PYJS_DEPS: %s' % imports)
+            print(('PYJS_DEPS: %s' % imports))
             print ('*/')
 
         if js:
             print ('/*')
-            print ('PYJS_JS: %s' % repr(js))
+            print(('PYJS_JS: %s' % repr(js)))
             print ('*/')
 
 if __name__ == "__main__":

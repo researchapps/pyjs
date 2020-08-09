@@ -25,7 +25,7 @@ from pyjamas.ui.FlexCellFormatter import FlexCellFormatter
 
 class FlexTable(HTMLTable):
     def __init__(self, **kwargs):
-        if not kwargs.has_key('CellFormatter'):
+        if 'CellFormatter' not in kwargs:
             kwargs['CellFormatter'] = FlexCellFormatter(self)
         HTMLTable.__init__(self, **kwargs)
 

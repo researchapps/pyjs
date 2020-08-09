@@ -109,7 +109,7 @@ def sanitise(copyright):
         else:
             res += ' '
     res = res.split(' ')
-    res = filter(lambda x:x, res)
+    res = [x for x in res if x]
     return ' '.join(res)
 
 def find_file_copyright_notices(fname):
@@ -197,15 +197,15 @@ class DebSect:
             cops = find_file_copyright_notices(fname)
             self.listed_copyrights.update(cops)
             for c in cops:
-                if not self.files_by_author.has_key(c):
+                if c not in self.files_by_author:
                     self.files_by_author[c] = set()
                 if fname not in self.files_by_author[c]:
                     self.files_by_author[c].add(fname)
-        print "Pattern", self.file_pattern
+        print("Pattern", self.file_pattern)
         for author in self.copyrights:
-            print "Copyright:", author
+            print("Copyright:", author)
         for author in self.listed_copyrights:
-            print "Listed Copyright:", author
+            print("Listed Copyright:", author)
 
     def remove_files(self, to_remove):
         for fname in to_remove:
@@ -229,13 +229,13 @@ class DebSect:
                 self.not_matches.add(word2)
 
         if self.not_matches:
-            print
-            print"   ** ** ** ** **"
+            print()
+            print("   ** ** ** ** **")
             for m in self.not_matches:
-                print "   ** not matches:", m
+                print("   ** not matches:", m)
                 for fname in self.files_by_author[m]:
-                    print"   ** ** ** ** **:", fname
-        print
+                    print("   ** ** ** ** **:", fname)
+        print()
 
 all_files = get_dir("*")
 copyright_sects = []
@@ -265,7 +265,7 @@ for l in dc.readlines():
         current_copyrights = set()
         current_licenses = set()
     l = l.split(" ")
-    l = map(strip, l)
+    l = list(map(strip, l))
     listed_files = []
     for pattern in l[1:]:
         if pattern[-1] == ',':
@@ -291,7 +291,7 @@ for i in range(1, len(copyright_sects)):
 for dc in copyright_sects:
     dc.read_files_for_copyrights()
     dc.check_copyright_matches()
-    print
+    print()
 
 #def check_in(l1, l2):
 #    res = []

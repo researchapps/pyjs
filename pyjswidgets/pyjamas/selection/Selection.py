@@ -16,8 +16,8 @@
 
 from __pyjamas__ import wnd
 
-import SelectionImpl
-from Range import Range
+from . import SelectionImpl
+from .Range import Range
 
 START_NODE	= "startContainer"
 START_OFFSET	= "startOffset"

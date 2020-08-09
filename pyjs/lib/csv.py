@@ -85,8 +85,8 @@ class CSVReader(object):
         self.__iter = self.__values.__iter__()
         return self
 
-    def next(self):
-        v = self.__iter.next()
+    def __next__(self):
+        v = next(self.__iter)
         self.line_num = v[0]
         return v[1:]
 

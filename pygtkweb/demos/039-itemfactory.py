@@ -9,7 +9,7 @@ import gtk
 class ItemFactoryExample:
     # Obligatory basic callback
     def print_hello(self, w, data):
-        print "Hello, World!"
+        print("Hello, World!")
 
     # This is the ItemFactoryEntry structure used to generate new menus.
     # Item 1: The menu path. The letter after the underscore indicates an

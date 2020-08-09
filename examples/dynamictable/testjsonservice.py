@@ -6,8 +6,8 @@ s = jsonrpclib.ServerProxy("http://127.0.0.1/examples/dynamictable/output/School
                            verbose=0)
 try:
     reply = s.getPeople(0, 10)
-except jsonrpclib.ProtocolError, e:
-    print e, e.errcode, e.errmsg, e.message, e.args, e.response
+except jsonrpclib.ProtocolError as e:
+    print(e, e.errcode, e.errmsg, e.message, e.args, e.response)
 
 pprint(reply['result'])
 

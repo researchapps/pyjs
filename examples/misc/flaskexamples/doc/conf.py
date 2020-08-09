@@ -36,8 +36,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Pyjamas and Flask Examples'
-copyright = u'2011, Jeffrey R. Van Voorst'
+project = 'Pyjamas and Flask Examples'
+copyright = '2011, Jeffrey R. Van Voorst'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -207,8 +207,8 @@ html_static_path = ['_static']
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'pyjamas_flask_example', u'Pyjamas and Flask Examples',
-     [u'Jeffrey R. Van Voorst'], 1)
+    ('index', 'pyjamas_flask_example', 'Pyjamas and Flask Examples',
+     ['Jeffrey R. Van Voorst'], 1)
 ]
 
 

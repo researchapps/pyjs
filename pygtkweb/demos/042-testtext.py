@@ -218,8 +218,7 @@ class Buffer(gtk.TextBuffer):
 
         for tag in self.color_tags:
             if enabled:
-                color = apply(TestText.colormap.alloc_color,
-                              hue_to_color(hue))
+                color = TestText.colormap.alloc_color(*hue_to_color(hue))
                 tag.set_property("foreground_gdk", color)
             else:
                 tag.set_property("foreground_set", False)
@@ -229,8 +228,7 @@ class Buffer(gtk.TextBuffer):
         hue = self.start_hue
 
         for tag in self.color_tags:
-            color = apply(TestText.colormap.alloc_color,
-                          hue_to_color (hue))
+            color = TestText.colormap.alloc_color(*hue_to_color (hue))
             tag.set_property("foreground_gdk", color)
 
             hue += 1.0 / Buffer.N_COLORS
@@ -245,18 +243,18 @@ class Buffer(gtk.TextBuffer):
         char_index = iter.get_offset()
         tag_name = tag.get_property("name")
         if event.type == gtk.gdk.MOTION_NOTIFY:
-            print "Motion event at char %d tag `%s'\n" % (char_index, tag_name)
+            print("Motion event at char %d tag `%s'\n" % (char_index, tag_name))
         elif event.type == gtk.gdk.BUTTON_PRESS:
-            print "Button press at char %d tag `%s'\n" % (char_index, tag_name)
+            print("Button press at char %d tag `%s'\n" % (char_index, tag_name))
         elif event.type == gtk.gdk._2BUTTON_PRESS:
-            print "Double click at char %d tag `%s'\n" % (char_index, tag_name)
+            print("Double click at char %d tag `%s'\n" % (char_index, tag_name))
         elif event.type == gtk.gdk._3BUTTON_PRESS:
-            print "Triple click at char %d tag `%s'\n" % (char_index, tag_name)
+            print("Triple click at char %d tag `%s'\n" % (char_index, tag_name))
         elif event.type == gtk.gdk.BUTTON_RELEASE:
-            print "Button release at char %d tag `%s'\n" % (char_index, tag_name)
+            print("Button release at char %d tag `%s'\n" % (char_index, tag_name))
         elif (event.type == gtk.gdk.KEY_PRESS or
               event.type == gtk.gdk.KEY_RELEASE):
-            print "Key event at char %d tag `%s'\n" % (char_index, tag_name)
+            print("Key event at char %d tag `%s'\n" % (char_index, tag_name))
 
         return False
 
@@ -366,8 +364,8 @@ class Buffer(gtk.TextBuffer):
                                     "Paragraph with negative indentation. blah blah blah blah blah. The quick brown fox jumped over the lazy dog.\n",
                                     self.get_tag_table().lookup("negative_indent"))
 
-        print "%d lines %d chars\n" % (self.get_line_count(),
-                                       self.get_char_count())
+        print("%d lines %d chars\n" % (self.get_line_count(),
+                                       self.get_char_count()))
 
         # Move cursor to start
         iter = self.get_iter_at_offset(0)
@@ -377,7 +375,8 @@ class Buffer(gtk.TextBuffer):
     def fill_file_buffer(self, filename):
         try:
             f = open(filename, "r")
-        except IOError, (errnum, errmsg):
+        except IOError as xxx_todo_changeme1:
+            (errnum, errmsg) = xxx_todo_changeme1.args
             err = "Cannot open file '%s': %s" % (filename, errmsg)
             view = TestText.active_window_stack.get()
             dialog = gtk.MessageDialog(view, gtk.DIALOG_MODAL,
@@ -403,7 +402,8 @@ class Buffer(gtk.TextBuffer):
         bak_filename = self.filename + "~"
         try:
             os.rename(self.filename, bak_filename)
-        except (OSError, IOError), (errnum, errmsg):
+        except (OSError, IOError) as xxx_todo_changeme2:
+            (errnum, errmsg) = xxx_todo_changeme2.args
             if errnum != errno.ENOENT:
                 err = "Cannot back up '%s' to '%s': %s" % (self.filename,
                                                            bak_filename,
@@ -425,7 +425,8 @@ class Buffer(gtk.TextBuffer):
             file.close()
             result = True
             self.set_modified(False)
-        except IOError, (errnum, errmsg):
+        except IOError as xxx_todo_changeme3:
+            (errnum, errmsg) = xxx_todo_changeme3.args
             err = "Error writing to '%s': %s" % (self.filename, errmsg)
             view = TestText.active_window_stack.get()
             dialog = gtk.MessageDialog(view, gtk.DIALOG_MODAL,
@@ -437,7 +438,8 @@ class Buffer(gtk.TextBuffer):
         if not result and have_backup:
             try:
                 os.rename(bak_filename, self.filename)
-            except OSError, (errnum, errmsg):
+            except OSError as xxx_todo_changeme:
+                (errnum, errmsg) = xxx_todo_changeme.args
                 err = "Can't restore backup file '%s' to '%s': %s\nBackup left as '%s'" % (
                     self.filename, bak_filename, errmsg, bak_filename)
                 view = TestText.active_window_stack.get()
@@ -806,7 +808,7 @@ class View(gtk.Window):
         start, end = dialog.buffer.get_bounds()
         search_string = start.get_text(end)
 
-        print "Searching for `%s'\n" % search_string
+        print("Searching for `%s'\n" % search_string)
 
         buffer = self.text_view.get_buffer()
         if response_id == RESPONSE_FORWARD:

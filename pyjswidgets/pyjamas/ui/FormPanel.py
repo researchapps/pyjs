@@ -54,7 +54,7 @@ class FormPanel(SimplePanel):
         if hasattr(target, "getName"):
             target = target.getName()
 
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
         else:
             element = DOM.createForm()
@@ -115,13 +115,13 @@ class FormPanel(SimplePanel):
             return None
 
     def _onload(self, form, event, something):
-        print form, event, something
+        print(form, event, something)
         if not self.__formAction:
             return
         self._listener.onFrameLoad()
 
     def _onsubmit(self, form, event, something):
-        print form, event, something
+        print(form, event, something)
         try:
             event = get_main_frame().gobject_wrap(event) # webkit HACK!
             form = get_main_frame().gobject_wrap(form) # webkit HACK!

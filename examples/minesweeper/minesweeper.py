@@ -277,9 +277,9 @@ class CustomGrid(Grid):
         self.game = game
 
         self.cells = []
-        for i in xrange(row):
+        for i in range(row):
             self.cells.append([])
-            for j in xrange(column):
+            for j in range(column):
                 self.cells[-1].append(Cell(i, j, self))
 
     def getCell(self, row, column):
@@ -438,8 +438,8 @@ class Game(VerticalPanel):
         self.face.setStyleName('facesmile')
 
     def get_all_cells(self):
-        for i in xrange(self.row):
-            for j in xrange(self.column):
+        for i in range(self.row):
+            for j in range(self.column):
                 one = self.grid.getCell(i, j)
                 yield one
 
@@ -447,9 +447,9 @@ class Game(VerticalPanel):
         x = cell.x
         y = cell.y
         row, column = self.row, self.column
-        for i in xrange(x-1, x+2):
+        for i in range(x-1, x+2):
             if 0 <= i < row:
-                for j in xrange(y-1, y+2):
+                for j in range(y-1, y+2):
                     if 0 <= j < column:
                         if (i,j) != (x, y):
                             one = self.grid.getCell(i, j)
@@ -491,7 +491,7 @@ class Game(VerticalPanel):
         # pyjamas doesn't support random.sample but random.choice
         seq = list(population)
         s = []
-        for i in xrange(k):
+        for i in range(k):
             pick = random.choice(seq)
             seq.remove(pick)
             s.append(pick)
@@ -499,7 +499,7 @@ class Game(VerticalPanel):
 
     def generate_bombs(self):
         # generate 1 extra mine so that if user's first click is bomb, move that
-        bombs = self.sample(xrange(self.squares), self.no_of_bomb+1)
+        bombs = self.sample(range(self.squares), self.no_of_bomb+1)
         row, column = self.row, self.column
         for i,bomb in enumerate(bombs):
             x = bomb // column

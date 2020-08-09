@@ -22,7 +22,7 @@ else:
 
 from pyjs import util
 from pyjs import options
-from cStringIO import StringIO
+from io import StringIO
 from optparse import OptionParser, OptionGroup
 import pyjs
 import re
@@ -180,7 +180,7 @@ class BrowserLinker(linker.BaseLinker):
         keys = {}
         for k in lst:
             keys[k] = 1
-        return keys.keys()
+        return list(keys.keys())
 
     def _generate_app_file(self, platform):
         # TODO: cache busting
@@ -415,16 +415,16 @@ def is_modified(path):
         return False
     else:
         MODIFIED_TIME[path] = current_mtime
-        print('mtime changed for %s.' % path)
+        print(('mtime changed for %s.' % path))
         return True
 
 def serve(path):
-    print("\nMonitoring file modifications in %s ..." % \
-           os.path.abspath(os.curdir))
+    print(("\nMonitoring file modifications in %s ..." % \
+           os.path.abspath(os.curdir)))
 
 def build(top_module, pyjs, options, app_platforms,
           runtime_options, args):
-    print("Building: %s\nPYJSPATH: %s" % (top_module, pformat(pyjs.path)))
+    print(("Building: %s\nPYJSPATH: %s" % (top_module, pformat(pyjs.path))))
 
     translator_arguments= translator.get_compile_options(options)
 
@@ -448,16 +448,16 @@ def build(top_module, pyjs, options, app_platforms,
     l()
 
     if not options.list_imports:
-        print ("Built to :", os.path.abspath(options.output))
+        print(("Built to :", os.path.abspath(options.output)))
         return
     print("Dependencies")
-    for f, deps in l.dependencies.items():
-        print("%s\n%s" % (f, '\n'.join(map(lambda x: "\t%s" % x, deps))))
-    print
+    for f, deps in list(l.dependencies.items()):
+        print(("%s\n%s" % (f, '\n'.join(["\t%s" % x for x in deps]))))
+    print()
     print("Visited Modules")
-    for plat, deps in l.visited_modules.items():
-        print("%s\n%s" % (plat, '\n'.join(map(lambda x: "\t%s" % x, deps))))
-    print
+    for plat, deps in list(l.visited_modules.items()):
+        print(("%s\n%s" % (plat, '\n'.join(["\t%s" % x for x in deps]))))
+    print()
 
 
 def build_script():
@@ -551,7 +551,7 @@ MODULE(s) will also translate, if available; they MUST be importable by the tool
                         dest_dir = os.path.dirname(dest_path)
                         if not os.path.exists(dest_dir):
                             os.makedirs(dest_dir)
-                        print('Copying %s to %s' % (file_path, dest_path))
+                        print(('Copying %s to %s' % (file_path, dest_path)))
                         shutil.copy(file_path, dest_path)
             else:
                 for filename in files:

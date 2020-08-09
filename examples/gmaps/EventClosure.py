@@ -70,7 +70,7 @@ class EventClosure(SimplePanel):
         southWest = LatLng(-31.203405, 125.244141)
         northEast = LatLng(-25.363882, 131.044922)
         bounds = LatLngBounds(southWest, northEast)
-        print "bounds", bounds
+        print("bounds", bounds)
 
         # this is not working well!! it opens the entire world...
         self.map.fitBounds(bounds)

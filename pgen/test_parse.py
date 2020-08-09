@@ -5,12 +5,12 @@ import traceback
 test_pyjs = True
 test_std = True
 
-from astpprint import getAststr, printAst
+from .astpprint import getAststr, printAst
 
 if test_pyjs:
-    from lib2to3 import compiler as test_compiler
-    from lib2to3.compiler.transformer import Transformer
-    from lib2to3.compiler import parser as test_parser
+    from .lib2to3 import compiler as test_compiler
+    from .lib2to3.compiler.transformer import Transformer
+    from .lib2to3.compiler import parser as test_parser
 
 #g = Grammar()
 
@@ -45,10 +45,10 @@ def compare_compilers(fname):
         return
 
     if ys == ys1:
-        print "passed"
+        print("passed")
         return
 
-    print "failed."
+    print("failed.")
 
     if test_pyjs:
         f = open(fname_out+".ast", "w")
@@ -62,11 +62,11 @@ def compare_compilers(fname):
 
 import sys
 for arg in sys.argv[1:]:
-    print "test file", arg
+    print("test file", arg)
     try:
         compare_compilers(arg)
     except:
-        print >> sys.stderr, "exception in compile of ", arg
+        print("exception in compile of ", arg, file=sys.stderr)
         traceback.print_exc()
         sys.stderr.flush()
 

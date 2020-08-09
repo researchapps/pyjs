@@ -46,7 +46,7 @@ class LabelTimer(Timer, Label):
         Label.setText(self, txt)
 
     def onRemoteResponse(self, response, request_info):
-        if(isinstance(response, (dict,))):
+        if(isinstance(response, dict)):
             if("echo" in response):
                 msg = "Celery echo: %s\nElapsed Time: %d"
                 self.setText(msg % (response["echo"], self.wait_cnt))
@@ -187,7 +187,7 @@ after newline
             pass
 
     def onRemoteResponse(self, response, request_info):
-        if(isinstance(response, (dict,))):
+        if(isinstance(response, dict)):
             self.status.start_timer(response["task_id"])
         else:
             self.status.setText(response)

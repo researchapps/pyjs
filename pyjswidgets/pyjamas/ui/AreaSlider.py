@@ -25,10 +25,10 @@ class AreaSlider(DoubleControl):
                  start_value=None, step=None,
                  **kwargs):
 
-        if not kwargs.has_key("StyleName"):
+        if "StyleName" not in kwargs:
             kwargs['StyleName'] = "gwt-VerticalSlider"
 
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             # XXX FIXME: Focus.createFocusable is here for a reason...
             element = kwargs.pop('Element')
         else:

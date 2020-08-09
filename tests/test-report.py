@@ -27,7 +27,7 @@ class Coverage:
 
     def output(self, *files):
 
-        print """
+        print("""
         <html>
         <head>
         <title>Coverage for %s</title>
@@ -69,17 +69,17 @@ class Coverage:
         </style>
         </head>
         <body>
-        """ % self.testset_name
+        """ % self.testset_name)
 
-        print """
+        print("""
             <h1>Coverage for %s</h1>
-        """ % self.testset_name
+        """ % self.testset_name)
 
         for filename in files:
-            print """
+            print("""
             <h2>%s</h2>
             <table>
-            """ % filename
+            """ % filename)
 
             code = open(filename).readlines()
             for lineno, line in enumerate(code):
@@ -92,19 +92,19 @@ class Coverage:
                 else:
                     klass = "hit"
                 klass2 = klass + "-line"
-                print """<tr><td class="lineno">%s</td><td class="%s">%s</td><td class="%s">%s</td></tr>""" % (lineno + 1, klass, count, klass2, line.strip("\n"))
+                print("""<tr><td class="lineno">%s</td><td class="%s">%s</td><td class="%s">%s</td></tr>""" % (lineno + 1, klass, count, klass2, line.strip("\n")))
 
-            print """
+            print("""
             </table>
-            """
+            """)
 
-        print """
+        print("""
         </body>
         </html>
-        """
+        """)
 
 
-print """
+print("""
 <html>
 <head>
 <style>
@@ -119,19 +119,19 @@ print """
 </style>
 </head>
 <body>
-"""
+""")
 
 def test(filename, module):
-    print "<h1>" + filename + "</h1>"
+    print("<h1>" + filename + "</h1>")
     try:
         output = pyjs.translate(filename + ".py", module)
         desired_output = open(filename + ".js").read()
         if output == desired_output:
-            print "<p>pass</p>"
+            print("<p>pass</p>")
         else:
-            print differ.make_table(output.split("\n"), desired_output.split("\n"), context=True)
-    except Exception, e:
-        print "\texception", e
+            print(differ.make_table(output.split("\n"), desired_output.split("\n"), context=True))
+    except Exception as e:
+        print("\texception", e)
 
 
 import sys
@@ -185,7 +185,7 @@ test("test044", None)
 test("test045", None)
 test("test046", None)
 
-print """
+print("""
 </body>
 </html>
-"""
+""")

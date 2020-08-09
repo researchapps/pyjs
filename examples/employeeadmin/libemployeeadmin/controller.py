@@ -6,8 +6,8 @@ Addapted for pyjamas: Kees Bos
 """
 
 from puremvc.patterns.command import SimpleCommand
-import model, view
-from ApplicationConstants import Command, Notification
+from . import model, view
+from .ApplicationConstants import Command, Notification
 
 class StartupCommand(SimpleCommand):
     def execute(self,note):

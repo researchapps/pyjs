@@ -17,7 +17,7 @@ class ComboBoxWrapExample:
         combobox.set_wrap_width(5)
         for n in range(10):
             liststore.append(['Item %d'%n, n%2+1, n%2+1])
-            print liststore[n][1], liststore[n][2]
+            print(liststore[n][1], liststore[n][2])
         combobox.set_model(liststore)
         combobox.set_row_span_column(1)
         combobox.set_column_span_column(2)
@@ -30,7 +30,7 @@ class ComboBoxWrapExample:
         model = combobox.get_model()
         index = combobox.get_active()
         if index > -1:
-            print model[index][0], 'selected'
+            print(model[index][0], 'selected')
         return
 
 def main():

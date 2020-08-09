@@ -61,7 +61,7 @@ class GObject:
     def connect_object(self, detailed_signal, handler, gobject, data=None):
         detailed_signal = detailed_signal.replace('_', '-')
         def inner(widget, data):
-            if handler.func_code.co_argcount == 1:
+            if handler.__code__.co_argcount == 1:
                 handler(widget)
             else:
                 handler(widget, data)
@@ -69,7 +69,7 @@ class GObject:
 
     def emit(self, detailed_signal, *args):
         detailed_signal = detailed_signal.replace('_', '-')
-        if self.callbacks.has_key(detailed_signal):
+        if detailed_signal in self.callbacks:
             for pair in self.callbacks[detailed_signal]:
                 if pair[1]:
                     pair[0](self, *pair[1])
@@ -1303,7 +1303,7 @@ class BuilderETree:
                 if value.isdigit():
                     setattr(obj.props, name, int(value))
                 else:
-                    print "setattr failed", klsname, name, value
+                    print("setattr failed", klsname, name, value)
         for childnode in node.findall("child"):
             childobj = childnode.find("object")
             if childobj is None:
@@ -1311,11 +1311,11 @@ class BuilderETree:
             child = self.create_object_from_xml_node(childobj)
             obj.add_child(Builder(), child, klsname)
             props = find_props(childnode.find("packing"))
-            for prop, value in props.items():
+            for prop, value in list(props.items()):
                 if value.isdigit():
                     value = int(value)
                 obj.child_set_property(child, prop, value)
-            print props
+            print(props)
         return obj
 
     def add_from_file(self, fname):
@@ -1367,7 +1367,7 @@ class Builder:
                 if value and value.isdigit():
                     setattr(obj, name, int(value))
                 else:
-                    print "setattr failed", klsname, name, value
+                    print("setattr failed", klsname, name, value)
         childnodes = node.getElementsByTagName("child")
         log.debug("%s children %d" % (klsname, childnodes.length))
         for i in range(childnodes.length):
@@ -1388,7 +1388,7 @@ class Builder:
                 continue
             packing = packing.item(0)
             props = find_props(packing)
-            for prop, value in props.items():
+            for prop, value in list(props.items()):
                 if value.isdigit():
                     value = int(value)
                 obj.child_set_property(child, prop, value)

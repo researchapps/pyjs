@@ -200,7 +200,7 @@ class LogRecord(object):
         self.lineno = lineno
         self.funcName = func
         self.created = ct
-        self.msecs = (ct - long(ct)) * 1000
+        self.msecs = (ct - int(ct)) * 1000
         self.relativeCreated = (self.created - _startTime) * 1000
         self.thread = None
         self.threadName = None
@@ -350,9 +350,9 @@ class Formatter(object):
             s = str(ei)
             s += sys.trackstackstr()
         else:
-            import cStringIO
+            import io
             import traceback
-            sio = cStringIO.StringIO()
+            sio = io.StringIO()
             traceback.print_exception(ei[0], ei[1], ei[2], None, sio)
             s = sio.getvalue()
             sio.close()
@@ -586,8 +586,8 @@ class Handler(Filterer):
         This version is intended to be implemented by subclasses and so
         raises a NotImplementedError.
         """
-        raise NotImplementedError, 'emit must be implemented '\
-                                    'by Handler subclasses'
+        raise NotImplementedError('emit must be implemented '\
+                                    'by Handler subclasses')
 
     def handle(self, record):
         """
@@ -650,7 +650,7 @@ class Handler(Filterer):
 
 class DefaultStream(object):
     def write(self, msg):
-        print msg
+        print(msg)
 defaultStream = DefaultStream()
 
 class StreamHandler(Handler):
@@ -718,7 +718,7 @@ class PlaceHolder(object):
         Add the specified logger as a child of this placeholder.
         """
         #if alogger not in self.loggers:
-        if not self.loggerMap.has_key(alogger):
+        if alogger not in self.loggerMap:
             #self.loggers.append(alogger)
             self.loggerMap[alogger] = None
 
@@ -735,8 +735,8 @@ def setLoggerClass(klass):
     """
     if klass != Logger:
         if not issubclass(klass, Logger):
-            raise TypeError, "logger not derived from logging.Logger: " + \
-                            klass.__name__
+            raise TypeError("logger not derived from logging.Logger: " + \
+                            klass.__name__)
     global _loggerClass
     _loggerClass = klass
 
@@ -773,7 +773,7 @@ class Manager(object):
         placeholder to now point to the logger.
         """
         rv = None
-        if self.loggerDict.has_key(name):
+        if name in self.loggerDict:
             rv = self.loggerDict[name]
             if isinstance(rv, PlaceHolder):
                 ph = rv
@@ -799,7 +799,7 @@ class Manager(object):
         rv = None
         while (i > 0) and not rv:
             substr = name[:i]
-            if not self.loggerDict.has_key(substr):
+            if substr not in self.loggerDict:
                 self.loggerDict[substr] = PlaceHolder(alogger)
             else:
                 obj = self.loggerDict[substr]
@@ -820,7 +820,7 @@ class Manager(object):
         """
         name = alogger.name
         namelen = len(name)
-        for c in ph.loggerMap.keys():
+        for c in list(ph.loggerMap.keys()):
             #The if means ... if not c.parent.name.startswith(nm)
             #if string.find(c.parent.name, nm) <> 0:
             if c.parent.name[:namelen] != name:
@@ -955,7 +955,7 @@ class Logger(Filterer):
         """
         if not isinstance(level, int):
             if raiseExceptions:
-                raise TypeError, "level must be an integer"
+                raise TypeError("level must be an integer")
             else:
                 return
         if self.manager.disable >= level:

@@ -46,7 +46,7 @@ class FlashPanel(Panel):
             return array
         def toObject(self, dict):
             object = Object()
-            for key,obj in dict.iteritems():
+            for key,obj in dict.items():
                 obj = self.toJS(obj)
                 setattr(object, key, obj)
             return object

@@ -19,7 +19,7 @@ for l in lines:
     txt += l
 
 if not found:
-    print "app does not have 'if __name__ == '__main__'' so giving up"
+    print("app does not have 'if __name__ == '__main__'' so giving up")
     sys.exit(0)
 
 f = open(sys.argv[1] + ".py", "w")

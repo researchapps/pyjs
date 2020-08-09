@@ -30,7 +30,7 @@ To use, simply 'import logging' and log away!
 from __pyjamas__ import debugger
 from pyjamas.HTTPRequest import HTTPRequest
 import logging
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 try:
     import codecs
@@ -63,7 +63,7 @@ class HTTPHandler(logging.Handler):
         logging.Handler.__init__(self)
         method = method.upper()
         if method not in ["GET", "POST"]:
-            raise ValueError, "method must be GET or POST"
+            raise ValueError("method must be GET or POST")
         self.host = host
         self.url = url
         self.method = method
@@ -92,7 +92,7 @@ class HTTPHandler(logging.Handler):
         try:
             host = self.host
             url = self.url
-            data = urllib.urlencode(self.mapLogRecord(record))
+            data = urllib.parse.urlencode(self.mapLogRecord(record))
             if self.method == "GET":
                 if (url.find('?') >= 0):
                     sep = '&'

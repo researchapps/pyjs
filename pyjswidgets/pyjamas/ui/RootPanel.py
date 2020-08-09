@@ -26,7 +26,7 @@ class RootPanelManager(object):
 
     def onWindowClosed(self):
         global rootPanels
-        for panel in rootPanels.itervalues():
+        for panel in rootPanels.values():
             panel.onDetach()
 
     def onWindowClosing(self):
@@ -36,7 +36,7 @@ def get(id=None):
     """
 
     """
-    if rootPanels.has_key(id):
+    if id in rootPanels:
         return rootPanels[id]
 
     element = None

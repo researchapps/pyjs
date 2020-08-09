@@ -50,7 +50,7 @@ class ExceptionTest(UnitTest):
     def testCatchClassException(self):
         try:
             raise MyException()
-        except MyException, e:
+        except MyException as e:
             self.assertEqual(e.__str__(), 'MyException',
                              "Caught exception does not match")
             return
@@ -59,7 +59,7 @@ class ExceptionTest(UnitTest):
     def testCatchMultiClassException(self):
         try:
             raise MyException()
-        except (MyException, MyException2), e:
+        except (MyException, MyException2) as e:
             self.assertEqual(e.__str__(), 'MyException',
                              "Caught exception does not match")
             return
@@ -75,14 +75,14 @@ class ExceptionTest(UnitTest):
             raise "test"
         except "test":
             return
-        except TypeError, e:
+        except TypeError as e:
             self.fail(e)
         self.fail('"test" was not caught or raised')
 
     def testBuiltInException(self):
         try:
             raise LookupError('hoschi')
-        except LookupError, err:
+        except LookupError as err:
             self.assertEqual(err.__class__.__name__, 'LookupError')
             return
         self.fail("LookupError should be caught")
@@ -90,7 +90,7 @@ class ExceptionTest(UnitTest):
     def testZeroDivisionError(self):
         try:
             v = 1/0
-        except ZeroDivisionError, err:
+        except ZeroDivisionError as err:
             self.assertEqual(err.__class__.__name__, 'ZeroDivisionError')
             return
         self.fail("ZeroDivisionError should be caught bug #265")
@@ -111,7 +111,7 @@ class ExceptionTest(UnitTest):
         self.assertEqual(str(e), args[0])
         self.assertEqual(repr(e), "TypeError('test',)")
 
-        e = StandardError(*args)
+        e = Exception(*args)
         self.assertEqual(str(e), args[0])
         self.assertEqual(repr(e), "StandardError('test',)")
 
@@ -158,9 +158,9 @@ class ExceptionTest(UnitTest):
     def testSyntax(self):
         try:
             pass
-        except KeyError, e:
+        except KeyError as e:
             pass
-        except (TypeError, LookupError), e:
+        except (TypeError, LookupError) as e:
             pass
         except:
             pass
@@ -220,7 +220,7 @@ class ExceptionTest(UnitTest):
         try:
             raise
             self.fail("No error raised on 'raise' after 'sys.exc_clear()'")
-        except TypeError, e:
+        except TypeError as e:
             # use message which works for both Python 2.5 and 2.6
             self.assertTrue(e.args[0].startswith('exceptions must be'), e.args[0])
         except:
@@ -228,9 +228,9 @@ class ExceptionTest(UnitTest):
             self.fail('TypeError expected, got %s' % e[0])
 
         try:
-            raise KeyError, 'test'
+            raise KeyError('test')
             self.fail('No error raised')
-        except KeyError, e:
+        except KeyError as e:
             self.assertEqual(e.args[0], 'test')
         except:
             e = sys.exc_info()
@@ -251,7 +251,7 @@ class ExceptionTest(UnitTest):
             try:
                 raise err
                 self.fail("Failed to raise exception")
-            except (KeyError, TypeError), e1:
+            except (KeyError, TypeError) as e1:
                 raised_errors.append(e1)
                 if isinstance(e1, KeyError):
                     self.assertEqual(e1.args[0], 'KeyError')
@@ -259,7 +259,7 @@ class ExceptionTest(UnitTest):
                     self.assertEqual(e1.args[0], 'TypeError')
                 else:
                     self.fail('neither KeyError nor TypeError in except (KeyError, TypeError)')
-            except AttributeError, e2:
+            except AttributeError as e2:
                 raised_errors.append(e2)
                 self.assertEqual(e2.args[0], 'AttributeError')
             except:
@@ -271,16 +271,16 @@ class ExceptionTest(UnitTest):
         try:
             try:
                 raise TypeError('TypeError')
-            except KeyError, e:
+            except KeyError as e:
                 self.fail("Got KeyError")
             self.fail("TypeError should not be ignored")
-        except TypeError, e:
+        except TypeError as e:
             self.assertEqual(e.args[0], 'TypeError')
 
     def testCatchSuperException(self):
         try:
             raise TypeError('test')
-        except Exception, e:
+        except Exception as e:
             self.assertTrue(True)
         except:
             self.fail("Failed to catch exception: bug #254")
@@ -289,15 +289,15 @@ class ExceptionTest(UnitTest):
         try:
             assert True
             self.assertTrue(True)
-        except AssertionError, e:
+        except AssertionError as e:
             self.fail("Got an unexpected assertion error: %r" % e)
         try:
             assert False
             self.fail("AssertionError expected")
-        except AssertionError, e:
+        except AssertionError as e:
             self.assertTrue(True)
         try:
             assert False, 'reason'
             self.fail("AssertionError expected")
-        except AssertionError, e:
+        except AssertionError as e:
             self.assertEqual(e.args[0], 'reason')

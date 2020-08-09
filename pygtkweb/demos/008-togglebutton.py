@@ -10,7 +10,7 @@ class ToggleButton:
     # Our callback.
     # The data passed to this method is printed to stdout
     def callback(self, widget, data=None):
-        print "%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()])
+        print("%s was toggled %s" % (data, ("OFF", "ON")[widget.get_active()]))
 
     # This callback quits the program
     def delete_event(self, widget, event, data=None):

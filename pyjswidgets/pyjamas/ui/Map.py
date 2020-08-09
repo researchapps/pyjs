@@ -26,7 +26,7 @@ class ImageMap(ComplexPanel):
     """
     def __init__(self, Name, **kwargs):
         kwargs['Name'] = Name
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
         else:
             element = DOM.createElement("map")
@@ -49,11 +49,11 @@ class MapArea(Widget, MouseHandler, ClickHandler):
     """ An area inside an imagemap
     """
     def __init__(self, Shape, Coords, **kwargs):
-        if not kwargs.has_key('Href'):
+        if 'Href' not in kwargs:
             kwargs['Href'] = ""
         kwargs['Shape'] = Shape
         kwargs['Coords'] = Coords
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
         else:
             element = DOM.createElement("area")

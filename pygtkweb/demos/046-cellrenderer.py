@@ -43,7 +43,7 @@ class InfoModel:
                                          gobject.TYPE_BOOLEAN )
         # places the global people data into the list
         # we form a simple tree.
-        for item in tasks.keys():
+        for item in list(tasks.keys()):
             parent = self.tree_store.append( None, (item, None) )
             self.tree_store.append( parent, (tasks[item],None) )
         return
@@ -89,7 +89,7 @@ class DisplayModel:
         Called when a text cell is edited.  It puts the new text
         in the model so that it is displayed properly.
         """
-        print "Change '%s' to '%s'" % (model[path][0], new_text)
+        print("Change '%s' to '%s'" % (model[path][0], new_text))
         model[path][0] = new_text
         return
     def col1_toggled_cb( self, cell, path, model ):
@@ -97,7 +97,7 @@ class DisplayModel:
         Sets the toggled state on the toggle button to true or false.
         """
         model[path][1] = not model[path][1]
-        print "Toggle '%s' to: %s" % (model[path][0], model[path][1],)
+        print("Toggle '%s' to: %s" % (model[path][0], model[path][1],))
         return
 
 if __name__ == '__main__':

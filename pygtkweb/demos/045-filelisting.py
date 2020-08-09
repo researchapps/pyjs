@@ -108,7 +108,7 @@ class FileListingCellDataExample:
         else:
             self.dirname = os.path.abspath(dname)
         self.window.set_title(self.dirname)
-        files = [f for f in os.listdir(self.dirname) if f[0] <> '.']
+        files = [f for f in os.listdir(self.dirname) if f[0] != '.']
         files.sort()
         files = ['..'] + files
         listmodel = gtk.ListStore(object)

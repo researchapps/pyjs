@@ -21,7 +21,7 @@ from pyjamas.ui.ComplexPanel import ComplexPanel
 class DeckPanel(ComplexPanel):
     def __init__(self, **kwargs):
         self.visibleWidget = None
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
         else:
             element = DOM.createDiv()

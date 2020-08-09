@@ -27,7 +27,7 @@ class SinkList(Composite):
         return None
 
     def setSinkSelection(self, name):
-        if self.selectedSink <> -1:
+        if self.selectedSink != -1:
             self.vp_list.getWidget(self.selectedSink).removeStyleName("ks-SinkItem-selected")
 
         for i in range(len(self.sinks)):

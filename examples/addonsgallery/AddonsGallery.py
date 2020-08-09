@@ -63,7 +63,7 @@ class AddonsGallery:
         if info == self.curInfo: return
         self.curInfo = info
 
-        if self.curSink <> None:
+        if self.curSink != None:
             self.curSink.onHide()
             self.sinkContainer.remove(self.curSink)
 

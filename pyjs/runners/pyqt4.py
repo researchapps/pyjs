@@ -21,14 +21,14 @@ class _CellsProxy:
     @property
     def length(self):
         l = self._element._js("rows.item(%d).cells.length" % self._idx)
-        print "cells %d length" % self._idx, self._element, l
+        print("cells %d length" % self._idx, self._element, l)
         if l is None:
             return 0
         return l
 
     def item(self, idx):
         i = self._element._js("rows.item(%d).cells.item(%d)" % (self._idx, idx))
-        print "cells %d,%d item" % (self._idx, idx), self._element, i
+        print("cells %d,%d item" % (self._idx, idx), self._element, i)
         return _ElementProxy(i)
 
 
@@ -50,14 +50,14 @@ class _RowElementProxy:
     @property
     def length(self):
         l = self._element._js("rows.length")
-        print "length", self._element, l
+        print("length", self._element, l)
         if l is None:
             return 0
         return l
 
     def item(self, idx):
         i = self._element._js("rows.item(%d)" % idx)
-        print "item", self._element, i
+        print("item", self._element, i)
         return _RowProxy(self._element, idx)
 
 
@@ -165,7 +165,7 @@ class _NewElement(_ElementBase):
 
     def setAttribute(self, name, value):
         if name.lower() == "style":
-            print "Warning: style should be set with setStyleAttribute and not with setAttribute"
+            print("Warning: style should be set with setStyleAttribute and not with setAttribute")
         self._attrs[name.lower()] = value
 
 
@@ -183,11 +183,11 @@ class _NewElement(_ElementBase):
 
     def __str__(self):
         html = "<%s" % self._tag_name
-        for k, v in self._attrs.items():
+        for k, v in list(self._attrs.items()):
             html += ' %s="%s"' % (k, v)
         if self._styles:
             html += ' style="'
-            for ks, vs in self._styles.items():
+            for ks, vs in list(self._styles.items()):
                 html += "%s:%s;" % (ks, vs)
             html += '"'
         html += ">"
@@ -209,14 +209,14 @@ class _ElementProxy(_ElementBase):
 
 
     def __repr__(self):
-        return "<%s>" % unicode(self._element.tagName())
+        return "<%s>" % str(self._element.tagName())
 
 
     def getAttribute(self, name, default=""):
         value = self._element.attribute(name, default)
         if isinstance(value, QWebElement):
             return _ElementProxy(value)
-        return unicode(value)
+        return str(value)
 
 
     def setAttribute(self, name, value):
@@ -241,7 +241,7 @@ class _ElementProxy(_ElementBase):
             self._element.appendInside(child._element)
         else:
             self._element.appendInside(str(child))
-            for name, value in child._styles.items():
+            for name, value in list(child._styles.items()):
                 self.setStyleAttribute(name, value)
 
 
@@ -274,13 +274,13 @@ class _Document(_ElementProxy):
 
 
 def console(*args):
-    print "console:", args
+    print("console:", args)
 
 
 def JS(code):
-    print "js: %r" % code
+    print("js: %r" % code)
     global app
-    print app.getDomDocument().evaluateJavaScript(code)
+    print(app.getDomDocument().evaluateJavaScript(code))
 
 
 
@@ -341,7 +341,7 @@ class QBrowserApp:
         self._listeners.append(listener)
 
     def getUri(self):
-        return unicode(self.current_web_frame().baseUrl().toString())
+        return str(self.current_web_frame().baseUrl().toString())
 
 def setup(filename, width=800, height=600):
     global app
@@ -350,8 +350,8 @@ def setup(filename, width=800, height=600):
 def run():
     global app
     app.app.exec_()
-    print "-"*60
-    print _current_web_frame().toHtml()
+    print("-"*60)
+    print(_current_web_frame().toHtml())
 
 
 
@@ -367,13 +367,13 @@ class Listener(QObject):
 
     @pyqtSignature("QVariant", result="bool")
     def execute(self, event_data):
-        class _Event(unicode):
+        class _Event(str):
             pass
         ev = _Event(self._event)
-        for k, v in event_data.toPyObject().items():
+        for k, v in list(event_data.toPyObject().items()):
             if isinstance(v, QString):
-                v = unicode(v)
-            setattr(ev, unicode(k), v)
+                v = str(v)
+            setattr(ev, str(k), v)
         result = self._callback(self._element, ev)
         if result is None:
             return True

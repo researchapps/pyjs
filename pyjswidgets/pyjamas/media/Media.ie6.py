@@ -2,12 +2,12 @@
 class Media(Widget):
 
     def setSrc(self, src):
-        print "setSrc", src
+        print("setSrc", src)
         obj = self.getElement()
         DOM.setAttribute(obj, "URL", src)
 
     def setControls(self, controls):
-        print "setControls", controls
+        print("setControls", controls)
         self.ctrlparam = DOM.createElement("PARAM")
         DOM.setAttribute(self.ctrlparam, "name", "ShowControls")
         DOM.setBooleanAttribute(self.ctrlparam, "VALUE",
@@ -23,7 +23,7 @@ class Media(Widget):
 #        self.getElement().appendChild(self.statparam)
 
     def setLoop(self, autorewind):
-        print "autorewind", autorewind
+        print("autorewind", autorewind)
         self.loopparam = DOM.createElement("PARAM")
         DOM.setAttribute(self.loopparam, "name", "autorewind")
         DOM.setBooleanAttribute(self.loopparam, "VALUE",
@@ -31,7 +31,7 @@ class Media(Widget):
         self.getElement().appendChild(self.loopparam)
 
     def setAutoplay(self, autostart):
-        print "autoplay", autostart
+        print("autoplay", autostart)
         self.playparam = DOM.createElement("PARAM")
         DOM.setAttribute(self.playparam, "name", "autostart")
         DOM.setBooleanAttribute(self.playparam, "VALUE",

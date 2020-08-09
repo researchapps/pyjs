@@ -15,10 +15,10 @@ class RoundtripLegalSyntaxTestCase(unittest.TestCase):
         t = st1.totuple()
         try:
             st2 = parser.sequence2st(t)
-        except parser.ParserError, why:
+        except parser.ParserError as why:
             self.fail("could not roundtrip %r: %s" % (s, why))
 
-        self.assertEquals(t, st2.totuple(),
+        self.assertEqual(t, st2.totuple(),
                           "could not re-generate syntax tree")
 
     def check_expr(self, s):
@@ -423,14 +423,14 @@ class CompileTestCase(unittest.TestCase):
     def test_compile_expr(self):
         st = parser.expr('2 + 3')
         code = parser.compilest(st)
-        self.assertEquals(eval(code), 5)
+        self.assertEqual(eval(code), 5)
 
     def test_compile_suite(self):
         st = parser.suite('x = 2; y = x + 3')
         code = parser.compilest(st)
         globs = {}
-        exec code in globs
-        self.assertEquals(globs['y'], 5)
+        exec(code, globs)
+        self.assertEqual(globs['y'], 5)
 
     def test_compile_error(self):
         st = parser.suite('1 = 3 + 4')

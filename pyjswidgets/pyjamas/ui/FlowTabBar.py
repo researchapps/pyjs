@@ -28,12 +28,12 @@ class FlowTabBar(Composite):
 
     def __init__(self, **kwargs):
 
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']="gwt-TabBar"
+        if 'StyleName' not in kwargs: kwargs['StyleName']="gwt-TabBar"
 
         # this is awkward: FlowPanel is the composite,
         # so we either the element here, and pass it in to FlowPanel.
         element = None
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
 
         self.panel = FlowPanel(Element=element)
@@ -100,7 +100,7 @@ class FlowTabBar(Composite):
             #throw new IndexOutOfBoundsException();
             pass
 
-        if isinstance(text, basestring):
+        if isinstance(text, str):
             if asHTML:
                 item = HTML(text)
             else:

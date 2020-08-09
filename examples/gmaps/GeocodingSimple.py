@@ -68,24 +68,24 @@ class GeocodingSimple(DockPanel):
     def codeAddress(self):
         address = self.address.getText()
 
-        print "codeAddress ", address
+        print("codeAddress ", address)
 
         if self.geocoder:
             request = GeocoderRequest(address=address)
             self.geocoder.geocode(request, self.geocodeResult)
 
     def geocodeResult(self, results, status):
-        print "geocodeResult"
+        print("geocodeResult")
 
         if status == GeocoderStatus.OK:
 
             for res in results:
-                print res.formatted_address
-                print res.geometry.location.lat()
-                print res.geometry.location.lng()
+                print(res.formatted_address)
+                print(res.geometry.location.lat())
+                print(res.geometry.location.lng())
                 for compo in res.address_components:
-                    print "- " + compo.short_name
-                print ""
+                    print("- " + compo.short_name)
+                print("")
 
             self.map.setCenter(results[0].geometry.location)
 

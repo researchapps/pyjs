@@ -448,9 +448,9 @@ class InfoDirectory:
     def fill_right_grid(self, data):
         index = data.get('index')
         name = data.get('name')
-        if data.has_key('items'):
+        if 'items' in data:
             self.rp.add_items(data.get('items'), name, index)
-        elif data.has_key('html'):
+        elif 'html' in data:
             self.rp.add_html(data.get('html'), name, index)
 
     def onRemoteResponse(self, response, request_info):

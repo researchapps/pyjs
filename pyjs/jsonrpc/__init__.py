@@ -4,10 +4,10 @@ import traceback
 # some dog's dinner random ways to get a json library from somewhere...
 try:
     import json
-except ImportError, e:
+except ImportError as e:
     try:
         import gluon.contrib.simplejson as json
-    except ImportError, e:
+    except ImportError as e:
         import simplejson as json
 
 # this base class, use it to call self.process
@@ -52,7 +52,7 @@ class JSONRPCServiceBase:
             return self.error(msgid, 100, 'method "%s" does not exist' % method)
 
     def listmethods(self):
-        return self.methods.keys()
+        return list(self.methods.keys())
 
 def jsonremote(service):
     """Make JSONRPCService a decorator so that you can write :
@@ -69,7 +69,7 @@ def jsonremote(service):
             service.add_method(func.__name__, func)
         else:
             emsg = 'Service "%s" not found' % str(service.__name__)
-            raise NotImplementedError, emsg
+            raise NotImplementedError(emsg)
         return func
     return remotify
 

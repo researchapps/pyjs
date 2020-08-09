@@ -21,11 +21,11 @@ from pyjamas import DOM
 modal_popups = {}
 
 def ModalPopupActive(title):
-    return modal_popups.has_key(title)
+    return title in modal_popups
 
 def ModalPopupCloseAll():
     while len(modal_popups) > 0:
-        k = modal_popups.keys()[0]
+        k = list(modal_popups.keys())[0]
         modal_popups[k].hide()
 
 class DialogBoxModal(PopupPanel):
@@ -146,7 +146,7 @@ class DialogBoxModal(PopupPanel):
         if self.showing:
             return
 
-        if modal_popups.has_key(self.identifier) and \
+        if self.identifier in modal_popups and \
            modal_popups[self.identifier] != self:
             return
         modal_popups[self.identifier] = self
@@ -157,7 +157,7 @@ class DialogBoxModal(PopupPanel):
         if not self.showing:
             return
 
-        if modal_popups.has_key(self.identifier):
+        if self.identifier in modal_popups:
             del modal_popups[self.identifier]
 
         PopupPanel.hide(self)
@@ -177,7 +177,7 @@ class DialogBoxModal(PopupPanel):
 class PopupFrame(DialogBoxModal):
 
     def __init__(self, identifier, title, iframe):
-        if modal_popups.has_key(identifier):
+        if identifier in modal_popups:
             return
         modal_popups[identifier] = self
 

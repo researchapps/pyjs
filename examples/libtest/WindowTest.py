@@ -48,5 +48,5 @@ class WindowTest(UnitTest):
             'LibTest.html'))
 
     def testTitle(self):
-        self.assertEquals(Window.getTitle(),
+        self.assertEqual(Window.getTitle(),
                           'LibTest')

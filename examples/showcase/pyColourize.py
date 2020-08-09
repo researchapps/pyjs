@@ -12,7 +12,7 @@
 ######################################################################
 
 import keyword, os, sys
-import cgi, string, cStringIO
+import cgi, string, io
 import token, tokenize, glob
 import getopt, webbrowser, time
 
@@ -29,7 +29,7 @@ Python license     M.E.Farmer 2004
 # Testing raw and unicode strings
 # We do nothing with the value just look at colorizing
 _ = (r'raw',r'''raw''',r"raw",r"""raw""")##Raw test
-_ = (u'uni',u'''uni''',u"uni",u"""uni""")##Unicode test
+_ = ('uni','''uni''',"uni","""uni""")##Unicode test
 
 # Do not edit
 _DOUBLECOMMENT = token.NT_OFFSET + 1
@@ -169,7 +169,7 @@ _Eriks_Style = {
 ##################################################################################
 
 def Usage():
-    print"""
+    print("""
 _______________________________________________________________________________
 Example usage:
   # To colorize all .py,.pyw files in cwdir you can also use: . or _
@@ -198,7 +198,7 @@ It is a hacked version of MoinMoin python parser recipe.
         Optional, Show webpage after creation.
             default: no show
 _______________________________________________________________________________
-"""
+""")
 
 def Main():
     '''This code gathers the command line arguments
@@ -267,12 +267,12 @@ def WebAll(sourcePath, outdir=None, colors=None, show=0):
             for i in fileList:
                 c+=1
                 WebIt(i, outdir, colors, show)
-    print'Completed colorizing %s source files.'% str(c)
+    print('Completed colorizing %s source files.'% str(c))
 
 def WebIt(sourcePath, outdir=None, colors=None, show=0):
     ''' Converts python source to html.
     '''
-    print" Converting %s into HTML" % sourcePath
+    print(" Converting %s into HTML" % sourcePath)
     if colors is None:
         # Default colorscheme
         colors = _Dark
@@ -286,7 +286,7 @@ def WebIt(sourcePath, outdir=None, colors=None, show=0):
             os.makedirs(outdir)
         sourceName = os.path.basename(sourcePath)
         htmlPath = os.path.join(outdir,sourceName)+'.html'
-        print "  Output to %s"%htmlPath
+        print("  Output to %s"%htmlPath)
     # Open the text and do the parsing.
     source = open(sourcePath).read()
     Parser(source, colors, sourcePath, open(htmlPath, 'wt')).format(None, None)
@@ -348,7 +348,7 @@ class Parser:
 
         # Wrap text in a filelike object
         self.pos = 0
-        text = cStringIO.StringIO(self.raw)
+        text = io.StringIO(self.raw)
 
         # Html start
         self.doPageStart()
@@ -358,7 +358,7 @@ class Parser:
         ## function for each token till done.
         try:
             tokenize.tokenize(text.readline, self)
-        except tokenize.TokenError, ex:
+        except tokenize.TokenError as ex:
             msg = ex[0]
             line = ex[1][0]
             self.out.write("<h3>ERROR: %s</h3>%s\n" % (
@@ -368,9 +368,11 @@ class Parser:
         self.doPageEnd()
 
 
-    def __call__(self, toktype, toktext, (srow,scol), (erow,ecol), line):
+    def __call__(self, toktype, toktext, xxx_todo_changeme, xxx_todo_changeme1, line):
         ''' Token handler.
         '''
+        (srow,scol) = xxx_todo_changeme
+        (erow,ecol) = xxx_todo_changeme1
         style = ''
         # calculate new positions
         oldpos = self.pos

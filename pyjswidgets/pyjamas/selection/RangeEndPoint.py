@@ -15,7 +15,7 @@ the License.
 """
 
 from pyjamas import DOM
-import RangeUtil
+from . import RangeUtil
 
 def isTextNode(node):
     if node is None:

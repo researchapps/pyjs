@@ -29,13 +29,13 @@ class Caption1Events(object):
         self.app = app
 
     def onHTMLMouseMoved(self, sender, x, y):
-        print "moved", sender, x, y
+        print("moved", sender, x, y)
 
     def onInputBoxFocus(self, sender):
-        print "input box focus", sender
+        print("input box focus", sender)
 
     def onHTMLClicked(self, sender):
-        print "clicked", sender
+        print("clicked", sender)
         #left = self.fDialogButton.getAbsoluteLeft() + 10
         #top = self.fDialogButton.getAbsoluteTop() + 10
         self.app.login.setWidth("600px")
@@ -43,20 +43,20 @@ class Caption1Events(object):
         self.app.login.setPopupPosition(10, 10)
         self.app.login.show()
         for v in dir(self.app.login):
-            print "db", v, getattr(self.app.login, v)
-        print self.app.login.getOffsetWidth()
-        print self.app.login.getOffsetHeight()
-        print self.app.login.getAbsoluteLeft()
-        print self.app.login.getAbsoluteTop()
+            print("db", v, getattr(self.app.login, v))
+        print(self.app.login.getOffsetWidth())
+        print(self.app.login.getOffsetHeight())
+        print(self.app.login.getAbsoluteLeft())
+        print(self.app.login.getAbsoluteTop())
 
     def onMenuItem2(self):
-        print "Menu 2 selected"
+        print("Menu 2 selected")
 
     def onMenuItem3(self):
-        print "Menu 3 selected"
+        print("Menu 3 selected")
 
     def onMenuItem5(self):
-        print "Menu 5 selected"
+        print("Menu 5 selected")
 
 class BuilderEvents(object):
 
@@ -64,15 +64,15 @@ class BuilderEvents(object):
         self.app = app
 
     def onAddClicked(self, sender):
-        print "add", sender
+        print("add", sender)
         grid = self.app.bp.getPanel()
         row = grid.getRowCount() + 1
         grid.resize(row, 1)
         self.app.bp.add("builderrow", row, 0)
-        print "counts", grid.getRowCount(), grid.getColumnCount()
+        print("counts", grid.getRowCount(), grid.getColumnCount())
 
     def onRemoveClicked(self, sender):
-        print "remove", sender
+        print("remove", sender)
         widget = sender.getParent() # bit of a cheat
         grid = self.app.bp.getPanel()
         (row, col) = grid.getIndex(widget) # find widget row,col
@@ -100,10 +100,10 @@ class EventTest(Caption1Events):
         RootPanel().add(self.bp)
 
     def onUILoadingTimeout(self, text, code):
-        print "timeout loading UI", text, code
+        print("timeout loading UI", text, code)
 
     def onUILoadError(self, text, code):
-        print "error loading UI", text, code
+        print("error loading UI", text, code)
 
 
 if __name__ == '__main__':

@@ -16,7 +16,7 @@ class Email(Composite):
     def __init__(self, **kwargs):
 
         element = None
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
 
         panel = VerticalPanel(Element=element)

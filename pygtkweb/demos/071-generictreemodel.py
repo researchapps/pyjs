@@ -26,7 +26,7 @@ class MyTreeModel(gtk.GenericTreeModel):
             if id(r) == id(rowref):
                 return n
             n += 1
-        raise ValueError, 'Invalid iter'
+        raise ValueError('Invalid iter')
 
     def on_get_value(self, rowref, column):
         return rowref[column]
@@ -35,7 +35,7 @@ class MyTreeModel(gtk.GenericTreeModel):
         n = self.on_get_path(rowref)
         try:
             rowref = self._model_data[n+1]
-        except IndexError, msg:
+        except IndexError as msg:
             rowref = None
         return rowref
 

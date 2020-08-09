@@ -21,7 +21,7 @@ from pyjamas.ui.ComplexPanel import ComplexPanel
 class FlowPanel(ComplexPanel):
     def __init__(self, **kwargs):
         element = None
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
         if element is None:
             element = DOM.createDiv()

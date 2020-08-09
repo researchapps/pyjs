@@ -22,11 +22,11 @@ def Polygon(options):
 def PolygonOptions(adict):
     """Accepts a dictionary of options. If necessary, transforms "paths" from
     python list or encoded string to javascript array."""
-    if adict.has_key("paths"):
+    if "paths" in adict:
         try:
             if isinstance(adict["paths"], (list,tuple)):
                 adict["paths"] = listToJs(adict["paths"])
-            elif isinstance(adict["paths"], basestring): #Gmaps
+            elif isinstance(adict["paths"], str): #Gmaps
                 adict["paths"] = decodePoly(adict["paths"])
         except: #isinstance throws exception for raw javascript objects.
             pass #That means it's already good.

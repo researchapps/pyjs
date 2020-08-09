@@ -25,12 +25,12 @@ class InputControl(Control):
     def __init__(self, min_value, max_value, start_value=None, step=None,
                        **kwargs):
 
-        if not kwargs.has_key("StyleName"):
+        if "StyleName" not in kwargs:
             kwargs['StyleName'] = "gwt-InputControl"
         self.input = TextBox()
         self.input.addKeyboardListener(self)
         #element = DOM.createDiv()
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             # XXX FIXME: unlikely to work!
             element = kwargs.pop('Element')
         else:

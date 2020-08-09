@@ -73,7 +73,7 @@ class WithTest(UnitTest.UnitTest):
             self.assertEqual(d, {1: ['z', 1, 2]})
 
         d = {1: [0, 1, 2]}
-        with self.Dummy('z') as d.values()[0][1]:
+        with self.Dummy('z') as list(d.values())[0][1]:
             self.assertEqual(d, {1: [0, 'z', 2]})
 
         d = {1: [0, 1, 2]}

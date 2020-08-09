@@ -18,8 +18,8 @@ from pyjamas.ui.PasswordTextBox import PasswordTextBox
 from pyjamas.ui.ListBox import ListBox
 from pyjamas.ui.Tooltip import TooltipListener
 
-from Grid import Grid
-import ApplicationConstants
+from .Grid import Grid
+from . import ApplicationConstants
 
 class PyJsApp(object):
 

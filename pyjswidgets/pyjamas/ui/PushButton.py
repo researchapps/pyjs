@@ -31,7 +31,7 @@ class PushButton (CustomButton):
         """
         Constructor for PushButton.
         """
-        if not kwargs.has_key('StyleName'): kwargs['StyleName']=self.STYLENAME_DEFAULT
+        if 'StyleName' not in kwargs: kwargs['StyleName']=self.STYLENAME_DEFAULT
 
         CustomButton.__init__(self, upImageText, downImageText, handler,
                                     **kwargs)

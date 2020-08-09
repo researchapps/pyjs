@@ -32,7 +32,7 @@ def force_positional_arguments(f):
             return f(request, **kwargs)
         data = simplejson.loads(request.raw_post_data)
         params = data["params"]
-        if isinstance(params, types.TupleType) and len(params) == 1 and isinstance(params[0], types.DictType):
+        if isinstance(params, tuple) and len(params) == 1 and isinstance(params[0], dict):
             return f(request, **params[0])
         return f(request, *params, **kwargs)
     return wrapped
@@ -55,7 +55,7 @@ class JSONRPCService:
             try:
                 result = self.method_map[method](request, *params)
                 return {'id': id, 'result': result}
-            except Exception, e:
+            except Exception as e:
                 return {'id': id, 'error': {"code": -2, "message": str(e), "data": ""}}
         else:
             return {'id': id, 'error': {"message": "No such method", "data": "", 'code': -1}}
@@ -83,11 +83,11 @@ from django import forms
 
 def builderrors(form):
     d = {}
-    for error in form.errors.keys():
+    for error in list(form.errors.keys()):
         if error not in d:
             d[error] = []
         for errorval in form.errors[error]:
-            d[error].append(unicode(errorval))
+            d[error].append(str(errorval))
     return d
 
 
@@ -112,17 +112,17 @@ def describe_field_errors(field):
     res = {}
     field_type = field.__class__.__name__
     msgs = {}
-    for n, m in field.error_messages.items():
-        msgs[n] = unicode(m)
+    for n, m in list(field.error_messages.items()):
+        msgs[n] = str(m)
     res['error_messages'] = msgs
     if field_type in ['ComboField', 'MultiValueField', 'SplitDateTimeField']:
-        res['fields'] = map(describe_field, field.fields)
+        res['fields'] = list(map(describe_field, field.fields))
     return res
 
 def describe_fields_errors(fields, field_names):
     res = {}
     if not field_names:
-        field_names = fields.keys()
+        field_names = list(fields.keys())
     for name in field_names:
         field = fields[name]
         res[name] = describe_field_errors(field)
@@ -142,7 +142,7 @@ def describe_field(bfield):
         if isinstance(res[fname], Promise): # force translation if translatable name (can't serialize some proxy obj exception)
             res[fname] = res[fname].title()
     if field_type in ['ComboField', 'MultiValueField', 'SplitDateTimeField']:#TODO: (may work but look at it)
-        res['fields'] = map(describe_field, field.fields)
+        res['fields'] = list(map(describe_field, field.fields))
     return res
 
 def describe_fields(form, field_names_to_describe = []):
@@ -154,7 +154,7 @@ class FormProcessor(JSONRPCService):
 
         if _formcls is None:
             JSONRPCService.__init__(self)
-            for k in forms.keys():
+            for k in list(forms.keys()):
                 s  = FormProcessor({}, forms[k])
                 self.add_method(k, s.__process)
         else:
@@ -170,27 +170,27 @@ class FormProcessor(JSONRPCService):
                 return {'success':False, 'errors': builderrors(f)}
             return {'success':True}
 
-        elif command.has_key('describe_errors'):
+        elif 'describe_errors' in command:
             field_names = command['describe_errors']
             return describe_fields_errors(f.fields, field_names)
 
-        elif command.has_key('describe'):
+        elif 'describe' in command:
             field_names = command['describe']
             ret_val = describe_fields(f, field_names)
-            print 'returning from describe: ', ret_val
-            print '>> params: ', params
-            print '>> command: ',command
+            print('returning from describe: ', ret_val)
+            print('>> params: ', params)
+            print('>> command: ',command)
             return ret_val
-        elif command.has_key('is_valid'):
+        elif 'is_valid' in command:
             return {'success': f.is_valid() }
 
-        elif command.has_key('save'):
+        elif 'save' in command:
             if not f.is_valid():
                 return {'success':False, 'errors': builderrors(f)}
             instance = f.save() # XXX: if you want more, over-ride save.
             return {'success': True, 'instance': json_convert(instance) }
 
-        elif command.has_key('html'):
+        elif 'html' in command:
             return {'success': True, 'html': f.as_table()}
 
         return "unrecognised command"
@@ -233,7 +233,7 @@ from datetime import date
 
 def dict_datetimeflatten(item):
     d = {}
-    for k, v in item.items():
+    for k, v in list(item.items()):
         k = str(k)
         if isinstance(v, datetime.date):
             d[k] = str(v)

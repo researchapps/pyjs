@@ -3,7 +3,7 @@
 
 import puremvc.patterns.proxy
 
-from vo.TimeVO import TimeVO
+from .vo.TimeVO import TimeVO
 
 import time
 
@@ -18,7 +18,7 @@ class TimeProxy(puremvc.patterns.proxy.Proxy):
         self.data = {}
 
     def getDateEntries(self, date):
-        if self.data.has_key(date):
+        if date in self.data:
             return self.data[date]
         return []
 
@@ -26,17 +26,17 @@ class TimeProxy(puremvc.patterns.proxy.Proxy):
         self.data[date] = entries
 
     def addItem(self, date, item):
-        if not self.data.has_key(date):
+        if date not in self.data:
             self.data[date] = []
         self.data[date].append(item)
 
     def removeDate(self, date):
-        if self.data.has_key(date):
+        if date in self.data:
             self.data[date] = []
 
     def exportData(self):
         lines = []
-        dates = self.data.keys()
+        dates = list(self.data.keys())
         dates.sort()
         for date in dates:
             for timeVO in self.data[date]:
@@ -66,13 +66,13 @@ class TimeProxy(puremvc.patterns.proxy.Proxy):
             date = cols[0]
             if date == 'TODAY':
                 date = today
-            if not dateEntries.has_key(date):
+            if date not in dateEntries:
                 dateEntries[date] = []
             dateEntries[date].append(cols[1:])
 
         # We got this far, so we have no errors yet
         self.clear()
-        dates = dateEntries.keys()
+        dates = list(dateEntries.keys())
         dates.sort()
         for date in dates:
             thisDate = []

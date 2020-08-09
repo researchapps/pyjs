@@ -2,7 +2,7 @@ import sys
 from IPython.iplib import InteractiveShell, softspace
 from IPython.Shell import IPShellEmbed, make_IPython, ipapi, kill_embedded, ultraTB
 from traceback import print_exc
-from StringIO import StringIO
+from io import StringIO
 
 from pyjs import translator
 
@@ -46,9 +46,9 @@ class REPL(object):
         try:
             res = self.jscontext.eval(code)
             if print_result:
-                print res
-        except Exception, e:
-            print e
+                print(res)
+        except Exception as e:
+            print(e)
         return 0
 
 js_interactive_func = """
@@ -104,12 +104,12 @@ class V8InteractiveShell(InteractiveShell):
         try:
             jscode, imppy, impjs = self._js_int.translate(source)
             self.code_to_run = jscode
-        except Exception, e:
+        except Exception as e:
             print_exc()
             return None
 
         if self._show_js:
-            print "\n Translated JS:\n" + jscode + "\n"
+            print("\n Translated JS:\n" + jscode + "\n")
         # now actually execute the code object
         if self._js_int.eval(jscode) == 0:
             return False
@@ -123,7 +123,7 @@ class V8InteractiveShell(InteractiveShell):
         try:
             try:
                 self.hooks.pre_runcode_hook()
-                exec code_obj in self.user_global_ns, self.user_ns
+                exec(code_obj, self.user_global_ns, self.user_ns)
             finally:
                 # Reset our crash handler in place
                 sys.excepthook = old_excepthook
@@ -140,7 +140,7 @@ class V8InteractiveShell(InteractiveShell):
         else:
             outflag = 0
             if softspace(sys.stdout, 0):
-                print
+                print()
         # Flush out code object which has been run (and source)
         self.code_to_run = None
         return outflag
@@ -150,11 +150,11 @@ class V8InteractiveShell(InteractiveShell):
 
     def magic_native(self, p):
         self._is_native = True
-        print "Switched to native interpreter"
+        print("Switched to native interpreter")
 
     def magic_pyjs(self, p):
         self._is_native = False
-        print "Switched to PyJS/PyV8 interpreter"
+        print("Switched to PyJS/PyV8 interpreter")
 
     def magic_showjs(self, p):
         f = False
@@ -166,9 +166,9 @@ class V8InteractiveShell(InteractiveShell):
             f = True
         self._show_js = f
         if f:
-            print "Showing translated JS"
+            print("Showing translated JS")
         else:
-            print "Not showing translated JS"
+            print("Not showing translated JS")
 
 def generate_prompt(is_continuation):
     """ calculate and return a string with the prompt to display """
@@ -326,7 +326,7 @@ class InteractiveTranslator(translator.Translator):
         captured_output = self.output.getvalue()
         self.output = save_output
         if self.source_tracking and self.store_source:
-            for l in self.track_lines.keys():
+            for l in list(self.track_lines.keys()):
                 self.w( self.spacing() + '''%s.__track_lines__[%d] = "%s";''' % (self.js_module_name, l, self.track_lines[l].replace('"', '\"')), translate=False)
         self.w( self.local_js_vars_decl([]))
         if captured_output.find("@CONSTANT_DECLARATION@") >= 0:

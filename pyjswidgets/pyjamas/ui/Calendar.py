@@ -143,7 +143,7 @@ class Calendar(FocusPanel, DateSelectedHandler):
         # where widget in created on last day of month and
         # page left till next day
         hasChangeMonth = False
-        if yy <> self.todayYear or mm <> self.todayMonth:
+        if yy != self.todayYear or mm != self.todayMonth:
             hasChangeMonth = True
             self.todayYear = yy
             self.todayMonth = mm
@@ -303,7 +303,7 @@ class Calendar(FocusPanel, DateSelectedHandler):
         day = 1
         col = startPos
         while day <= daysInMonth:
-            if pos % 7 == 0 and day <> 1:
+            if pos % 7 == 0 and day != 1:
                 row += 1
             col = pos % 7
             grid.setText(row, col, str(day))
@@ -334,7 +334,7 @@ class Calendar(FocusPanel, DateSelectedHandler):
             return
         try:
             selectedDay = int(text)
-        except ValueError, e:
+        except ValueError as e:
             return
 
         self.fireDateSelectedEvent(date(

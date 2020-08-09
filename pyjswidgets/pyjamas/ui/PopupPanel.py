@@ -46,7 +46,7 @@ class PopupPanel(SimplePanel):
             if not 'GlassStyleName' in kwargs:
                 kwargs['GlassStyleName'] = "gwt-PopupPanelGlass"
 
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             element = kwargs.pop('Element')
         else:
             element = self.createElement()
@@ -172,13 +172,13 @@ class PopupPanel(SimplePanel):
         self.popupListeners.remove(listener)
 
     def setPopupPosition(self, left, top):
-        if isinstance(left, basestring):
+        if isinstance(left, str):
             if left.endswith('%'):
                 left = int(left[:-1])
                 left = int(left * Window.getClientWidth() / 100)
             elif left.lower().endswith('px'):
                 left = int(left[:-2])
-        if isinstance(top, basestring):
+        if isinstance(top, str):
             if top.lower().endswith('%'):
                 top = int(top[:-1])
                 top = int(top * Window.getClientHeight() / 100)

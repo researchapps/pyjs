@@ -99,7 +99,7 @@ class Timer(object):
         if notify is not None:
             run = getattr(notify, 'onTimer', notify)
             if not callable(run):
-                raise ValueError, 'Programming error: notify must be callable'
+                raise ValueError('Programming error: notify must be callable')
             self.__onTimer = lambda: run(self)
 
         # ugly, ugly, ugly, but there's no other way to get
@@ -137,9 +137,9 @@ class Timer(object):
         overridden by a subclass or if Timer isn't instantiated with
         the notify keyword arguement.
         """
-        raise NotImplementedError, ('''Timer.run() must be overridden or Timer
+        raise NotImplementedError(('''Timer.run() must be overridden or Timer
                                        must be instantiated with notify keyword
-                                       argument''')
+                                       argument'''))
 
     def schedule(self, delayMillis):
         '''Schedule this timer to fire in delayMillis milliseconds.
@@ -147,7 +147,7 @@ class Timer(object):
         previously scheduled timer.'''
 
         if delayMillis <= 0:
-            raise ValueError, 'delay must be positive'
+            raise ValueError('delay must be positive')
 
         self.cancel()
         self.__is_repeating = False
@@ -161,7 +161,7 @@ class Timer(object):
         (for this instance only) any previously scheduled timer.'''
 
         if periodMillis <= 0:
-            raise ValueError, 'period must be positive'
+            raise ValueError('period must be positive')
 
         self.cancel()
         self.__is_repeating = True

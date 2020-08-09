@@ -10,7 +10,7 @@ with open("index.rst") as infile:
     line = line.rstrip("\n").rstrip()
     if(line.startswith(".. ")):
       if(line.startswith(".. note::")):
-        print >> ofile, line
+        print(line, file=ofile)
         continue
 
       pos = line.find(":")
@@ -25,17 +25,17 @@ with open("index.rst") as infile:
 
     else:
       if(line.startswith("  * ")):
-        print >> ofile, "** " + line[4:]
+        print("** " + line[4:], file=ofile)
       else:
-        print >> ofile, line
+        print(line, file=ofile)
 
 ofile.close()
 
 
 with open("sed_it.sed", "w+") as sed_file:
-  print >> sed_file, "#!/usr/bin/sed -f"
-  for k,v in link_subs.iteritems():
-    print >> sed_file, "s:%s:%s:g" % (k, v)
+  print("#!/usr/bin/sed -f", file=sed_file)
+  for k,v in link_subs.items():
+    print("s:%s:%s:g" % (k, v), file=sed_file)
 
 
 

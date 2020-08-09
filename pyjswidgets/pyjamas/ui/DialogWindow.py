@@ -16,9 +16,9 @@ from pyjamas import DOM
 from pyjamas import Factory
 
 from pyjamas.ui.UIObject import UIObject
-from DialogBox import DialogBox
-from HTML import HTML
-from FlexTable import FlexTable
+from .DialogBox import DialogBox
+from .HTML import HTML
+from .FlexTable import FlexTable
 from pyjamas.ui.HorizontalPanel import HorizontalPanel
 from pyjamas.ui.SimplePanel import SimplePanel
 from pyjamas.ui import HasHorizontalAlignment
@@ -58,7 +58,7 @@ class DialogWindow(DialogBox):
         self._maximized = None
 
         # Arguments section
-        if isinstance(caption, basestring):
+        if isinstance(caption, str):
             self.caption.setText(caption)
         elif caption is not None:
             self.caption = caption
@@ -81,19 +81,19 @@ class DialogWindow(DialogBox):
     def setControls(self, minimize, maximize, close):
         if minimize is True:
             self.minimizeWidget = self.createDefaultControl('minimize')
-        elif isinstance(minimize, basestring):
+        elif isinstance(minimize, str):
             self.minimizeWidget = Image(minimize)
         else:
             self.minimizeWidget = minimize
         if maximize is True:
             self.maximizeWidget = self.createDefaultControl('maximize')
-        elif isinstance(maximize, basestring):
+        elif isinstance(maximize, str):
             self.maximizeWidget = Image(maximize)
         else:
             self.maximizeWidget = maximize
         if close is True:
             self.closeWidget = self.createDefaultControl('close')
-        elif isinstance(close, basestring):
+        elif isinstance(close, str):
             self.closeWidget = Image(close)
         else:
             self.closeWidget = close

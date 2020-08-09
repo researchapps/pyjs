@@ -20,7 +20,7 @@
 
 from pyjs.jsonrpc import JSONRPCServiceBase, jsonremote
 import sys, os
-import Cookie
+import http.cookies
 
 def read_data():
     try:
@@ -55,7 +55,7 @@ class CGIJSONRPCService(JSONRPCServiceBase):
         self._cookies = c
 
     def __call__(self):
-        self._cookies = Cookie.SimpleCookie()
+        self._cookies = http.cookies.SimpleCookie()
         self._cookies.load(os.environ.get('HTTP_COOKIE', ''))
         d = read_data() # TODO: handle partial data
         write_data(self.process(d), self._cookies.output())

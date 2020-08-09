@@ -45,9 +45,9 @@ down-disabled|getDownDisabledFace()|button is down and disabled|down
 from pyjamas    import DOM
 from pyjamas import Factory
 from pyjamas.ui import Event
-from ButtonBase import ButtonBase
+from .ButtonBase import ButtonBase
 from pyjamas.ui import Focus
-from UIObject import UIObject
+from .UIObject import UIObject
 
 
 class Face:
@@ -175,9 +175,9 @@ class CustomButton (ButtonBase):
                        **kwargs):
         """Constructor for CustomButton."""
 
-        if not kwargs.has_key('StyleName'):
+        if 'StyleName' not in kwargs:
             kwargs['StyleName']=self.STYLENAME_DEFAULT
-        if kwargs.has_key('Element'):
+        if 'Element' in kwargs:
             # XXX FIXME: createFocusable is used for a reason...
             element = kwargs.pop('Element')
         else:
@@ -211,14 +211,14 @@ class CustomButton (ButtonBase):
             listener = upImageText
             upImageText = None
 
-        if upImageText and isinstance(upImageText, basestring):
+        if upImageText and isinstance(upImageText, str):
            upText = upImageText
            upImage = None
         else:
            upImage = upImageText
            upText = None
 
-        if downImageText and isinstance(downImageText, basestring):
+        if downImageText and isinstance(downImageText, str):
            downText = downImageText
            downImage = None
         else:

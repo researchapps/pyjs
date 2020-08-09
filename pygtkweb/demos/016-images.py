@@ -14,7 +14,7 @@ class ImagesExample:
 
     # is invoked when the button is clicked.  It just prints a message.
     def button_clicked(self, widget, data=None):
-        print "button %s clicked" % data
+        print("button %s clicked" % data)
 
     def __init__(self):
         # create the main window, and attach delete_event signal to terminating

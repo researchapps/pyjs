@@ -1,4 +1,4 @@
-from UnitTest import UnitTest
+from .UnitTest import UnitTest
 from textwrap import dedent
 import os.path
 import sys
@@ -198,7 +198,7 @@ class CompilerTest(UnitTest):
         for code, codestr in statements:
             self._test_compile(code, codestr)
 
-from RunTests import RunTests
+from .RunTests import RunTests
 def test_main():
     t = RunTests()
     t.add(CompilerTest)

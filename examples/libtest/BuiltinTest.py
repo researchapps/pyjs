@@ -1,4 +1,5 @@
 from UnitTest import UnitTest, PY27_BEHAVIOUR
+from functools import reduce
 
 try:
     builtin_value = builtin.value
@@ -83,31 +84,31 @@ class BuiltinTest(UnitTest):
         try:
             int('')
             self.fail("No int() argument error raised: int('')")
-        except ValueError, e:
+        except ValueError as e:
             self.assertEqual(e[0], "invalid literal for int() with base 10: ''")
 
         try:
             int(' ')
             self.fail("No int() argument error raised: int(' ')")
-        except ValueError, e:
+        except ValueError as e:
             self.assertEqual(e[0], "invalid literal for int() with base 10: ''")
 
         try:
             int('not int')
             self.fail("No int() argument error raised: int('not-int')")
-        except ValueError, e:
+        except ValueError as e:
             self.assertEqual(e[0], "invalid literal for int() with base 10: 'not int'")
 
         try:
             int(1, 10)
             self.fail("No int() argument error raised: int(1, 10)")
-        except TypeError, e:
+        except TypeError as e:
             self.assertEqual(e[0], "int() can't convert non-string with explicit base")
 
         try:
             int('10px')
             self.fail("No int() argument error raised: int('10px')")
-        except ValueError, e:
+        except ValueError as e:
             self.assertEqual(e[0], "invalid literal for int() with base 10: '10px'")
 
     def testFloat(self):
@@ -120,7 +121,7 @@ class BuiltinTest(UnitTest):
         try:
             float('not float')
             self.fail("No float('not float') argument error raised")
-        except ValueError, e:
+        except ValueError as e:
             self.assertIn(e[0], [
                 "invalid literal for float(): not float", # <= 2.6
                 "could not convert string to float: not float", # 2.7
@@ -129,7 +130,7 @@ class BuiltinTest(UnitTest):
         try:
             float('')
             self.fail("No float('') argument error raised")
-        except ValueError, e:
+        except ValueError as e:
             self.assertIn(e[0], [
                 "empty string for float()", # <= 2.6
                 "could not convert string to float: ", # 2.7
@@ -138,7 +139,7 @@ class BuiltinTest(UnitTest):
         try:
             float(' ')
             self.fail("No float(' ') argument error raised")
-        except ValueError, e:
+        except ValueError as e:
             self.assertIn(e[0], [
                 "empty string for float()", # <= 2.6
                 "could not convert string to float: ", # 2.7
@@ -156,12 +157,12 @@ class BuiltinTest(UnitTest):
         self.assertEqual(-0.3 % 1.0, 0.7)
         self.assertEqual(-1 % 2, 1)
         self.assertEqual(-1 % -2, -1)
-        self.assertEqual(-1 % 3L, 2L)
-        self.assertEqual(-2 % -3L, -2L)
-        self.assertEqual(-1L % 4, 3L)
-        self.assertEqual(-3L % -4, -3L)
-        self.assertEqual(-1L % 5L, 4L)
-        self.assertEqual(-4L % -5L, -4L)
+        self.assertEqual(-1 % 3, 2)
+        self.assertEqual(-2 % -3, -2)
+        self.assertEqual(-1 % 4, 3)
+        self.assertEqual(-3 % -4, -3)
+        self.assertEqual(-1 % 5, 4)
+        self.assertEqual(-4 % -5, -4)
         self.assertEqual(-1.0 % 6, 5.0)
         self.assertEqual(-5.0 % -6, -5.0)
 
@@ -177,7 +178,7 @@ class BuiltinTest(UnitTest):
         try:
             h = hex(23.2)
             self.fail("No hex() argument error raised")
-        except TypeError, why:
+        except TypeError as why:
             self.assertEqual(why.args[0], "hex() argument can't be converted to hex")
 
     def testOct(self):
@@ -185,7 +186,7 @@ class BuiltinTest(UnitTest):
         try:
             o = oct(23.2)
             self.fail("No oct() argument error raised")
-        except TypeError, why:
+        except TypeError as why:
             self.assertEqual(str(why), "oct() argument can't be converted to oct")
 
     def testRound(self):
@@ -247,7 +248,7 @@ class BuiltinTest(UnitTest):
         self.assertEqual(i1.__repr__(), '10000')
         self.assertEqual(repr(f1), '1.5')
         self.assertEqual(f1.__repr__(), '1.5', 'float.__repr__() returns type instead of value, bug #487')
-        self.assertEqual(`l1`, '[1, 2, 3]')
+        self.assertEqual(repr(l1), '[1, 2, 3]')
 
     def testIsInstance(self):
 
@@ -309,10 +310,10 @@ class BuiltinTest(UnitTest):
 
 
         # import builtins module
-        import __builtin__
-        self.assertEqual(__builtin__.dict, dict, "__builtin__.dict != dict")
+        import builtins
+        self.assertEqual(builtins.dict, dict, "__builtin__.dict != dict")
 
-        from __builtin__ import dict as dict_bltin
+        from builtins import dict as dict_bltin
         self.assertEqual(dict_bltin, dict, "__builtin__.dict != dict")
 
 
@@ -361,7 +362,7 @@ class BuiltinTest(UnitTest):
             return g()
         outer_locals, inner_locals = fn3()
         self.assertEqual(inner_locals, {'li':3, 'lx':3}, "locals() bugs: #589")
-        keys = outer_locals.keys()
+        keys = list(outer_locals.keys())
         keys.sort()
         self.assertEqual(keys, ['lh', 'lx'], "locals() bugs: #589")
 
@@ -405,54 +406,54 @@ class BuiltinTest(UnitTest):
         self.assertEqual(var, 1)
 
     def testRange(self):
-        r = range(3)
+        r = list(range(3))
         self.assertEqual(r, [0, 1, 2])
-        r = range(2, 5)
+        r = list(range(2, 5))
         self.assertEqual(r, [2, 3, 4])
-        r = range(2, 15, 3)
+        r = list(range(2, 15, 3))
         self.assertEqual(r, [2, 5, 8, 11, 14])
-        r = range(15, 2, -3)
+        r = list(range(15, 2, -3))
         self.assertEqual(r, [15, 12, 9, 6, 3])
-        r = range(15, 2, 3)
+        r = list(range(15, 2, 3))
         self.assertEqual(r, [])
-        r = range(-6, -2, -1)
+        r = list(range(-6, -2, -1))
         self.assertEqual(r, [])
-        r = range(2, 1, 2)
+        r = list(range(2, 1, 2))
         self.assertEqual(r, [])
-        r = range(0, 2, 2)
+        r = list(range(0, 2, 2))
         self.assertEqual(r, [0])
 
     def testXRange(self):
-        r = [i for i in xrange(3)]
+        r = [i for i in range(3)]
         self.assertEqual(r, [0, 1, 2])
-        r = [i for i in xrange(2, 5)]
+        r = [i for i in range(2, 5)]
         self.assertEqual(r, [2, 3, 4])
-        r = [i for i in xrange(2, 15, 3)]
+        r = [i for i in range(2, 15, 3)]
         self.assertEqual(r, [2, 5, 8, 11, 14])
-        r = [i for i in xrange(15, 2, -3)]
+        r = [i for i in range(15, 2, -3)]
         self.assertEqual(r, [15, 12, 9, 6, 3])
-        r = [i for i in xrange(15, 2, 3)]
+        r = [i for i in range(15, 2, 3)]
         self.assertEqual(r, [])
-        r = [i for i in xrange(-6, -2, -1)]
+        r = [i for i in range(-6, -2, -1)]
         self.assertEqual(r, [])
-        self.assertEqual(str(xrange(3)), "xrange(3)")
-        self.assertEqual(str(xrange(3,4)), "xrange(3, 4)")
-        self.assertEqual(str(xrange(3,4,5)), "xrange(3, 8, 5)")
-        self.assertEqual(str(xrange(14,3,-5)), "xrange(14, -1, -5)")
+        self.assertEqual(str(range(3)), "xrange(3)")
+        self.assertEqual(str(range(3,4)), "xrange(3, 4)")
+        self.assertEqual(str(range(3,4,5)), "xrange(3, 8, 5)")
+        self.assertEqual(str(range(14,3,-5)), "xrange(14, -1, -5)")
 
     def testForLoop(self):
         n1 = 0
         n2 = 0
         for i in range(10):
             n1 += i
-            for i in xrange(4):
+            for i in range(4):
                 n2 += i
         self.assertEqual(n1, 45)
         self.assertEqual(n2, 60)
         self.assertEqual(i, 3)
 
         try:
-            for i in xrange(4):
+            for i in range(4):
                 raise StopIteration
             self.fail("Failed to raise StopIteration")
         except StopIteration:
@@ -528,7 +529,7 @@ class BuiltinTest(UnitTest):
             def __iter__(self):
                 return self
 
-            def next(self):
+            def __next__(self):
                 self.idx += 1
                 if self.idx == 5:
                     raise StopIteration
@@ -545,24 +546,24 @@ class BuiltinTest(UnitTest):
         except:
             self.fail("error in user-defined iterator (caught here so tests can proceed)")
 
-        self.assertEqual(res, range(1,5))
+        self.assertEqual(res, list(range(1,5)))
 
     def testSorted(self):
-        lst1 = range(10)
-        lst2 = range(10)
+        lst1 = list(range(10))
+        lst2 = list(range(10))
         lst2.reverse()
         self.assertTrue(lst1 == sorted(lst2), "lst1 == sorted(lst2)")
 
-        self.assertTrue(lst1 == sorted(xrange(10)), "lst1 == sorted(xrange(1))")
-        self.assertTrue(lst2 == sorted(xrange(10), reverse=True), "lst2 == sorted(xrange(10), reverse=True)")
+        self.assertTrue(lst1 == sorted(range(10)), "lst1 == sorted(xrange(1))")
+        self.assertTrue(lst2 == sorted(range(10), reverse=True), "lst2 == sorted(xrange(10), reverse=True)")
 
     def testReversed(self):
-        lst1 = range(10)
-        lst2 = range(10)
+        lst1 = list(range(10))
+        lst2 = list(range(10))
         lst2.reverse()
         tpl1 = tuple(lst1)
         self.assertTrue(lst1 == list(reversed(lst2)), "lst1 == reversed(lst2)")
-        self.assertTrue(lst2 == list(reversed(xrange(10))), "lst2 == reversed(xrange(10), reverse=True)")
+        self.assertTrue(lst2 == list(reversed(range(10))), "lst2 == reversed(xrange(10), reverse=True)")
         self.assertTrue(lst2 == list(reversed(tpl1)), "lst1 == reversed(tpl1)")
         dict1 = {'a': 'A', 'b': 'B'}
         self.assertRaises(TypeError, reversed, dict1)
@@ -570,7 +571,7 @@ class BuiltinTest(UnitTest):
     def testType(self):
         try:
             self.assertTrue(type(object) is type)
-        except NotImplementedError, why:
+        except NotImplementedError as why:
             self.fail("Bug #229" + str(why))
         self.assertTrue(type([]) is type([]))
         self.assertTrue(type([]) is list)
@@ -581,7 +582,7 @@ class BuiltinTest(UnitTest):
         self.assertTrue(type("") is str, "str")
         self.assertTrue(type(True) is bool, "bool")
         self.assertTrue(type(1) is int, "int")
-        self.assertTrue(type(1L) is long, "long")
+        self.assertTrue(type(1) is int, "long")
         self.assertTrue(type(1.1) is float, "float 1.1")
         self.assertTrue(type(1.0) is float, "float 1.0 issue #524")
 
@@ -599,8 +600,8 @@ class BuiltinTest(UnitTest):
         self.assertEqual(lst, list(iter(lst)), "iter(lst)")
         g = G()
         self.assertEqual(lst, list(iter(g)), "iter(g)")
-        self.assertEqual(lst, list(iter(fn().next, 5)), "iter(fn().next, 5)")
-        self.assertEqual([0,1], list(iter(fn().next, 2)), "iter(fn().next, 2)")
+        self.assertEqual(lst, list(iter(fn().__next__, 5)), "iter(fn().next, 5)")
+        self.assertEqual([0,1], list(iter(fn().__next__, 2)), "iter(fn().next, 2)")
 
     def testReduce(self):
         v = reduce(lambda x, y: x+y, [1, 2, 3, 4, 5])
@@ -610,13 +611,13 @@ class BuiltinTest(UnitTest):
         lst1 = [0,1,2,3]
         lst2 = [10,11,12]
         dict1 = {'a': 'A', 'b': 'B'}
-        v = zip(lst1)
+        v = list(zip(lst1))
         self.assertEqual(v, [(0,), (1,), (2,), (3,)])
-        v = zip(lst1, lst2)
+        v = list(zip(lst1, lst2))
         self.assertEqual(v, [(0, 10), (1, 11), (2, 12)])
-        v = zip(dict1)
+        v = list(zip(dict1))
         self.assertEqual(v, [('a',), ('b',)])
-        v = zip(lst1, dict1, lst2)
+        v = list(zip(lst1, dict1, lst2))
         self.assertEqual(v, [(0, 'a', 10), (1, 'b', 11)])
 
     def testSum(self):
@@ -683,7 +684,7 @@ class BuiltinTest(UnitTest):
             slice(100,  -100,  -1).indices(10),
             slice(None, None, -1).indices(10)
         )
-        self.assertEqual(slice(-100L, 100L, 2L).indices(10), (0, 10,  2))
+        self.assertEqual(slice(-100, 100, 2).indices(10), (0, 10,  2))
 
     ### begin from CPython 2.7 Lib/test/test_str.py
 
@@ -1065,21 +1066,21 @@ class BuiltinTest(UnitTest):
     ### from pypy test_newformat.py
 
     def test_sign(self):
-        self.assertEquals(format(-6), "-6")
-        self.assertEquals(format(-6, "-"), "-6")
-        self.assertEquals(format(-6, "+"), "-6")
-        self.assertEquals(format(-6, " "), "-6")
-        self.assertEquals(format(6, " "), " 6")
-        self.assertEquals(format(6, "-"), "6")
-        self.assertEquals(format(6, "+"), "+6")
+        self.assertEqual(format(-6), "-6")
+        self.assertEqual(format(-6, "-"), "-6")
+        self.assertEqual(format(-6, "+"), "-6")
+        self.assertEqual(format(-6, " "), "-6")
+        self.assertEqual(format(6, " "), " 6")
+        self.assertEqual(format(6, "-"), "6")
+        self.assertEqual(format(6, "+"), "+6")
 
     def test_thousands_separator(self):
-        self.assertEquals(format(123, ","), "123")
-        self.assertEquals(format(12345, ","), "12,345")
-        self.assertEquals(format(123456789, ","), "123,456,789")
-        self.assertEquals(format(12345, "7,"), " 12,345")
-        self.assertEquals(format(12345, "<7,"), "12,345 ")
-        self.assertEquals(format(1234, "0=10,"), "00,001,234")
-        self.assertEquals(format(1234, "010,"), "00,001,234")
+        self.assertEqual(format(123, ","), "123")
+        self.assertEqual(format(12345, ","), "12,345")
+        self.assertEqual(format(123456789, ","), "123,456,789")
+        self.assertEqual(format(12345, "7,"), " 12,345")
+        self.assertEqual(format(12345, "<7,"), "12,345 ")
+        self.assertEqual(format(1234, "0=10,"), "00,001,234")
+        self.assertEqual(format(1234, "010,"), "00,001,234")
 
     ### end from pypy test_newformat.py

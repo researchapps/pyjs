@@ -14,13 +14,13 @@ class TestJsolait(unittest.TestCase):
                                         verbose=0)
 
     def item_equal(self, item, fields):
-        self.assert_(item.has_key('pk'))
-        print item['fields']
-        for fname in fields.keys():
+        self.assertTrue('pk' in item)
+        print(item['fields'])
+        for fname in list(fields.keys()):
             v = item['fields'][fname]
             if isinstance(v, dict):
                 v = v['fields']['value']
-            self.assert_(v == fields[fname])
+            self.assertTrue(v == fields[fname])
 
     def notest_createanddeleteitem(self):
         forsale = {'name': 'a car',
@@ -30,13 +30,13 @@ class TestJsolait(unittest.TestCase):
                    'numdoors': '3'
                    }
         reply = self.s.addItem(forsale)
-        print reply
+        print(reply)
         item = reply["result"]
         self.item_equal(item, forsale)
         to_delete = item['pk']
 
         reply = self.s.getItem(to_delete)
-        print reply
+        print(reply)
         item = reply["result"]
         forsale = {'name': 'a car',
                    'short_description': 'a nice car',
@@ -46,12 +46,12 @@ class TestJsolait(unittest.TestCase):
                    }
         self.item_equal(item, forsale)
         reply = self.s.deleteItem(to_delete)
-        print reply
+        print(reply)
 
         reply = self.s.getItem(to_delete)
-        print reply
+        print(reply)
         item = reply["result"]
-        self.assert_(item is None)
+        self.assertTrue(item is None)
 
     def test_itemform(self):
         reply = self.f.itemform({}, {"describe":
@@ -72,7 +72,7 @@ class TestJsolait(unittest.TestCase):
         item = reply["result"]['instance']
         to_delete = item['pk']
 
-        print "get"
+        print("get")
         reply = self.f.itemform({}, {"get": {'id': to_delete}})
         pprint(reply)
 

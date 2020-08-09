@@ -30,7 +30,7 @@ else:
         PYJAMASLIB_PATH = os.path.join(pyjs.pyjspth, "library")
 
 
-translator_opts = options.all_compile_options.keys()
+translator_opts = list(options.all_compile_options.keys())
 non_boolean_opts = ['translator']
 assert set(non_boolean_opts) < set(translator_opts)
 
@@ -48,7 +48,7 @@ def is_modified(in_file,out_file):
 def get_translator_opts(args):
     opts = []
     for k in options.mappings:
-        if args.has_key(k):
+        if k in args:
             #XXX somewhat of a hack ... should have a method
             # for default positive and default negative
             nk = options.mappings[k]['names'][0]
@@ -105,7 +105,7 @@ def out_translate(platform, file_names, out_file, module_name,
                     platform = "[%s] " % platform
                 else:
                     platform = ''
-                print("Translating file %s:" % platform, file_name)
+                print(("Translating file %s:" % platform, file_name))
                 do_translate = True
                 break
     if not incremental or do_translate:
@@ -117,7 +117,7 @@ def out_translate(platform, file_names, out_file, module_name,
             opts.append(out_file)
             shell = False
         else:
-            file_names = map(lambda x: x.replace(" ", r"\ "), file_names)
+            file_names = [x.replace(" ", r"\ ") for x in file_names]
             opts.append(out_file.replace(" ", r"\ "))
             shell=True
 
@@ -138,7 +138,7 @@ def out_translate(platform, file_names, out_file, module_name,
             raise translator.TranslationError('general fail in translator process')
 
     if translator_args.get('list_imports', None):
-        print("List Imports %s:" % platform, file_names)
+        print(("List Imports %s:" % platform, file_names))
         print(stdout_value)
         return [], []
 
@@ -264,7 +264,7 @@ class BaseLinker(object):
                     self.visit_end_platform(platform)
             if not self.list_imports:
                 self.visit_end()
-        except translator.TranslationError, e:
+        except translator.TranslationError as e:
             raise
 
     def visit_modules(self, module_names, platform=None, parent_file = None):
@@ -300,7 +300,7 @@ class BaseLinker(object):
                 p = module_path(mn, paths)
             if not p:
                 if "generic" in mn:
-                    print("Module %r not found, sys.path is %r" % (mn, paths))
+                    print(("Module %r not found, sys.path is %r" % (mn, paths)))
                 continue
                 #raise RuntimeError, "Module %r not found. Dep of %r" % (
                 #    mn, self.dependencies)

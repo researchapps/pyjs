@@ -13,7 +13,7 @@
 
 """
 
-print "WARNING: Controls.py is deprecated and split into AreaSlider, Control, etc."
+print("WARNING: Controls.py is deprecated and split into AreaSlider, Control, etc.")
 
 from pyjamas.ui.Control import Control
 from pyjamas.ui.DoubleControl import DoubleControl as DControl

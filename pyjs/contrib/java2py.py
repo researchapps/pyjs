@@ -147,26 +147,26 @@ def redofunctions(txt):
     if pre.find("except") >= 0:
         is_exception = 1
     else:
-        pre = map(string.strip, pre.split(' '))
+        pre = list(map(string.strip, pre.split(' ')))
         if len(pre) == 1: # assume it's a constructor
             pre = '__init__'
         elif len(pre) == 2:
             pre = pre[-1] # drop the first word (return type)
         else:
-            print (txt, pre)
+            print((txt, pre))
             error # deliberately cause error - investigate 3-word thingies!
 
-    args = map(string.strip, args.split(','))
+    args = list(map(string.strip, args.split(',')))
     newargs = []
     for arg in args:
         if arg == '':
             continue
-        arg = map(string.strip, arg.split(' '))
+        arg = list(map(string.strip, arg.split(' ')))
         if len(arg) == 2:
             newargs.append(arg[1]) # drop first word (arg type)
         else:
             print (txt)
-            print (pre, args, arg)
+            print((pre, args, arg))
             error # deliberately cause error - find out why arg no type
     if count != 0 and not is_exception:
         # assume class not global function - add self

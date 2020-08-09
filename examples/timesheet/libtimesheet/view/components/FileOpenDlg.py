@@ -108,7 +108,7 @@ class FileOpenDlg(DialogBox):
             filename = file.fileName
             try:
                 data = file.getAsText("")
-            except AttributeError, e:
+            except AttributeError as e:
                 has_getAsText = False
                 alert("Sorry. cannot retrieve file in this browser.\nTry again.")
         else:

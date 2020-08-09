@@ -8,7 +8,7 @@ from pyjamas.ui.FlexTable import FlexTable
 from pyjamas.ui.Label import Label
 from pyjamas.ui.TextBox import TextBox
 
-from Grid import Grid
+from .Grid import Grid
 
 from libtimesheet.model.vo.TimeVO import TimeVO
 
@@ -247,7 +247,7 @@ class TimeGrid(FlexTable):
                     text = _text
                     widget.setText(text)
                 _text = self.checkHHMM(text)
-            except ValueError, e:
+            except ValueError as e:
                 widget.setFocus(True)
                 return False
             if text == "":

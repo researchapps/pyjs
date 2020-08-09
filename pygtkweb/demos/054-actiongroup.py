@@ -150,7 +150,7 @@ class ActionGroupExample:
         return
 
     def quit_cb(self, b):
-        print 'Quitting program'
+        print('Quitting program')
         gtk.main_quit()
 
     def toggle_sensitivity(self, b):

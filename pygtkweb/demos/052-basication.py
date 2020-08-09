@@ -89,7 +89,7 @@ to quit.
         return
 
     def quit_cb(self, b):
-        print 'Quitting program'
+        print('Quitting program')
         gtk.main_quit()
 
 if __name__ == '__main__':

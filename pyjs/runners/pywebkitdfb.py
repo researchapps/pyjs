@@ -101,10 +101,10 @@ import webkitdfb as pywebkit
 
 def module_load(m):
     minst = None
-    exec """\
+    exec("""\
 from %(mod)s import %(mod)s
 minst = %(mod)s()
-""" % ({'mod': m})
+""" % ({'mod': m}))
     return minst
 
 
@@ -176,7 +176,7 @@ class Browser:
         return name
 
     def _alert(self, msg):
-        print "alert:", msg
+        print("alert:", msg)
 
     def getDomWindow(self):
         return self._browser.GetDomWindow()

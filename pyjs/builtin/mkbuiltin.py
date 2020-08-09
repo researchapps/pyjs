@@ -44,7 +44,7 @@ class Replacement(object):
             try:
                 repl = getattr(self, 'repl_%s' % name, None)(*args)
             except:
-                print 'repl name:', name, args
+                print('repl name:', name, args)
                 raise
             lines = ['%s%s' % (
                 '    ' * indent_level,
@@ -53,7 +53,7 @@ class Replacement(object):
             return "\n".join(lines)
         dst = self.re_p.sub(subs, src)
         for name in names:
-            if isinstance(names[name], basestring):
+            if isinstance(names[name], str):
                 dst = dst.replace('${%s}' % name, names[name])
         dst = self.re_empty_line.sub('', dst)
         return dst
@@ -1046,5 +1046,5 @@ if __name__ == '__main__':
     else:
         src = open(sys.argv[1], 'r').read()
         dst = Replacement().substitute(src, {})
-        print dst
+        print(dst)
         #open("pyjslib.py", 'w').write(dst)

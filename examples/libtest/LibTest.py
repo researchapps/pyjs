@@ -30,7 +30,7 @@ from LongTest import LongTest
 from CompileTest import CompileTest
 from TemplateStringTest import TemplateStringTest
 
-if 1L << 31 > 0:
+if 1 << 31 > 0:
     has_long_type = True
     from LongTypeTest import LongTypeTest
 else:

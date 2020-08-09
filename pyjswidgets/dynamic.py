@@ -2,10 +2,10 @@
 # Warning: this is an alpha module and might be removed/renamed in
 # later pyjamas versions
 #
-from __pyjamas__ import wnd, doc, JS, setCompilerOptions
+from .__pyjamas__ import wnd, doc, JS, setCompilerOptions
 from __javascript__ import ActiveXObject, XMLHttpRequest
-from pyjamas import DOM
-from __pyjamas__ import debugger
+from .pyjamas import DOM
+from .__pyjamas__ import debugger
 import sys
 
 setCompilerOptions("noSourceTracking", "noLineTracking", "noStoreSource")
@@ -71,7 +71,7 @@ def load(url, onreadystatechange=None, on_load_fn=None, async=False):
 
 def inject(values, namespace = None, names=None):
     if namespace is None:
-        from __pyjamas__ import JS
+        from .__pyjamas__ import JS
         namespace = JS("$pyjs['global_namespace']")
     values = dict(values)
     if names is None:
@@ -157,7 +157,7 @@ def ajax_eval(url, on_load_fn, async):
 __imported__ = {}
 def ajax_import(url, namespace=None, names=None):
     setCompilerOptions("noDebug")
-    if __imported__.has_key(url):
+    if url in __imported__:
         module = __imported__[url]
     else:
         req = load(url, None, None, False)
@@ -266,7 +266,7 @@ def do_ajax_dlink_refresh():
 
 def ajax_dlink(idname, url, on_load_fn):
     global running_timeout, timeout_idname, timeout_url, timeout_on_load_fn, redo_timeout, timeout_id
-    from __pyjamas__ import doc
+    from .__pyjamas__ import doc
     body = doc().body
 
     from __javascript__ import clearTimeout

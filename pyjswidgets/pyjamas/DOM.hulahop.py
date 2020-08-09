@@ -37,7 +37,7 @@ def sinkEventsMozilla(element, bits):
     return
     mf = get_main_frame()
     if (bits & 0x40000):
-        print "add scroll", element
+        print("add scroll", element)
         mf.addEventListener(element, "DOMMouseScroll", _dispatchEvent)
 
 def eventGetMouseWheelVelocityY(evt):

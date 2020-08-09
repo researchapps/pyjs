@@ -70,7 +70,7 @@ class GWTCanvasImplDefault:
             self.saveContext()
             self.translate(sourceX, sourceY)
             try:
-                text = unicode(text) # for pyjd / xulrunner
+                text = str(text) # for pyjd / xulrunner
                 self.canvasContext.mozDrawText(text) # old xulrunner
             except:
                 self.canvasContext.drawText(text)
@@ -174,7 +174,7 @@ class GWTCanvasImplDefault:
     def setStrokeStyle(self, gradient):
         if isinstance(gradient, Color): # is it a colorString?
             gradient = str(gradient)
-        elif not isinstance(gradient, basestring): # is it a colorString?
+        elif not isinstance(gradient, str): # is it a colorString?
             gradient = gradient.getObject() # it's a gradient object
         self.canvasContext.strokeStyle = cvt(gradient)
 
@@ -182,7 +182,7 @@ class GWTCanvasImplDefault:
     def setFillStyle(self, gradient):
         if isinstance(gradient, Color): # is it a colorString?
             gradient = str(gradient)
-        elif not isinstance(gradient, basestring): # is it a colorString?
+        elif not isinstance(gradient, str): # is it a colorString?
             gradient = gradient.getObject() # it's a gradient object
         self.canvasContext.fillStyle = cvt(gradient)
 

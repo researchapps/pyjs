@@ -16,8 +16,8 @@ fallback token code OP, but the parser needs the actual token code.
 import pickle
 
 # Local imports
-from lib2to3.compiler import token
-import tokenize
+from .lib2to3.compiler import token
+from . import tokenize
 
 
 class Grammar(object):
@@ -111,7 +111,7 @@ class Grammar(object):
         pprint(self.dfas)
         print("labels")
         pprint(self.labels)
-        print("start", self.start)
+        print(("start", self.start))
 
     def genjs(self):
         from pprint import pformat

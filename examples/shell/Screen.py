@@ -64,7 +64,7 @@ class Screen(AbsolutePanel):
 
     def lower_app(self, app):
         app_zi = self.window_zindex[app.identifier]
-        for t in self.window_zindex.keys():
+        for t in list(self.window_zindex.keys()):
             w = self.window[t]
             zi = self.window_zindex[t]
             if zi < app_zi:
@@ -74,7 +74,7 @@ class Screen(AbsolutePanel):
 
     def raise_app(self, app):
         app_zi = self.window_zindex[app.identifier]
-        for t in self.window_zindex.keys():
+        for t in list(self.window_zindex.keys()):
             w = self.window[t]
             zi = self.window_zindex[t]
             if zi > app_zi:
@@ -94,7 +94,7 @@ class Screen(AbsolutePanel):
     def close_app(self, app):
 
         app_zi = self.window_zindex[app.identifier]
-        for t in self.window_zindex.keys():
+        for t in list(self.window_zindex.keys()):
             w = self.window[t]
             zi = self.window_zindex[t]
             if zi > app_zi:

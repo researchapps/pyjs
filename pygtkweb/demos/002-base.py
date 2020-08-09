@@ -14,7 +14,7 @@ class Base:
     def main(self):
         gtk.main()
 
-print __name__
+print(__name__)
 if __name__ == "__main__":
     base = Base()
     base.main()

@@ -237,7 +237,7 @@ class SliceEditor(DialogBox):
 
 
     def onClick(self, sender):
-        print "onClick", sender
+        print("onClick", sender)
         if sender == self.prevSlice:
             self.chart.onClickPrevSlice(sender)
         elif sender == self.nextSlice:

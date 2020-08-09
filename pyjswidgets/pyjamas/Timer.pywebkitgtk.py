@@ -23,6 +23,6 @@ class Timer:
             if not self.__is_repeating:
                 Timer.__timers.discard(self)
             self.__onTimer()
-        except Exception, e:
+        except Exception as e:
             print_exc()
 

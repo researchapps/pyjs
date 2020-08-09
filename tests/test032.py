@@ -7,8 +7,8 @@ class Foo:
 def test_builtins():
     x = []
     y = callable(x)
-    z = map(i, x)
-    filter(callable, z)
+    z = list(map(i, x))
+    list(filter(callable, z))
     dir(x)
     if hasattr(x, "foo"):
         foo = getattr(x, "foo")

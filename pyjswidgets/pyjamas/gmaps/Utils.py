@@ -137,11 +137,11 @@ def createListenerMethods(obj):
 
 def __dumpListeners():
     self = JS("this")
-    print "DUMP"
+    print("DUMP")
     for eventName in self.__listeners:
-        print "  " + eventName
+        print("  " + eventName)
         for list in self.__listeners[eventName]:
-            print "    " + str(list)
+            print("    " + str(list))
 
 
 def __addListener(eventName, callback):

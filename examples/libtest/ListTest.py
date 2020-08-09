@@ -118,13 +118,13 @@ class ListTest(UnitTest):
         try:
             del value[3]
             self.fail("Failed to raise error on 'del value[3]'")
-        except IndexError, e:
+        except IndexError as e:
             self.assertEqual(e[0], "list assignment index out of range")
 
         try:
             del value[-4]
             self.fail("Failed to raise error on 'del value[-4]'")
-        except IndexError, e:
+        except IndexError as e:
             self.assertEqual(e[0], "list assignment index out of range")
 
         value = [0, 1, 2, 3, 4]
@@ -176,13 +176,13 @@ class ListTest(UnitTest):
         try:
             x = value.pop(5)
             self.fail("Failed to raise error on 'value.pop(5)'")
-        except IndexError, err:
+        except IndexError as err:
             self.assertEqual(err[0], "pop index out of range")
 
         try:
             x = value.pop(-6)
             self.fail("Failed to raise error on 'value.pop(-6)'")
-        except IndexError, err:
+        except IndexError as err:
             self.assertEqual(err[0], "pop index out of range")
 
         x = value.pop(4)
@@ -205,7 +205,7 @@ class ListTest(UnitTest):
         try:
             x = value.pop()
             self.fail("Failed to raise error on 'value.pop()'")
-        except IndexError, err:
+        except IndexError as err:
             self.assertEqual(err[0], "pop from empty list")
 
 
@@ -248,9 +248,9 @@ class ListTest(UnitTest):
 
         t1 = (1,2,3)
 
-        self.assertEquals(cmp([],[]), 0, "Empty lists are the same")
+        self.assertEqual(cmp([],[]), 0, "Empty lists are the same")
         self.assertTrue([]==[])
-        self.assertEquals([]!=[], False)
+        self.assertEqual([]!=[], False)
         self.assertTrue(cmp(l1, l2) == 1)
         self.assertTrue(cmp(l2, l1) == -1)
         self.assertTrue(cmp(l3, l4) == -1)
@@ -319,7 +319,7 @@ class ListTest(UnitTest):
 
     def testRangeList(self):
         list1 = [0, 1, 2, 3]
-        list2 = range(0, 4)
+        list2 = list(range(0, 4))
         self.assertTrue(list1 == list2)
 
     def testExtend(self):
@@ -364,7 +364,7 @@ class ListTest(UnitTest):
         it = l.__iter__()
         while True:
             try:
-                item = it.next()
+                item = next(it)
             except StopIteration:
                 break
             self.assertEqual(item, l[i])
@@ -379,8 +379,8 @@ class ListTest(UnitTest):
 
         try:
             l.index(200000)
-        except ValueError, e:
-            print '[%s]' % str(e)
+        except ValueError as e:
+            print('[%s]' % str(e))
             self.assertIn(str(e), [
                 "list.index(x): x not in list", # <= 2.6
                 "200000 is not in list", # <= 2.6
@@ -461,7 +461,7 @@ class ListTest(UnitTest):
         return
 
         # slice object
-        a = range(20)
+        a = list(range(20))
         a[slice(2,10,3)] = [1,2,3]
         self.assertEqual(a, [0, 1, 1, 3, 4, 2, 6, 7, 3,
                              9, 10, 11, 12, 13, 14, 15,
@@ -472,20 +472,20 @@ class ListTest(UnitTest):
         del a[::2]
         self.assertEqual(a, [1,3])
 
-        a = range(5)
+        a = list(range(5))
         del a[1::2]
         self.assertEqual(a, [0,2,4])
 
-        a = range(5)
+        a = list(range(5))
         del a[1::-2]
         self.assertEqual(a, [0,2,3,4])
 
-        a = range(10)
+        a = list(range(10))
         del a[::1000]
         self.assertEqual(a, [1, 2, 3, 4, 5, 6, 7, 8, 9])
 
         #  assignment
-        a = range(10)
+        a = list(range(10))
         a[::2] = [-1]*5
         self.assertEqual(a, list([-1, 1, -1, 3, -1, 5, -1, 7, -1, 9]))
 
