@@ -47,7 +47,7 @@ class JSONRPCService(JSONRPCServiceBase):
             filename = os.path.join(os.getcwd(), self.defaultPage)
         if os.path.isfile(filename):
             log(os.linesep + '>>> Serve: %s' % filename)
-            f = file(filename)
+            f = open(filename)
             s = f.read()
             f.close()
             return s

@@ -57,7 +57,7 @@ class Builder(object):
         self.options.output_file = os.path.abspath(self.options.output_file)
 
     def __read_file(self, filename):
-        f = file(filename, "r")
+        f = open(filename, "r")
         buf = f.read()
         f.close()
         return buf
@@ -71,7 +71,7 @@ class Builder(object):
                 store_source=self.options.debug
               )
         self.modules.append(module_name)
-        fr = file(dst, "r")
+        fr = open(dst, "r")
         self.modules_source.append(fr.read())
         fr.close()
 
@@ -136,7 +136,7 @@ class Builder(object):
                         "public/_pyjs.js")) # core pyjs functions
         modules_source = "\n\n".join(self.modules_source)
 
-        fapp = file(os.path.join(self.options.working_dir,
+        fapp = open(os.path.join(self.options.working_dir,
                                 self.options.output_file), "w")
         fapp.write(tmpl % {"available_modules": available_modules,
                           "_pyjs": _pyjs,

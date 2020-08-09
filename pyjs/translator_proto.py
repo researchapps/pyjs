@@ -4431,7 +4431,7 @@ def translate(sources, output_file, module_name=None, **kw):
     for src in sources:
         current_tree = compiler.parseFile(src)
         flags = set()
-        f = file(src)
+        f = open(src)
         for l in f:
             if l.startswith('#@PYJS_'):
                 flags.add(l.strip()[7:])
@@ -4441,7 +4441,7 @@ def translate(sources, output_file, module_name=None, **kw):
         else:
             tree = current_tree
     #XXX: if we have an override the sourcefile and the tree is not the same!
-    f = file(sources[0], "r")
+    f = open(sources[0], "r")
     src = f.read()
     f.close()
     if list_imports:
@@ -4454,7 +4454,7 @@ def translate(sources, output_file, module_name=None, **kw):
     elif output_file == '-':
         output = sys.stdout
     else:
-        output = file(output_file, 'w')
+        output = open(output_file, 'w')
 
     t = Translator(compiler,
                    module_name, sources[0], src, tree, output, **kw)
@@ -4794,7 +4794,7 @@ class AppTranslator:
 
         output = StringIO()
 
-        f = file(file_name, "r")
+        f = open(file_name, "r")
         src = f.read()
         f.close()
 
@@ -4860,7 +4860,7 @@ class AppTranslator:
               if self.verbose:
                   print(('Including JS', js))
               print('\n//\n// BEGIN JS '+js+'\n//\n', file=lib_code)
-              print(file(path).read(), file=lib_code)
+              print(open(path).read(), file=lib_code)
               print('\n//\n// END JS '+js+'\n//\n', file=lib_code)
            else:
               print('Warning: Unable to find imported javascript:', js, file=sys.stderr)

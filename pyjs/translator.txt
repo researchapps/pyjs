@@ -16,7 +16,7 @@ Let us write a simple module.
 
     >>> mymodule1 = os.path.join(tmp, 'mymodule1.py')
     >>> out_file = os.path.join(tmp, 'mymodule.js')
-    >>> f = file(mymodule1, 'w')
+    >>> f = open(mymodule1, 'w')
     >>> f.write("""
     ... def main():
     ...     print 1
@@ -30,7 +30,7 @@ modules are there.
 
     >>> out_file = os.path.join(tmp, 'imports.js')
     >>> imports = os.path.join(tmp, 'imports.py')
-    >>> f = file(imports, 'w')
+    >>> f = open(imports, 'w')
     >>> f.write("""
     ... import a
     ... from x.z import y, p as pp
@@ -67,7 +67,7 @@ modules are there.
 
     (['a', 'x.z.y', 'x', 'x.z', 'x.z.p', 'a.b', 'a.b.c', 'z'], set([]))
 
-    >>> print file(out_file).read()
+    >>> print open(out_file).read()
     /* start module: imports */
     var imports = $pyjs.loaded_modules["imports"] = function (__mod_name__) {
     if(imports.__was_initialized__) return imports;
@@ -127,7 +127,7 @@ modules are there.
     <BLANKLINE>
 
     >>> baseclass = os.path.join(tmp, 'baseclass.py')
-    >>> f = file(baseclass, 'w')
+    >>> f = open(baseclass, 'w')
     >>> f.write("""
     ... if 1:
     ...     import pack4
@@ -160,7 +160,7 @@ Note that the __import__ function is called twice in edge-cases like
 the on in this example, it does not matter because duplicate imports
 do nothing. TODO: fix this
 
-    >>> for line in file(out_file):
+    >>> for line in open(out_file):
     ...     print line.strip()
     /* start module: baseclass */
     var baseclass = $pyjs.loaded_modules["baseclass"] = function (__mod_name__) {
@@ -217,7 +217,7 @@ do nothing. TODO: fix this
 
 
     >>> baseclass = os.path.join(tmp, 'baseclass.py')
-    >>> f = file(baseclass, 'w')
+    >>> f = open(baseclass, 'w')
     >>> f.write("""
     ... if False:
     ...     import pack1.sub
@@ -249,7 +249,7 @@ do nothing. TODO: fix this
 
 Note that the block-level defines the smartness of the imports.
 
-    >>> for line in file(out_file):
+    >>> for line in open(out_file):
     ...     print line.strip()
     /* start module: baseclass */
     var baseclass = $pyjs.loaded_modules["baseclass"] = function (__mod_name__) {
@@ -309,7 +309,7 @@ Note that the block-level defines the smartness of the imports.
 The following is not working right now.
 
     >>> more = os.path.join(tmp, 'more.py')
-    >>> f = file(more, 'w')
+    >>> f = open(more, 'w')
     >>> f.write("""
     ... a = b = []
     ... 3 # works
@@ -331,7 +331,7 @@ The following is not working right now.
     unsupported type, must be call or const (in _discard)
     Subscript(Name('a'), 'OP_APPLY', [Const(1)])
 
-    >>> f = file(more, 'w')
+    >>> f = open(more, 'w')
     >>> f.write("""
     ... from write import write
     ... write()
@@ -347,7 +347,7 @@ The following is not working right now.
     ...                      source_tracking=False,
     ...                      line_tracking=False,
     ...                      store_source=False)
-    >>> for line in file(out_file):
+    >>> for line in open(out_file):
     ...     print line.strip()
     /* start module: more */
     var more = $pyjs.loaded_modules["more"] = function (__mod_name__) {
@@ -378,7 +378,7 @@ We cannot use top-level names that are reserved words in javascript.
 
     >>> m = os.path.join(tmp, 'package.py')
     >>> out_file = os.path.join(tmp, 'package.js')
-    >>> f = file(m, 'w')
+    >>> f = open(m, 'w')
     >>> f.write("""
     ... print 1
     ... """)
@@ -406,7 +406,7 @@ the override file.
 
     >>> m = os.path.join(tmp, 'o1.py')
     >>> out_file = os.path.join(tmp, 'o1.js')
-    >>> f = file(m, 'w')
+    >>> f = open(m, 'w')
     >>> f.write("""
     ... #@PYJS_FULL_OVERRIDE
     ... print "this is o1 override full"
@@ -422,7 +422,7 @@ the override file.
     ...                      store_source=False)
     >>> deps
     ([], set([]))
-    >>> print file(out_file).read()
+    >>> print open(out_file).read()
     /...('this is o1 override full')], 1);...
 
 

@@ -3151,7 +3151,7 @@ def translate(sources, output_file, module_name=None, **kw):
     for src in sources:
         current_tree = translator.ast_tree_creator(src)
         flags = set()
-        f = file(src)
+        f = open(src)
         for l in f:
             if l.startswith('#@PYJS_'):
                 flags.add(l.strip()[7:])
@@ -3161,7 +3161,7 @@ def translate(sources, output_file, module_name=None, **kw):
         else:
             tree = current_tree
     #XXX: if we have an override the sourcefile and the tree is not the same!
-    f = file(sources[0], "r")
+    f = open(sources[0], "r")
     src = f.read()
     f.close()
     if list_imports:
@@ -3177,7 +3177,7 @@ def translate(sources, output_file, module_name=None, **kw):
     if output_file == '-':
         output = sys.stdout
     else:
-        output = file(output_file, 'w')
+        output = open(output_file, 'w')
     output.write(translator.get_javascript())
     output.close()
     return sorted(translator.imported_modules.keys()), sorted(translator.imported_js.keys())

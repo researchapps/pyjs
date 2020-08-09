@@ -9,7 +9,7 @@ python -c "
 import sys
 sys.path.insert(0, '../../pyjs/src')
 from pyjs import sm
-f = file('$BULK', 'r')
+f = open('$BULK', 'r')
 bulk = f.read()
 f.close()
 
@@ -18,7 +18,7 @@ bulk += '''
 \$pyjs.loaded_modules['pyjslib'].___import___ = function () {};
 '''
 
-f = file('$BULK', 'w')
+f = open('$BULK', 'w')
 f.write('load = function() {};\n')
 f.write(sm.APP_TEMPLATE % {'available_modules': '[]', 'app_name':'test', 
                         'module_files': '[]', 'js_lib_files': '[]',

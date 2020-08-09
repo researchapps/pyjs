@@ -171,7 +171,7 @@ class BrowserLinker(linker.BaseLinker):
         raise RuntimeError("Boilerplate not found %r" % name)
 
     def read_boilerplate(self, name):
-        f = file(self.find_boilerplate(name))
+        f = open(self.find_boilerplate(name))
         res = f.read()
         f.close()
         return res
@@ -222,7 +222,7 @@ class BrowserLinker(linker.BaseLinker):
                 code.append('<script type="text/javascript"><!--')
                 if not msg is None:
                     code.append("/* start %s: %s */" % (msg, name))
-                f = file(fname)
+                f = open(fname)
                 code.append(f.read())
                 if not msg is None:
                     code.append("/* end %s */" % (name,))
@@ -304,7 +304,7 @@ class BrowserLinker(linker.BaseLinker):
             name_parts.insert(2, md5sum)
         out_path = os.path.join(self.output, '.'.join((name_parts)))
 
-        out_file = file(out_path, 'w')
+        out_file = open(out_path, 'w')
         out_file.write(file_contents)
         out_file.close()
         return out_path
@@ -319,7 +319,7 @@ class BrowserLinker(linker.BaseLinker):
             cache_html = os.path.basename(self.app_files[platform])
             sel = select_tmpl % (platform, cache_html)
             script_selectors.write(sel)
-        out_file = file(out_path, 'w')
+        out_file = open(out_path, 'w')
         out_file.write(template % dict(
             app_name = self.top_module,
             script_selectors = script_selectors.getvalue()

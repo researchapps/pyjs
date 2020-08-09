@@ -43,7 +43,7 @@ def main():
             if fName.startswith(".") or not fName.endswith(".py"):
                 continue
 
-            f = file(os.path.join("src", "demos_" + section, fName), "r")
+            f = open(os.path.join("src", "demos_" + section, fName), "r")
             src = f.read()
             f.close()
 
@@ -107,7 +107,7 @@ def main():
     s.append('    return demos')
     s.append('')
 
-    f = file(os.path.join("src", "demoInfo.py"), "w")
+    f = open(os.path.join("src", "demoInfo.py"), "w")
     f.write("\n".join(s))
     f.close()
 

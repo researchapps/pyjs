@@ -112,7 +112,7 @@ class SpidermonkeyLinker(linker.BaseLinker):
                     name = os.path.basename(lib)
                 if not msg is None:
                     code.append("/* start %s: %s */" % (msg, name))
-                f = file(fname)
+                f = open(fname)
                 code.append(f.read())
                 if not msg is None:
                     code.append("/* end %s */" % (name,))

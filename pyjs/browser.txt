@@ -18,13 +18,13 @@ Let us generate some python code.
     >>> pp = os.path.join(lib_path, 'mypackage')
     >>> os.makedirs(pp)
     >>> mp = os.path.join(pp, '__init__.py')
-    >>> f = file(mp, 'w')
+    >>> f = open(mp, 'w')
     >>> f.write("""
     ... # package
     ... """)
     >>> f.close()
     >>> mp = os.path.join(pp, 'index.py')
-    >>> f = file(mp, 'w')
+    >>> f = open(mp, 'w')
     >>> f.write("""
     ... def main():
     ...     print 1
@@ -46,7 +46,7 @@ output directory.
     ['mypackage.index.js', 'mypackage.js', 'pyjslib.__mozilla__.js', 'pyjslib.js', 'sys.js']
 
     >>> out_file = os.path.join(output, 'mypackage.index.ie6.cache.html')
-    >>> print file(out_file).read()
+    >>> print open(out_file).read()
     <html>...
     pyjslib = ...
     mypackage = $pyjs.loaded_modules["mypackage"] = function (__mod_name__)...
@@ -60,13 +60,13 @@ Let us add another package with some public folder.
     >>> pp = os.path.join(lib_path, 'second_package')
     >>> os.makedirs(pp)
     >>> mp = os.path.join(pp, '__init__.py')
-    >>> f = file(mp, 'w')
+    >>> f = open(mp, 'w')
     >>> f.write("""
     ... # package
     ... """)
     >>> f.close()
     >>> mp = os.path.join(pp, 'widget.py')
-    >>> f = file(mp, 'w')
+    >>> f = open(mp, 'w')
     >>> f.write("""
     ... # do something
     ... """)
@@ -74,7 +74,7 @@ Let us add another package with some public folder.
     >>> p_dir = os.path.join(pp, 'public')
     >>> os.mkdir(p_dir)
     >>> mp = os.path.join(p_dir, 'second.css')
-    >>> f = file(mp, 'w')
+    >>> f = open(mp, 'w')
     >>> f.write("""
     ... /* some css */
     ... """)
@@ -93,7 +93,7 @@ now.
 So let us add an import.
 
     >>> mp = os.path.join(lib_path, 'mypackage', 'index.py')
-    >>> f = file(mp, 'w')
+    >>> f = open(mp, 'w')
     >>> f.write("""
     ... import second_package.widget
     ... def main():
@@ -112,7 +112,7 @@ Now we have the contents of the public folder in our output directory.
 Now we will add a sub module and import it.
 
     >>> mp = os.path.join(lib_path, 'mypackage', 'util.py')
-    >>> f = file(mp, 'w')
+    >>> f = open(mp, 'w')
     >>> f.write("""
     ... def log(msg):
     ...     print msg
@@ -120,7 +120,7 @@ Now we will add a sub module and import it.
     >>> f.close()
 
     >>> mp = os.path.join(lib_path, 'mypackage', 'index.py')
-    >>> f = file(mp, 'w')
+    >>> f = open(mp, 'w')
     >>> f.write("""
     ... import second_package.widget
     ... import util
@@ -137,7 +137,7 @@ Now we will add a sub module and import it.
     >>> outputContainsFiles(output, ['mypackage.index.html'])
 
     >>> op = os.path.join(output, 'mypackage.index.ie6.cache.html')
-    >>> f = file(op, 'r')
+    >>> f = open(op, 'r')
     >>> content = f.read()
     >>> f.close()
 
@@ -149,7 +149,7 @@ this is raised at runtime.
 
     >>> pp = os.path.join(lib_path, 'mypackage')
     >>> mp = os.path.join(pp, 'index.py')
-    >>> f = file(mp, 'w')
+    >>> f = open(mp, 'w')
     >>> f.write("""
     ... import unknown.module
     ... """)
@@ -176,7 +176,7 @@ script tags into the generated cache.html file.
     >>> l()
 
     >>> op = os.path.join(output, 'mypackage.index.ie6.cache.html')
-    >>> f = file(op)
+    >>> f = open(op)
     >>> content = f.read()
     >>> f.close()
 
@@ -209,7 +209,7 @@ to their paths.
     >>> l()
 
     >>> op = os.path.join(output, 'mypackage.index.nocache.html')
-    >>> f = file(op)
+    >>> f = open(op)
 
 The script selectors point to the according files.
 
@@ -232,7 +232,7 @@ Also the libfiles which are generated from multifile option are upated.
     ...     lambda x: x.startswith('mypackage.index.ie6.'), out_files)[0]
 
     >>> op = os.path.join(output, ie6_file)
-    >>> f = file(op)
+    >>> f = open(op)
     >>> print f.read()
     <html>...
     <script type="text/javascript" src="...pyjslib.js"></script>
