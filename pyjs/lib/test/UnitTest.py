@@ -181,7 +181,7 @@ class UnitTest:
 
     def failIfAlmostEqual(self, first, second, places=7, msg=None):
         self.startTest()
-        if round(second-first, places)  is  0:
+        if round(second-first, places) == 0:
             if not msg:
                 msg=repr(first) + " == " + repr(second) + " within " + repr(places) + " places"
             return self.fail(msg)

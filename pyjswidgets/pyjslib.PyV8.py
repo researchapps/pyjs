@@ -11,7 +11,7 @@ def printFunc(objs, newline):
     """)
 
 # pyv8_import_module is actually in pyv8run.py and has been added to Globals.
-def import_module(syspath, parent_name, module_name, dynamic_load, async, init):
+def import_module(syspath, parent_name, module_name, dynamic_load, is_async, init):
     JS("""
     @{{module}} = $pyjs['modules_hash'][@{{module_name}}];
     if (typeof @{{module}} == 'function' && @{{module}}['__was_initialized__'] == true) {
@@ -50,10 +50,10 @@ def import_module(syspath, parent_name, module_name, dynamic_load, async, init):
     JS("""$pyjs['modules'][@{{name}}] = $pyjs['modules_hash'][@{{name}}];""")
     return None
 
-# FIXME: dynamic=1, async=False are useless here (?). Only dynamic modules
+# FIXME: dynamic=1, is_async=False are useless here (?). Only dynamic modules
 # are loaded with load_module and it's always "async"
 @noSourceTracking
-def load_module(path, parent_module, module_name, dynamic=1, async=False):
+def load_module(path, parent_module, module_name, dynamic=1, is_async=False):
     """
     """
 
@@ -92,7 +92,7 @@ def load_module(path, parent_module, module_name, dynamic=1, async=False):
         var onload_fn = '';
 
         // this one tacks the script onto the end of the DOM
-        @{{pyjs_load_script}}(cache_file, onload_fn, @{{async}});
+        @{{pyjs_load_script}}(cache_file, onload_fn, @{{is_async}});
 
         try {
             var loaded = (typeof $pyjs['modules_hash'][@{{module_name}}] == 'function')

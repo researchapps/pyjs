@@ -32,11 +32,11 @@ def createHttpRequest():
 #  @param url                   URL to load
 #  @param onreadystatechange    function to be used for onreadystatechange
 #  @param on_load_fn            function to be called on succes, with parameters event, request
-#  @param async                 request mode
-#  @returns                     async == False: request object, async == True: None
+#  @param is_async              request mode
+#  @returns                     is_async == False: request object, is_async == True: None
 #
 
-def load(url, onreadystatechange=None, on_load_fn=None, async=False):
+def load(url, onreadystatechange=None, on_load_fn=None, is_async=False):
     setCompilerOptions("noDebug")
     wnd().status = ('Loading ' + url)
     req = createHttpRequest()
@@ -51,10 +51,10 @@ def load(url, onreadystatechange=None, on_load_fn=None, async=False):
 
     # next line is in JS() for IE6
     JS("@{{req}}['onreadystatechange'] = @{{onreadystatechange}};")
-    req.open("GET", url , async)
+    req.open("GET", url , is_async)
     try:
         req.send(None)
-        if async:
+        if is_async:
             return None
         while True:
             if (    req.status == 200
@@ -144,7 +144,7 @@ def eval(str):
 #  @returns     readyState
 #
 
-def ajax_eval(url, on_load_fn, async):
+def ajax_eval(url, on_load_fn, is_async):
     setCompilerOptions("noDebug")
     def onready(evnt, req):
         str = req.responseText
@@ -152,7 +152,7 @@ def ajax_eval(url, on_load_fn, async):
         if not on_load_fn is None:
             on_load_fn()
 
-    load(url, None, onready, async)
+    load(url, None, onready, is_async)
 
 __imported__ = {}
 def ajax_import(url, namespace=None, names=None):
@@ -193,7 +193,7 @@ return $pyjs$moduleObject;
 #  @param onload   text of function to be eval/executed on successful load
 #
 
-def load_script(url, onload, async):
+def load_script(url, onload, is_async):
     wnd().status = ('Loading ' + url)
 
     def onload_fn():
@@ -206,7 +206,7 @@ def load_script(url, onload, async):
     e.src = url
     e.type="text/javascript"
     e.language = "javascript"
-    e.defer = async
+    e.defer = is_async
     e.onload = onload_fn
     doc().getElementsByTagName("head")[0].appendChild(e)
 
@@ -309,6 +309,3 @@ def ajax_dlink(idname, url, on_load_fn):
     xhtoj.send("")
 
     return 0
-
-
-

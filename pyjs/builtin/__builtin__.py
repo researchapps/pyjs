@@ -19672,9 +19672,9 @@ class BaseException:
 
     def __str__(self):
         args = self.args
-        if len(args) is 0:
+        if len(args) == 0:
             return ''
-        elif len(args) is 1:
+        elif len(args) == 1:
             return str(args[0])
         return repr(args)
 
@@ -19728,9 +19728,9 @@ class SystemError(Exception):
 class KeyError(LookupError):
 
     def __str__(self):
-        if len(self.args) is 0:
+        if len(self.args) == 0:
             return ''
-        elif len(self.args) is 1:
+        elif len(self.args) == 1:
             return repr(self.args[0])
         return repr(self.args)
 

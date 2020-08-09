@@ -17,8 +17,8 @@
 # must declare import _before_ importing sys
 
 
-# FIXME: dynamic=1, async=False, init=True are useless here (?)
-def import_module(path, parent_module, module_name, dynamic=1, async=False, init=True):
+# FIXME: dynamic=1, is_sync=False, init=True are useless here (?)
+def import_module(path, parent_module, module_name, dynamic=1, is_async=False, init=True):
     module = None
     JS("""
     @{{module}} = $pyjs['modules_hash'][@{{module_name}}];
@@ -44,10 +44,10 @@ def import_module(path, parent_module, module_name, dynamic=1, async=False, init
         importName += '.'
     return None
 
-# FIXME: dynamic=1, async=False are useless here (?). Only dynamic modules
+# FIXME: dynamic=1, is_async=False are useless here (?). Only dynamic modules
 # are loaded with load_module and it's always "async"
 @noSourceTracking
-def load_module(path, parent_module, module_name, dynamic=1, async=False):
+def load_module(path, parent_module, module_name, dynamic=1, is_async=False):
     """
     """
 
@@ -86,7 +86,7 @@ def load_module(path, parent_module, module_name, dynamic=1, async=False):
         var onload_fn = '';
 
         // this one tacks the script onto the end of the DOM
-        pyjs_load_script(cache_file, onload_fn, @{{async}});
+        pyjs_load_script(cache_file, onload_fn, @{{is_async}});
 
         try {
             var loaded = (typeof $pyjs['modules_hash'][@{{module_name}}] == 'function')

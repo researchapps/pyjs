@@ -1013,9 +1013,9 @@ class BaseException:
         return self.__name__ + ': ' + self.__str__()
 
     def __str__(self):
-        if len(self.args) is 0:
+        if len(self.args) == 0:
             return ''
-        elif len(self.args) is 1:
+        elif len(self.args) == 1:
             return str(self.args[0])
         return repr(self.args)
 
@@ -1079,9 +1079,9 @@ class SystemError(Exception):
 class KeyError(LookupError):
 
     def __str__(self):
-        if len(self.args) is 0:
+        if len(self.args) == 0:
             return ''
-        elif len(self.args) is 1:
+        elif len(self.args) == 1:
             return repr(self.args[0])
         return repr(self.args)
 
@@ -5827,7 +5827,7 @@ class str(str):
 """)
 
 def ord(x):
-    if(JS("typeof @{{x}}== 'string'") and len(x) is 1):
+    if(JS("typeof @{{x}}== 'string'") and len(x) == 1):
         return INT(x.charCodeAt(0));
     else:
         JS("""throw @{{TypeError}}("ord() expected string of length 1");""")
