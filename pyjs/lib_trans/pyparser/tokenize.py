@@ -195,7 +195,7 @@ class Untokenizer:
             self.add_whitespace(start)
             self.tokens.append(token)
             self.prev_row, self.prev_col = end
-            if tok_type in (NEWLINE, NL):
+            if tok_type in (NEWLINE):
                 self.prev_row += 1
                 self.prev_col = 0
         return "".join(self.tokens)
@@ -207,7 +207,7 @@ class Untokenizer:
         toknum, tokval = token
         if toknum in (NAME, NUMBER):
             tokval += ' '
-        if toknum in (NEWLINE, NL):
+        if toknum in (NEWLINE):
             startline = True
         for tok in iterable:
             toknum, tokval = tok[:2]
@@ -221,7 +221,7 @@ class Untokenizer:
             elif toknum == DEDENT:
                 indents.pop()
                 continue
-            elif toknum in (NEWLINE, NL):
+            elif toknum in (NEWLINE):
                 startline = True
             elif startline and indents:
                 toks_append(indents[-1])
@@ -317,10 +317,10 @@ def generate_tokens(readline):
                     nl_pos = pos + len(comment_token)
                     yield (COMMENT, comment_token,
                            (lnum, pos), (lnum, pos + len(comment_token)), line)
-                    yield (NL, line[nl_pos:],
+                    yield (NEWLINE, line[nl_pos:],
                            (lnum, nl_pos), (lnum, len(line)), line)
                 else:
-                    yield ((NL, COMMENT)[line[pos] == '#'], line[pos:],
+                    yield ((NEWLINE, COMMENT)[line[pos] == '#'], line[pos:],
                            (lnum, pos), (lnum, len(line)), line)
                 continue
 
@@ -353,7 +353,7 @@ def generate_tokens(readline):
                 elif initial in '\r\n':
                     newline = NEWLINE
                     if parenlev > 0:
-                        newline = NL
+                        newline = NEWLINE
                     yield (newline, token, spos, epos, line)
                 elif initial == '#':
                     assert not token.endswith("\n")
@@ -386,7 +386,7 @@ def generate_tokens(readline):
                     yield (NAME, token, spos, epos, line)
                 elif initial == '\\':                      # continued stmt
                     # This yield is new; needed for better idempotency:
-                    yield (NL, token, spos, (lnum, pos), line)
+                    yield (NEWLINE, token, spos, (lnum, pos), line)
                     continued = 1
                 else:
                     if initial in '([{': parenlev = parenlev + 1

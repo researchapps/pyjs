@@ -380,7 +380,7 @@ class Parser:
         self.pos = newpos + len(toktext)
 
         # handle newlines
-        if toktype in [token.NEWLINE, tokenize.NL]:
+        if toktype in [token.NEWLINE, tokenize.NEWLINE]:
             self.out.write('\n')
             return
 
