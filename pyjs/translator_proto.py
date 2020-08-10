@@ -1422,7 +1422,8 @@ class Translator(object):
         return "%(e)s['__getitem__'](%(i)s)" % locals()
 
     def md5(self, node):
-        return md5(self.module_name + str(node.lineno) + repr(node)).hexdigest()
+        content = bytes((self.module_name + str(node.lineno) + repr(node)).encode('utf-8'))
+        return md5(content).hexdigest()
 
     def track_lineno(self, node, module=False):
         if self.source_tracking and node.lineno:
