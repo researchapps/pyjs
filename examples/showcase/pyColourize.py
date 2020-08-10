@@ -58,7 +58,7 @@ _Null = {
     token.NAME:           '#000000',# All Text
     token.NUMBER:        'b#000000',# 0->10
     token.OP:            'b#000000',# ()<>=!.:;^>%, etc...
-    tokenize.COMMENT:    'i#000000',# There are 2 types of comment
+    tokenize.TYPE_COMMENT: 'i#000000',# There are 2 types of comment
     _DOUBLECOMMENT:       '#000000',## Like this
     _CLASS:             'bu#000000',# Class name
     _DEF:                'b#000000',# Def name
@@ -77,7 +77,7 @@ _Dark = {
     token.NAME:           '#ffffff',# All Text
     token.NUMBER:         '#FF0000',# 0->10
     token.OP:            'b#FAF785',# Operators ()<>=!.:;^>%, etc...
-    tokenize.COMMENT:    'i#45FCA0',# There are 2 types of comment
+    tokenize.TYPE_COMMENT:    'i#45FCA0',# There are 2 types of comment
     _DOUBLECOMMENT:       '#A7C7A9',## Like this
     _CLASS:              'b#B599FD',# Class name
     _DEF:                'b#EBAE5C',# Def name
@@ -97,7 +97,7 @@ _Lite = {
     token.NAME:           '#000000',# All Text
     token.NUMBER:         '#FF2200',# 0->10
     token.OP:            'b#303000',# Operators ()<>=!.:;^>%, etc...
-    tokenize.COMMENT:     '#007F00',# There are 2 types of comment
+    tokenize.TYPE_COMMENT:     '#007F00',# There are 2 types of comment
     _DOUBLECOMMENT:       '#606060',## Like this
     _CLASS:               '#0000FF',# Class name
     _DEF:                'b#BF9B00',# Def name
@@ -116,7 +116,7 @@ _Idle = {
     token.NAME:           '#000000',# All Text
     token.NUMBER:         '#000000',# 0->10
     token.OP:             '#000000',# Operators ()<>=!.:;^>%, etc...
-    tokenize.COMMENT:     '#DD0000',# There are 2 types of comment
+    tokenize.TYPE_COMMENT:     '#DD0000',# There are 2 types of comment
     _DOUBLECOMMENT:       '#DD0000',## Like this
     _CLASS:               '#0000FF',# Class name
     _DEF:                 '#0000FF',# Def name
@@ -135,7 +135,7 @@ _PythonWin = {
     token.NAME:           '#303030',# All Text
     token.NUMBER:         '#008080',# 0->10
     token.OP:             '#000000',# ()<>=!.:;^>%, etc...
-    tokenize.COMMENT:     '#007F00',# There are 2 types of comment
+    tokenize.TYPE_COMMENT: '#007F00',# There are 2 types of comment
     _DOUBLECOMMENT:       '#7F7F7F',## Like this
     _CLASS:              'b#0000FF',# Class name
     _DEF:                'b#007F7F',# Def name
@@ -154,7 +154,7 @@ _Eriks_Style = {
     token.NAME:           '#000000',# All Text
     token.NUMBER:         '#FF2200',# 0->10
     token.OP:            'b#303000',# Operators ()<>=!.:;^>%, etc...
-    tokenize.COMMENT:     '#007F00',# There are 2 types of comment
+    tokenize.TYPE_COMMENT: '#007F00',# There are 2 types of comment
     _DOUBLECOMMENT:       '#606060',## Like this
     _CLASS:               '#0000FF',# Class name
     _DEF:                 '#0000FF',# Def name
@@ -438,7 +438,7 @@ class Parser:
                 toktype = _SINGLEQUOTE
 
         # Exetended to seperate the diffrent comment types
-        elif toktype == tokenize.COMMENT:
+        elif toktype == tokenize.TYPE_COMMENT:
             if toktext[:2] == "##":
                 toktype = _DOUBLECOMMENT
 

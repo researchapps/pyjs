@@ -54,7 +54,7 @@ class Driver(object):
                 if column < s_column:
                     prefix += line_text[column:s_column]
                     column = s_column
-            if type in (tokenize.COMMENT, tokenize.NL):
+            if type in (tokenize.TYPE_COMMENT, tokenize.NL):
                 prefix += value
                 lineno, column = end
                 if value.endswith("\n"):
