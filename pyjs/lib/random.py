@@ -1,42 +1,3 @@
-"""Random variable generators.
-
-    integers
-    --------
-           uniform within range
-
-    sequences
-    ---------
-           pick random element
-           pick random sample
-           pick weighted random sample
-           generate random permutation
-
-    distributions on the real line:
-    ------------------------------
-           uniform
-           triangular
-           normal (Gaussian)
-           lognormal
-           negative exponential
-           gamma
-           beta
-           pareto
-           Weibull
-
-    distributions on the circle (angles 0 to 2pi)
-    ---------------------------------------------
-           circular uniform
-           von Mises
-
-General notes on the underlying Mersenne Twister core generator:
-
-* The period is 2**19937-1.
-* It is one of the most extensively tested generators in existence.
-* The random() method is implemented in C, executes in a single Python step,
-  and is, therefore, threadsafe.
-
-"""
-
 from warnings import warn as _warn
 from math import log as _log, exp as _exp, pi as _pi, e as _e, ceil as _ceil
 from math import sqrt as _sqrt, acos as _acos, cos as _cos, sin as _sin
@@ -54,12 +15,12 @@ except ImportError:
     from hashlib import sha512 as _sha512
 
 
-__all__ = ["Random","seed","random","uniform","randint","choice","sample",
-           "randrange","shuffle","normalvariate","lognormvariate",
-           "expovariate","vonmisesvariate","gammavariate","triangular",
-           "gauss","betavariate","paretovariate","weibullvariate",
-           "getstate","setstate", "getrandbits", "choices",
-           "SystemRandom"]
+#__all__ = ["Random","seed","random","uniform","randint","choice","sample",
+#           "randrange","shuffle","normalvariate","lognormvariate",
+#           "expovariate","vonmisesvariate","gammavariate","triangular",
+#           "gauss","betavariate","paretovariate","weibullvariate",
+#           "getstate","setstate", "getrandbits", "choices",
+#           "SystemRandom"]
 
 NV_MAGICCONST = 4 * _exp(-0.5)/_sqrt(2.0)
 TWOPI = 2.0*_pi
