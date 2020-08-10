@@ -67,9 +67,14 @@ ASYNC = 56
 TYPE_IGNORE = 57
 TYPE_COMMENT = 58
 ERRORTOKEN = 59
+COMMENT = 60
+NL = 61
+ENCODING = 62
 N_TOKENS = 63
 NT_OFFSET = 256
 #--end constants--
+
+
 
 tok_name = {}
 for _name, _value in list(globals().items()):
