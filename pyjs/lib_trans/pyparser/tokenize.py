@@ -350,7 +350,7 @@ def generate_tokens(readline):
                 if initial in numchars or \
                    (initial == '.' and token != '.'):      # ordinary number
                     yield (NUMBER, token, spos, epos, line)
-                elif initial in '\r\n':
+                elif initial in ['\r\n', '\n', '\n\n']:
                     newline = NL
                     if parenlev > 0:
                         newline = NL
